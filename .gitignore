@@ -1,0 +1,13 @@
+
+/.vs
+
+/[lL]ibrary
+/[tT]emp
+
+*.sln
+*.suo
+*.csproj
+*.user
+*.sdf
+*.opendb
+Assets/Resources/NotShare/
