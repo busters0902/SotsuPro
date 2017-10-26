@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scene/VRSceneTemplate.unity
+- path: Assets/Scene/NoVR.unity
   isLoaded: 1
   isActive: 1

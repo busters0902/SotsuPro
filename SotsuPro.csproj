@@ -76,8 +76,59 @@
     <Reference Include="UnityEngine.HoloLens">
       <HintPath>Library\UnityAssemblies\UnityEngine.HoloLens.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEditor.iOS.Extensions.Xcode">
+      <HintPath>Library\UnityAssemblies\UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.iOS.Extensions.Xcode">
+      <HintPath>Library\UnityAssemblies\UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.iOS.Extensions.Common">
+      <HintPath>Library\UnityAssemblies\UnityEditor.iOS.Extensions.Common.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Menu\Scripts\Bookmark.cs" />
+    <Compile Include="Assets\Menu\Scripts\Bookmarks.cs" />
+    <Compile Include="Assets\Menu\Scripts\ChapterNode.cs" />
+    <Compile Include="Assets\Menu\Scripts\ConfigManager.cs" />
+    <Compile Include="Assets\Menu\Scripts\ContentsManager.cs" />
+    <Compile Include="Assets\Menu\Scripts\Episode.cs" />
+    <Compile Include="Assets\Menu\Scripts\Memory.cs" />
+    <Compile Include="Assets\Menu\Scripts\MemoryManager.cs" />
+    <Compile Include="Assets\Menu\Scripts\MenuManager.cs" />
+    <Compile Include="Assets\Menu\Scripts\ProfileImage.cs" />
+    <Compile Include="Assets\Menu\Scripts\ProfileManager.cs" />
+    <Compile Include="Assets\Menu\Scripts\ProfileSelect.cs" />
+    <Compile Include="Assets\Menu\Scripts\Record.cs" />
+    <Compile Include="Assets\Menu\Scripts\RecordManager.cs" />
+    <Compile Include="Assets\Menu\Scripts\ResetManager.cs" />
+    <Compile Include="Assets\Menu\Scripts\StaffManager.cs" />
+    <Compile Include="Assets\Menu\Scripts\StillManager.cs" />
+    <Compile Include="Assets\Scripts\Bat.cs" />
+    <Compile Include="Assets\Scripts\ControllerExample.cs" />
+    <Compile Include="Assets\Scripts\NoVR\DebugEnemyCreator.cs" />
+    <Compile Include="Assets\Scripts\NoVR\NoVR2SceneController.cs" />
+    <Compile Include="Assets\Scripts\NoVR\NoVRManager.cs" />
+    <Compile Include="Assets\Scripts\NoVR\NoVRSceneController.cs" />
+    <Compile Include="Assets\Scripts\PreCube.cs" />
+    <Compile Include="Assets\Scripts\Racket.cs" />
+    <Compile Include="Assets\Scripts\SingletonManager.cs" />
+    <Compile Include="Assets\Scripts\SpawnItem.cs" />
+    <Compile Include="Assets\Scripts\Test1\Bullet.cs" />
+    <Compile Include="Assets\Scripts\Test1\Enemy.cs" />
+    <Compile Include="Assets\Scripts\Test1\EnemyController.cs" />
+    <Compile Include="Assets\Scripts\Test1\EnemySpawner.cs" />
+    <Compile Include="Assets\Scripts\Test1\GunController.cs" />
+    <Compile Include="Assets\Scripts\Test1\GunGameSceneController.cs" />
+    <Compile Include="Assets\Scripts\Test1\HandGun.cs" />
+    <Compile Include="Assets\Scripts\Test2\Test2.cs" />
+    <Compile Include="Assets\Scripts\Test2\Test2Line.cs" />
+    <Compile Include="Assets\Scripts\Test3\GunEnemy.cs" />
+    <Compile Include="Assets\Scripts\Test3\Test3Controller.cs" />
+    <Compile Include="Assets\Scripts\Timer.cs" />
+    <Compile Include="Assets\Scripts\TrackMover.cs" />
+    <Compile Include="Assets\Scripts\ViveController.cs" />
+    <Compile Include="Assets\Scripts\ViveLiser.cs" />
     <Compile Include="Assets\SteamVR\Extras\SteamVR_GazeTracker.cs" />
     <Compile Include="Assets\SteamVR\Extras\SteamVR_LaserPointer.cs" />
     <Compile Include="Assets\SteamVR\Extras\SteamVR_Teleporter.cs" />
