@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scene/NoVR.unity
+- path: Assets/Scene/NoVR2.unity
   isLoaded: 1
   isActive: 1
