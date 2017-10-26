@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scene/NoVR2.unity
+- path: Assets/Busters/busters.unity
   isLoaded: 1
   isActive: 1
