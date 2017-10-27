@@ -91,8 +91,6 @@
     <Compile Include="Assets\Busters\Arrow.cs" />
     <Compile Include="Assets\Busters\Bow.cs" />
     <Compile Include="Assets\Busters\bustersSceneController.cs" />
-    <Compile Include="Assets\Busters\MouseVectorRotation.cs" />
-    <Compile Include="Assets\Busters\StoppingArea.cs" />
     <Compile Include="Assets\Scripts\Bat.cs" />
     <Compile Include="Assets\Scripts\ControllerExample.cs" />
     <Compile Include="Assets\Scripts\NoVR\DebugEnemyCreator.cs" />
