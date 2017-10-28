@@ -6,7 +6,7 @@ public class add : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        GetComponent<Rigidbody>().AddForce(new Vector3(500, 100, 0));
+        GetComponent<Rigidbody>().AddForce(new Vector3(0, 100, 500));
 	}
 	
 	// Update is called once per frame
@@ -23,7 +23,7 @@ public class add : MonoBehaviour {
             //collision.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
             //collision.gameObject.GetComponent<Rigidbody>().isKinematic = true;
             //collision.gameObject.GetComponent<Rigidbody>().useGravity = false;
-            transform.position = new Vector3(-transform.localScale.x / 2 + collision.gameObject.transform.position.x, transform.position.y, transform.position.z);
+            transform.position = new Vector3(transform.position.x, transform.position.y, -transform.localScale.z / 2 + collision.gameObject.transform.position.z);
             var ri = GetComponent<Rigidbody>();
             transform.rotation = Quaternion.identity;
             Destroy(ri);
