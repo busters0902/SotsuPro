@@ -6,6 +6,10 @@ TagManager:
   tags:
   - Prehensile
   - Bullet
+  - FxTemporaire
+  - projectile
+  - DrawObj
+  - Target
   layers:
   - Default
   - TransparentFX
