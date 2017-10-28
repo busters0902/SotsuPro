@@ -8,9 +8,6 @@ public class bustersSceneController : MonoBehaviour
     [SerializeField]
     Bow bow;
 
-    [SerializeField]
-    Camera camera;
-
 
     void Update()
     {

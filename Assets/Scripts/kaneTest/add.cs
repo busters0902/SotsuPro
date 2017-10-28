@@ -6,7 +6,7 @@ public class add : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        GetComponent<Rigidbody>().AddForce(new Vector3(0, 100, 500));
+        //GetComponent<Rigidbody>().AddForce(new Vector3(0, 100, 500));
 	}
 	
 	// Update is called once per frame
