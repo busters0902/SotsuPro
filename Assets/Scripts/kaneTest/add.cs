@@ -25,7 +25,7 @@ public class add : MonoBehaviour {
             //collision.gameObject.GetComponent<Rigidbody>().useGravity = false;
             transform.position = new Vector3(transform.position.x, transform.position.y, -transform.localScale.z / 2 + collision.gameObject.transform.position.z);
             var ri = GetComponent<Rigidbody>();
-            transform.rotation = Quaternion.identity;
+            transform.rotation = Quaternion.EulerAngles(90,0,0);
             Destroy(ri);
         }
     }

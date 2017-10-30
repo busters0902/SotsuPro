@@ -8,7 +8,7 @@ public class Bow : MonoBehaviour
     GameObject body;
 
     [SerializeField]
-    Arrow arrow;
+    public Arrow arrow;
 
     [SerializeField]
     GameObject arrowPrefab;
