@@ -29,8 +29,8 @@ public class Arrow : MonoBehaviour
     {
         //弓のサイズの半分前に
         Debug.Log("tail scale: " + tail.transform.lossyScale);
-        var half = tail.transform.lossyScale;
-        transform.position = tailPos + transform.up * half.y;
+        var scl = tail.transform.lossyScale;
+        transform.position = tailPos + transform.up * scl.y;
     }
 
 }

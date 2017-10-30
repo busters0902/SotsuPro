@@ -67,4 +67,37 @@ public class ControllerExample : MonoBehaviour
             //Debug.Log("タッチパッドに触っている");
         }
     }
+
+    void PulseTest()
+    {
+        SteamVR_TrackedObject trackedObject = GetComponent<SteamVR_TrackedObject>();
+        var device = SteamVR_Controller.Input((int)trackedObject.index);
+
+        if (device.GetTouchDown(SteamVR_Controller.ButtonMask.Touchpad))
+        {
+            // タッチパッドに触れた
+            device.TriggerHapticPulse(500);
+        }
+
+        if (device.GetPress(SteamVR_Controller.ButtonMask.Trigger))
+        {
+            // トリガーを深く引いている
+            device.TriggerHapticPulse(1000);
+        }
+        else if (device.GetTouch(SteamVR_Controller.ButtonMask.Trigger))
+        {
+            // トリガーを浅く引いている
+            device.TriggerHapticPulse(100);
+        }
+    }
+
+    void Axis()
+    {
+        SteamVR_TrackedObject trackedObject = GetComponent<SteamVR_TrackedObject>();
+        var device = SteamVR_Controller.Input((int)trackedObject.index);
+
+        float value = device.GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger).x;
+        Debug.Log(value);
+    }
+
 }
