@@ -56,15 +56,6 @@ public class ViveController : MonoBehaviour
 
     Vector2 rightAxis;
 
-    //void UseTest()
-    //{
-    //	var device = ViveController.Instance.GetRightDevice();
-    //	if (device.GetPressDown(SteamVR_Controller.ButtonMask.Trigger))
-    //	{
-
-    //	}
-    //}
-
     private void Update()
     {
         var device = ViveController.Instance.GetRightDevice();
@@ -73,10 +64,10 @@ public class ViveController : MonoBehaviour
         else
             viveRightDown = false;
 
-        Debug.Log(" " + device.GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger).x);
+        //Debug.Log(" " + device.GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger).x);
 
         Vector2 position = device.GetAxis();
-        Debug.Log("x: " + position.x + " y: " + position.y);
+        //Debug.Log("x: " + position.x + " y: " + position.y);
 
         if (device.GetPressUp(SteamVR_Controller.ButtonMask.Trigger))
             viveRightUp = true;
@@ -108,9 +99,6 @@ public class ViveController : MonoBehaviour
 
         //Debug.Log("VRコン: " + rightAxis);
     }
-
-
-    //
 
 }
 

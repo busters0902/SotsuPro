@@ -20,7 +20,9 @@ public class Bow : MonoBehaviour
     float minPower;
 
     [SerializeField]
-    float curPower;
+    public float curPower;
+
+    public bool hasArrow;
 
     void Update()
     { 
@@ -38,6 +40,8 @@ public class Bow : MonoBehaviour
         arrow = arr;
         arrow.gameObject.transform.SetParent(gameObject.transform);
 
+        hasArrow = true;
+
         curPower = minPower;
         //gameObject.transform 
         return arr;
@@ -49,9 +53,10 @@ public class Bow : MonoBehaviour
         if(arrow != null)
         {
             //arrow.transform.position;
-            //body.transform.position
+            //body.transform.position;
             arrow.gameObject.transform.parent = null;
             arrow.Shot(transform.forward, curPower );
+            hasArrow = false;
         }
     }
 
