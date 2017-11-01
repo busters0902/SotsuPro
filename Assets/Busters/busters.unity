@@ -212,7 +212,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bow: {fileID: 1193690097}
-  camera: {fileID: 0}
 --- !u!4 &135876515
 Transform:
   m_ObjectHideFlags: 0
@@ -741,6 +740,7 @@ MonoBehaviour:
   maxPower: 200
   minPower: 0
   curPower: 30
+  hasArrow: 0
 --- !u!1001 &1209007991
 Prefab:
   m_ObjectHideFlags: 0
@@ -1261,7 +1261,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 1553818162}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
