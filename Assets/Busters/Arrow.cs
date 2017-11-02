@@ -11,14 +11,19 @@ public class Arrow : MonoBehaviour
     [SerializeField]
     GameObject tail;
 
+    [SerializeField]
+    GameObject head;
+
     public void Start()
     {
         rig.isKinematic = true;
+        var pos = head.transform.localPosition;
+        rig.centerOfMass = pos;
     }
 
     public void Shot( Vector3 dir, float power )
     {
-        rig.useGravity = true;
+        //rig.useGravity = true;
         rig.velocity = dir * power;
         rig.isKinematic = false;
 

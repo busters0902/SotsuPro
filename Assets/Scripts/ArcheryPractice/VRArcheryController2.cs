@@ -25,6 +25,9 @@ public class VRArcheryController2 : MonoBehaviour
     [SerializeField]
     float powMagMax;
 
+    [SerializeField]
+    float vibration;
+
     public GameObject drawingStandard;
 
     public bool hasArrow;
@@ -75,7 +78,10 @@ public class VRArcheryController2 : MonoBehaviour
             bow.curPower = mag * powerMagnitude;
 
             //振動
-            rDevice.TriggerHapticPulse((ushort)(mag * 100));
+            rDevice.TriggerHapticPulse((ushort)(mag * vibration));
+            lDevice.TriggerHapticPulse((ushort)(mag * vibration));
+
+            Debug.Log("mag: " + mag);
             
 
         }
@@ -94,7 +100,7 @@ public class VRArcheryController2 : MonoBehaviour
         if(hasArrow)
         {
             //振動
-            lDevice.TriggerHapticPulse(300);
+            //lDevice.TriggerHapticPulse(1000);
         }
 
     }

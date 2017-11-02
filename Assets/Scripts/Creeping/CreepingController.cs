@@ -51,7 +51,7 @@ public class CreepingController : MonoBehaviour
         {
             if (rock == RockState.RIGHT)
             {
-                vecDist = rightRockPostion - rDevice.transform.pos;
+                vecDist = rDevice.transform.pos - rightRockPostion;
                 rightRockPostion = rDevice.transform.pos;
             }
         }
@@ -73,7 +73,7 @@ public class CreepingController : MonoBehaviour
         {
             if (rock == RockState.LEFT)
             {
-                vecDist = leftRockPostion - lDevice.transform.pos;
+                vecDist = lDevice.transform.pos - leftRockPostion;
                 leftRockPostion = lDevice.transform.pos;
             }
         }
