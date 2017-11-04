@@ -23,7 +23,7 @@ public class MouseVectorRotation : MonoBehaviour
         {
             mousePos = Input.mousePosition;
             prevMousePos = mousePos;
-            Debug.Log(mousePos);
+            //Debug.Log(mousePos);
         }
         else if (Input.GetMouseButton(0))
         {
