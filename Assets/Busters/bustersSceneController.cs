@@ -8,6 +8,14 @@ public class bustersSceneController : MonoBehaviour
     [SerializeField]
     Bow bow;
 
+    [SerializeField]
+    PredictionLine preLine;
+
+    void Start()
+    {
+        preLine.CreateLine();
+
+    }
 
     void Update()
     {

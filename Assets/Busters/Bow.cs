@@ -8,7 +8,7 @@ public class Bow : MonoBehaviour
     GameObject body;
 
     [SerializeField]
-    public Arrow arrow;
+    public Arrow3 arrow;
 
     [SerializeField]
     GameObject arrowPrefab;
@@ -29,21 +29,21 @@ public class Bow : MonoBehaviour
 
     }
 
-    public Arrow CreateArrow()
+    public Arrow3 CreateArrow()
     {
         var pos = transform.position + transform.forward * 0.3f + transform.right * 0.01f;
         var obj = Instantiate<GameObject>(arrowPrefab);
         obj.transform.position = pos;
-        obj.transform.rotation = transform.rotation * Quaternion.AngleAxis(90.0f, Vector3.right) ;
-        var arr = obj.GetComponent<Arrow>();
+        //obj.transform.rotation = transform.rotation * Quaternion.AngleAxis(90.0f, Vector3.right) ;
+        var arr = obj.GetComponent<Arrow3>();
+        arr.calcData = CalculatedData.Create(this.transform.forward, curPower);
 
         arrow = arr;
         arrow.gameObject.transform.SetParent(gameObject.transform);
 
         hasArrow = true;
 
-        curPower = minPower;
-        //gameObject.transform 
+        //gameObject.transform
         return arr;
     }
 
@@ -55,7 +55,14 @@ public class Bow : MonoBehaviour
             //arrow.transform.position;
             //body.transform.position;
             arrow.gameObject.transform.parent = null;
-            arrow.Shot(transform.forward, curPower );
+            var data = new CalculatedData();
+            data.dir = transform.forward;
+            data.speed = curPower;
+            data.startPos = transform.position;
+            data.grav = 0.1f;
+
+            
+            arrow.Shot( data );
             hasArrow = false;
         }
     }
