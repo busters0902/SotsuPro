@@ -34,10 +34,14 @@ public class VRArcheryController2 : MonoBehaviour
 
     public Vector3 basePos = Vector3.zero;
 
+    [SerializeField]
+    PredictionLine preLine;
+
     private void Start()
     {
         drawingStandard = new GameObject("ArrowStandard");
         drawingStandard.transform.SetParent(bow.transform);
+        preLine.CreateLine();
     }
 
     void Update()
@@ -47,13 +51,11 @@ public class VRArcheryController2 : MonoBehaviour
 
         var rTransform = ViveController.Instance.RightController.transform;
 
-        //第一
         if (lDevice.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger) &&
             hasArrow == false)
         {
             bow.CreateArrow();
             hasArrow = true;
-
             //追尾カメラをセット
             arrowCamera.target = bow.arrow.transform;
         }
@@ -63,7 +65,7 @@ public class VRArcheryController2 : MonoBehaviour
             var pos = rDevice.transform.pos;
             basePos = pos;
             drawingStandard.transform.position = pos;
-        
+            UpdateLine();
         }
         else if (rDevice.GetTouch(SteamVR_Controller.ButtonMask.Trigger))
         {
@@ -71,15 +73,16 @@ public class VRArcheryController2 : MonoBehaviour
             var pos = rDevice.transform.pos;
             var curMov = drawingStandard.transform.position - pos;
             var mag = curMov.magnitude;
-            if (mag > powMagMax) mag = powMagMax;
+            //if (mag > powMagMax) mag = powMagMax;
             //Debug.Log(drawingStandard.transform.position +" "+ pos + " " +  curMov);
-      
-            bow.arrow.SetPosFromTail(bow.transform.right * 0.01f + bow.transform.position + -bow.transform.forward * mag);
-            bow.curPower = mag * powerMagnitude;
 
+            //bow.arrow.SetPosFromTail(bow.transform.right * 0.01f + bow.transform.position + -bow.transform.forward * mag);
+            bow.curPower = mag * powerMagnitude;
             //振動
             rDevice.TriggerHapticPulse((ushort)(mag * vibration));
-            lDevice.TriggerHapticPulse((ushort)(mag * vibration));
+            //lDevice.TriggerHapticPulse((ushort)(mag * vibration));
+
+            UpdateLine();
 
             Debug.Log("mag: " + mag);
             
@@ -88,9 +91,8 @@ public class VRArcheryController2 : MonoBehaviour
         else if (rDevice.GetTouchUp(SteamVR_Controller.ButtonMask.Trigger) &&
             hasArrow == true)
         {
-            hasArrow = false;
-            //bow.curPower = shotPower;
             bow.Shoot();
+            hasArrow = false;
             arrowCamera.target = bow.arrow.transform;
 
             Debug.Log("ShotPower "+ bow.curPower);
@@ -103,5 +105,16 @@ public class VRArcheryController2 : MonoBehaviour
             //lDevice.TriggerHapticPulse(1000);
         }
 
+    }
+
+
+    void UpdateLine()
+    {
+        var data = new CalculatedData();
+        data.dir = bow.transform.forward;
+        data.speed = bow.curPower;
+        data.startPos = bow.transform.position;
+        data.grav = bow.arrowGrav;
+        preLine.CalcLine(data);
     }
 }
