@@ -19,10 +19,10 @@ public class StoppingArea : MonoBehaviour
         Debug.Log("On Trigger");
         if (col.gameObject.tag == "Bullet")
         {
-            Debug.Log("Bullet Hit");
-            var rig = col.gameObject.GetComponent<Rigidbody>();
-            rig.velocity = Vector3.zero;
-            rig.useGravity = false;
+            Debug.Log("Hit " + col.gameObject);
+            var rigAc = col.gameObject.GetComponent<RigAccess>();
+            rigAc.rig.velocity = Vector3.zero;
+            rigAc.rig.useGravity = false;
         }
     }
 
