@@ -9,7 +9,7 @@
 	}
 		SubShader
 	{
-		Tags { "RenderType" = "Opaque" }
+		Tags { "RenderType" = "Cutout" }
 		LOD 100
 		Blend SrcAlpha OneMinusSrcAlpha
 		Pass

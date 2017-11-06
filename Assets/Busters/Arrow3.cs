@@ -21,6 +21,19 @@ public class CalculatedData
         obj.grav = grav;
         return obj;
     }
+
+    public Vector3 GetMovedPos(float time)
+    {
+        //y = 1/2gt^2
+        float y = 0.5f * grav * time * time;
+        //xz = v0t
+        Vector3 xz = dir * speed * time;
+        var pos = xz + Vector3.down * y + startPos;
+
+        Debug.Log("Moved: " + pos);
+
+        return pos;
+    }
 }
 
 
@@ -51,6 +64,8 @@ public class Arrow3 : MonoBehaviour
     public Vector3 curPos;
     public Vector3 prevPos;
 
+    public float angleLerp;
+
     bool isFarstHit;
 
     public void Start()
@@ -69,21 +84,24 @@ public class Arrow3 : MonoBehaviour
             var pos = MoveCalcedPosition(elapsedTime);
             prevPos = curPos;
             curPos = pos;
-            transform.position = pos;
+            //transform.position = pos;
+            rig.MovePosition(pos);
         }
 
-        if (useLockVel) LockVelocity();
+        if (useLockVel) LookVelocity();
     }
 
     public void Shot(CalculatedData data)
     {
+        if (data == null) Debug.LogError("data is null");
+
         startTime = Time.time;
         calcData = data;
 
         rig.isKinematic = false;
         useCalc = true;
         useLockVel = true;
-
+        curPos = prevPos = transform.position;
 
         Destroy(gameObject, 10f);
     }
@@ -97,7 +115,7 @@ public class Arrow3 : MonoBehaviour
     }
 
     //移動法を向く
-    public void LockVelocity()
+    public void LookVelocity()
     {
         if (!rig.isKinematic)
         {
@@ -105,24 +123,15 @@ public class Arrow3 : MonoBehaviour
             if (vel != Vector3.zero)
             {
                 //rig.MoveRotation(Quaternion.LookRotation(vel));
-                var qt = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(vel), 0.1f);
+                var qt = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(vel), angleLerp);
                 rig.MoveRotation(qt);
             }
         }
     }
 
-    //y  = vY * g * t;
-    //xz = vXY * t;
     public Vector3 MoveCalcedPosition(float time)
-    {
-        float y = calcData.grav * time;
-
-        Vector3 xz = calcData.dir * calcData.speed * time ;
-        var pos = xz + Vector3.down * y + calcData.startPos;
-
-        Debug.Log("Move: " + pos);
-
-        return pos;
+    { 
+        return calcData.GetMovedPos(time);
     }
 
     public void Stick()
@@ -141,7 +150,8 @@ public class Arrow3 : MonoBehaviour
         useLockVel = false;
         useCalc = false;
 
-        var accel = calcData.dir * calcData.speed + (new Vector3(0, -calcData.grav, 0) * elapsedTime * elapsedTime);
+        // v = v0 + gt
+        var accel = calcData.dir * calcData.speed + new Vector3(0, -calcData.grav, 0) * elapsedTime;
         accel.y = -accel.y;
         Debug.Log(accel);
 

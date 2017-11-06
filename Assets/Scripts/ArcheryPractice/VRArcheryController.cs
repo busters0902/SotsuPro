@@ -16,12 +16,6 @@ public class VRArcheryController : MonoBehaviour
     [SerializeField]
     TrackingTransform arrowCamera;
 
-    private void Start()
-    {
-        //ViveController.Instance.SetLeftController(rController);
-        //ViveController.Instance.SetRightController(lController);
-    }
-
     void Update()
     {
         var lDevice = ViveController.Instance.GetLeftDevice();
