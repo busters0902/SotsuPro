@@ -36,6 +36,7 @@ GameObject:
   - component: {fileID: 4103666204895306}
   - component: {fileID: 54550608355875120}
   - component: {fileID: 114388699310473274}
+  - component: {fileID: 114991681080148100}
   m_Layer: 4
   m_Name: Arrow3
   m_TagString: Bullet
@@ -73,6 +74,7 @@ GameObject:
   - component: {fileID: 136821845439732230}
   - component: {fileID: 23303377972536996}
   - component: {fileID: 114663683228024288}
+  - component: {fileID: 114045420162530298}
   m_Layer: 4
   m_Name: Body
   m_TagString: Bullet
@@ -220,7 +222,7 @@ Rigidbody:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1534616174687102}
   serializedVersion: 2
-  m_Mass: 20
+  m_Mass: 0.2
   m_Drag: 0.1
   m_AngularDrag: 0.1
   m_UseGravity: 0
@@ -228,6 +230,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 2
+--- !u!114 &114045420162530298
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1716434342232962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87ac24e686a8dd4488cb136a5002d1f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rig: {fileID: 54550608355875120}
 --- !u!114 &114388699310473274
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -262,6 +276,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ff11c63e55efdf24990f93ea99c02403, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rig: {fileID: 54550608355875120}
+--- !u!114 &114991681080148100
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1534616174687102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87ac24e686a8dd4488cb136a5002d1f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   rig: {fileID: 54550608355875120}

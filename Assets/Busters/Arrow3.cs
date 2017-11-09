@@ -15,6 +15,7 @@ public class CalculatedData
     public static CalculatedData Create(Vector3 dir, float speed, float grav = 0)
     {
         var obj = new CalculatedData();
+        obj.startPos = Vector3.up;
         obj.dir = dir;
         obj.speed = speed;
         obj.vel = dir * speed;

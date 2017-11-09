@@ -58,6 +58,7 @@ public class VRArcheryController2 : MonoBehaviour
             hasArrow = true;
             //追尾カメラをセット
             arrowCamera.target = bow.arrow.transform;
+            arrowCamera.onUsed = true;
         }
 
         if (rDevice.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger))

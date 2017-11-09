@@ -9,9 +9,13 @@ public class TrackingTransform : MonoBehaviour
 
     public Vector3 distance;
 
+    public bool onUsed;
+
     private void Update()
     {
-        transform.position = target.transform.position + distance;
+
+        if(onUsed)  transform.position = target.transform.position + distance;
+
     }
 
 }
