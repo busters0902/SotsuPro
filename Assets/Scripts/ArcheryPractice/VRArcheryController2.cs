@@ -78,7 +78,8 @@ public class VRArcheryController2 : MonoBehaviour
             //Debug.Log(drawingStandard.transform.position +" "+ pos + " " +  curMov);
 
             //bow.arrow.SetPosFromTail(bow.transform.right * 0.01f + bow.transform.position + -bow.transform.forward * mag);
-            bow.curPower = mag * powerMagnitude;
+            //bow.curPower = mag * powerMagnitude;
+            bow.SetPower(mag * powerMagnitude);
             //振動
             rDevice.TriggerHapticPulse((ushort)(mag * vibration));
             //lDevice.TriggerHapticPulse((ushort)(mag * vibration));

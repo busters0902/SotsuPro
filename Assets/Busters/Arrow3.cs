@@ -31,7 +31,7 @@ public class CalculatedData
         Vector3 xz = dir * speed * time;
         var pos = xz + Vector3.down * y + startPos;
 
-        Debug.Log("Moved: " + pos);
+        //Debug.Log("Moved: " + pos);
 
         return pos;
     }

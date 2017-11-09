@@ -51,7 +51,7 @@ public class PredictionLine : MonoBehaviour
 
     public void CalcLine(CalculatedData data = null)
     {
-        Debug.Log("Calcline");
+        //Debug.Log("Calcline");
         if(data == null)
         {
             if (calcData == null)
@@ -74,7 +74,7 @@ public class PredictionLine : MonoBehaviour
             Vector3[] points = new Vector3[num];
             lineRend.GetPositions(points);
             //時間 (tpl* (float)i);
-            Debug.Log(" arry " + points[i]);
+            //Debug.Log(" arry " + points[i]);
             var pos = calcData.GetMovedPos(tpl * (float)i);
             points[i] = pos;
             lineRend.SetPositions(points);

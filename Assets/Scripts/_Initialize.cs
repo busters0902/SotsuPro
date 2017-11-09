@@ -13,21 +13,14 @@ public class _Initialize : MonoBehaviour
 	{
 		//データマネージャーの生成
 		Debug.Log("_Initialize");
-		//GameObject obj = new GameObject("Manager", typeof(DataManager));
-		//GameObject.DontDestroyOnLoad(obj);
+        //GameObject obj = new GameObject("Manager", typeof(DataManager));
+        //GameObject.DontDestroyOnLoad(obj);
 
-		//フェードマネージャーの作成
-		//var fadeObj = (GameObject)Instantiate(Resources.Load("Prefabs/FadeManager"));//(GameObject)Resources.Load("Prefabs/FadeManager");
-		//DontDestroyOnLoad(fadeObj);
-
-		//サウンドマネージャーの作成
-		var soundObj = (GameObject)Instantiate(Resources.Load("Prefabs/SoundManager"));
-		DontDestroyOnLoad(soundObj);
+        //フェードマネージャーの作成
+        //var fadeObj = (GameObject)Instantiate(Resources.Load("Prefabs/FadeManager"));//(GameObject)Resources.Load("Prefabs/FadeManager");
+        //DontDestroyOnLoad(fadeObj);
 
 
-		//スクリーンの向き
-		//Screen.orientation = ScreenOrientation.LandscapeLeft;
-		//var asset = Resources.Load<InitializeAsset>("InitializeAsset");
 
 		//Application.targetFrameRate = asset.targetFps;
 		Debug.Log("target fps: " + Application.targetFrameRate);
