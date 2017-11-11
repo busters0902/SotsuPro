@@ -5,23 +5,23 @@ using UnityEngine;
 public class AudioManager : MonoBehaviour
 {
 
-    static private AudioManager instants = null;
-    static public AudioManager Instants
+    static private AudioManager instance = null;
+    static public AudioManager Instance
     {
         get
         {
-            if (instants == null)
+            if (instance == null)
             {
                 var obj = Instantiate(new GameObject("AudioManager"));
                 var _instans = obj.AddComponent<AudioManager>();
-                instants = _instans;
+                instance = _instans;
             }
-            return instants;
+            return instance;
         }
     }
     void Awake()
     {
-        instants = this;
+        instance = this;
 
         
     }
@@ -35,7 +35,8 @@ public class AudioManager : MonoBehaviour
     //SEを鳴らす
     public void PlaySE(string se_name,Vector3? playPos = null)
     {
-        //var dis = Vector3.Distance(Camera.main.transform.position, new Vector3(playPos));
+        var dis = Vector3.Distance(Camera.main.transform.position, playPos.Value);
+        Debug.Log(dis);
 
         var audsou = gameObject.AddComponent<AudioSource>();
         audsou.clip = seAudioClips[se_name];
