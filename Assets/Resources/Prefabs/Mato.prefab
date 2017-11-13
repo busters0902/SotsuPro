@@ -38,6 +38,7 @@ GameObject:
   - component: {fileID: 65751717576074712}
   - component: {fileID: 23529966329103690}
   - component: {fileID: 114232164962931106}
+  - component: {fileID: 114970328798985342}
   m_Layer: 0
   m_Name: Mato
   m_TagString: Target
@@ -221,3 +222,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   di: 0.043
   obj: {fileID: 1184429734698056}
+--- !u!114 &114970328798985342
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1619624208462748}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b7182fc9f7158d4c91323a271cdf2d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
