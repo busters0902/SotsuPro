@@ -20,6 +20,8 @@ public class _Initialize : MonoBehaviour
         //var fadeObj = (GameObject)Instantiate(Resources.Load("Prefabs/FadeManager"));//(GameObject)Resources.Load("Prefabs/FadeManager");
         //DontDestroyOnLoad(fadeObj);
 
+        var obj = AudioManager.Instance.gameObject;
+        DontDestroyOnLoad(obj);
 
 
 		//Application.targetFrameRate = asset.targetFps;
