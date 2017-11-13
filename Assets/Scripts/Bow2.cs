@@ -20,6 +20,10 @@ public class Bow2 : MonoBehaviour
     public Transform StringCenter { get { return stringCenter; } }
 
     [SerializeField]
+    Transform stringBasePos;
+    public Transform StringBasePos { get { return stringBasePos; } }
+
+    [SerializeField]
     Transform arrowPlace;
 
     [SerializeField]
