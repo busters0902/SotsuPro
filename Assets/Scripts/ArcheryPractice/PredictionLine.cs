@@ -33,13 +33,11 @@ public class PredictionLine : MonoBehaviour
     {
         
         Vector3[] points = new Vector3[lineNum];
-        //List<Vector3> points = new List<Vector3>();
 
         for (int i = 0; i < lineNum; i++)
         {
             var pos = iniPos + new Vector3(0f, 0f, 0.2f * i);
             points[i] = pos;
-            //points.Add(pos);
             //Debug.Log(pos);
         }
 

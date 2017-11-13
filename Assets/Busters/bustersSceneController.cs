@@ -6,10 +6,13 @@ public class bustersSceneController : MonoBehaviour
 {
 
     [SerializeField]
-    Bow bow;
+    Bow2 bow;
 
     [SerializeField]
     PredictionLine preLine;
+
+    bool isSettingArrow;
+
 
     void Start()
     {
@@ -23,8 +26,8 @@ public class bustersSceneController : MonoBehaviour
         if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Return))
         {
             bow.CreateArrow();
-            //preLine.CalcLine(bow);
-            
+            isSettingArrow = true;
+            UpdateLine();
 
         }
         else if (Input.GetMouseButton(0) || Input.GetKey(KeyCode.Return))
@@ -34,6 +37,7 @@ public class bustersSceneController : MonoBehaviour
         else if (Input.GetMouseButtonUp(0) || Input.GetKeyUp(KeyCode.Return))
         {
             bow.Shoot();
+            isSettingArrow = false;
         }
 
         if(Input.GetKey(KeyCode.UpArrow))
@@ -64,7 +68,8 @@ public class bustersSceneController : MonoBehaviour
         var data = new CalculatedData();
         data.dir = bow.transform.forward;
         data.speed = bow.curPower;
-        data.startPos = bow.transform.position;
+        if( isSettingArrow) data.startPos = bow.arrow.transform.position;
+        else    data.startPos = bow.transform.position;
         data.grav = bow.arrowGrav;
         preLine.CalcLine(data);
     }
