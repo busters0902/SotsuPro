@@ -23,7 +23,7 @@ public class AudioManager : MonoBehaviour
     {
         instance = this;
 
-        
+
     }
 
     [SerializeField]
@@ -33,19 +33,32 @@ public class AudioManager : MonoBehaviour
 
 
     //SEを鳴らす
-    public void PlaySE(string se_name,Vector3? playPos = null)
+    public void PlaySE(string se_name, Vector3? playPos = null)
     {
-        var dis = Vector3.Distance(Camera.main.transform.position, playPos.Value);
-        Debug.Log(dis);
+        if (playPos != null)
+        {
+            //距離によって
+            var dis = Vector3.Distance(Camera.main.transform.position, playPos.Value);
+            Debug.Log(dis);
+            StartCoroutine(Easing.Deyray(dis / 340f, () =>
+            {
+                var audsou = gameObject.AddComponent<AudioSource>();
+                audsou.clip = seAudioClips[se_name];
+                audsou.Play();
+                StartCoroutine(AudioSourceIns(audsou));
+            }));
+        }
+        else
+        {
+            var audsou = gameObject.AddComponent<AudioSource>();
+            audsou.clip = seAudioClips[se_name];
+            audsou.Play();
+            StartCoroutine(AudioSourceIns(audsou));
+        }
 
-        var audsou = gameObject.AddComponent<AudioSource>();
-        audsou.clip = seAudioClips[se_name];
-        audsou.Play();
-        StartCoroutine(AudioSourceIns(audsou));
-        
     }
-    
-    
+
+
     //BGMを鳴らす
     public void PlayBGM(string se_name)
     {
@@ -53,7 +66,7 @@ public class AudioManager : MonoBehaviour
         bgmAudioSource.Play();
 
     }
-    
+
     //なり終わったら消す
     IEnumerator AudioSourceIns(AudioSource au)
     {
@@ -76,7 +89,7 @@ public class AudioManager : MonoBehaviour
 
     void Start()
     {
-        
+
         Load("Audio/SE");
     }
 
