@@ -56,6 +56,7 @@ public class VRArcheryController3 : MonoBehaviour
 
         var rTransform = ViveController.Instance.RightController.transform;
 
+        //矢を生成して、弓にセットする
         if (lDevice.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger) &&
             hasArrow == false)
         {
@@ -81,7 +82,8 @@ public class VRArcheryController3 : MonoBehaviour
             drawingStandard.transform.position = pos;
             UpdateLine();
         }
-        else if (rDevice.GetTouch(SteamVR_Controller.ButtonMask.Trigger))
+        else if (rDevice.GetTouch(SteamVR_Controller.ButtonMask.Trigger) &&
+            hasArrow == true)
         {
             //弓の弦
             var cenPos = bow.arrow.Tail.transform.position;
@@ -97,6 +99,7 @@ public class VRArcheryController3 : MonoBehaviour
 
             if (dist > drawLimit) dist = drawLimit;
 
+            //弓の弦に合った位置に矢を移動させる
             bow.StringCenter.position = bow.StringBasePos.position + back * dist;
             bow.arrow.SetPosFromTail(bow.StringCenter.position);
 
@@ -108,7 +111,6 @@ public class VRArcheryController3 : MonoBehaviour
             UpdateLine();
             preLine.lineRend.material.color = new Color(1f, 0f, 0f, 1f);
 
-            //Debug.Log("mag: " + mag);
             Debug.Log("dist: " + dist);
 
         }
@@ -121,6 +123,7 @@ public class VRArcheryController3 : MonoBehaviour
 
             bow.StringCenter.position = bow.StringBasePos.position;
 
+            //予測線をフェードアウト
             StartCoroutine(Utility.TimeCrou(1.0f, 
                 (f) => 
                 {

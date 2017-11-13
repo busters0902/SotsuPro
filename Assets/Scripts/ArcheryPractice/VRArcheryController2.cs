@@ -51,6 +51,7 @@ public class VRArcheryController2 : MonoBehaviour
 
         var rTransform = ViveController.Instance.RightController.transform;
 
+        //弓を生成してセットする
         if (lDevice.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger) &&
             hasArrow == false)
         {
@@ -61,6 +62,7 @@ public class VRArcheryController2 : MonoBehaviour
             arrowCamera.onUsed = true;
         }
 
+        //
         if (rDevice.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger))
         { 
             var pos = rDevice.transform.pos;
@@ -68,7 +70,8 @@ public class VRArcheryController2 : MonoBehaviour
             drawingStandard.transform.position = pos;
             UpdateLine();
         }
-        else if (rDevice.GetTouch(SteamVR_Controller.ButtonMask.Trigger))
+        else if (rDevice.GetTouch(SteamVR_Controller.ButtonMask.Trigger) &&
+            hasArrow == true)
         {
             //弓の引き具合の計算　引いてるほどパワーが強くなる
             var pos = rDevice.transform.pos;
