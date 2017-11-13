@@ -84,8 +84,8 @@ public class VRArcheryController3 : MonoBehaviour
 
             var back = -bow.transform.forward;
             var dist = Vector3.Dot(back, pos);
-            
 
+            bow.StringCenter.position = bow.StringBasePos.position + back * dist;
 
             bow.SetPower(dist * powerMagnitude);
             //振動

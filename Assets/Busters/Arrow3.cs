@@ -74,15 +74,15 @@ public class Arrow3 : MonoBehaviour
 
     public void Awake()
     {
-
+        rig.isKinematic = true;
+        rig.useGravity = false;
+        var pos = head.transform.localPosition;
+        rig.centerOfMass = pos * 0.4f;
     }
+
     public void Start()
     {
-        rig.isKinematic = true;
-        var pos = head.transform.localPosition;
-
-
-        rig.centerOfMass = pos * 0.4f;
+        
     }
 
     private void Update()
