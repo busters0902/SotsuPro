@@ -72,17 +72,23 @@ public class Arrow3 : MonoBehaviour
 
     bool isFarstHit;
 
+    public void Awake()
+    {
+
+    }
     public void Start()
     {
         rig.isKinematic = true;
         var pos = head.transform.localPosition;
+
+
         rig.centerOfMass = pos * 0.4f;
     }
 
     private void Update()
     {
         elapsedTime = Time.time - startTime;
-        
+
         if (useCalc)
         {
             var pos = MoveCalcedPosition(elapsedTime);
@@ -134,7 +140,7 @@ public class Arrow3 : MonoBehaviour
     }
 
     public Vector3 MoveCalcedPosition(float time)
-    { 
+    {
         return calcData.GetMovedPos(time);
     }
 
@@ -159,7 +165,7 @@ public class Arrow3 : MonoBehaviour
         accel.y = -accel.y;
         Debug.Log(accel);
 
-        rig.AddForce( accel, ForceMode.Acceleration);
+        rig.AddForce(accel, ForceMode.Acceleration);
         isFarstHit = true;
 
     }

@@ -5,13 +5,19 @@ using UnityEngine;
 public class HitStopObject : MonoBehaviour
 {
 
+    void Start()
+    {
+        Debug.Log("hoge");
+    }
+    
     private void OnCollisionEnter(Collision collision)
     {
+        Debug.Log("hogehoge");
 
-        if(collision.gameObject.tag == "Bullet")
+        if (collision.gameObject.tag == "Bullet")
         {
             var bul = collision.gameObject.GetComponent<BulletTag>();
-            
+
             Debug.Log("Stop Bullet");
 
             var size = transform.localScale;
