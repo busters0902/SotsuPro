@@ -72,17 +72,23 @@ public class Arrow3 : MonoBehaviour
 
     bool isFarstHit;
 
-    public void Start()
+    public void Awake()
     {
         rig.isKinematic = true;
+        rig.useGravity = false;
         var pos = head.transform.localPosition;
         rig.centerOfMass = pos * 0.4f;
+    }
+
+    public void Start()
+    {
+        
     }
 
     private void Update()
     {
         elapsedTime = Time.time - startTime;
-        
+
         if (useCalc)
         {
             var pos = MoveCalcedPosition(elapsedTime);
@@ -115,7 +121,7 @@ public class Arrow3 : MonoBehaviour
         //弓のサイズの半分前に
         Debug.Log("tail scale: " + tail.transform.lossyScale);
         var scl = tail.transform.lossyScale;
-        transform.position = tailPos + transform.up * scl.y;
+        transform.position = tailPos + transform.forward * scl.y * 0.4f ;
     }
 
     //移動法を向く
@@ -134,7 +140,7 @@ public class Arrow3 : MonoBehaviour
     }
 
     public Vector3 MoveCalcedPosition(float time)
-    { 
+    {
         return calcData.GetMovedPos(time);
     }
 
@@ -148,6 +154,8 @@ public class Arrow3 : MonoBehaviour
 
         if (isFarstHit) return;
 
+        Debug.Log(col.gameObject);
+
         //衝突したら物理挙動
         rig.useGravity = true;
         rig.mass = 0.002f;
@@ -159,7 +167,7 @@ public class Arrow3 : MonoBehaviour
         accel.y = -accel.y;
         Debug.Log(accel);
 
-        rig.AddForce( accel, ForceMode.Acceleration);
+        rig.AddForce(accel, ForceMode.Acceleration);
         isFarstHit = true;
 
     }
