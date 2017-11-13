@@ -43,12 +43,15 @@ public class Arrow3 : MonoBehaviour
 
     [SerializeField]
     Rigidbody rig;
+    public Rigidbody Rig { get { return rig; } }
 
     [SerializeField]
     GameObject head;
+    public GameObject Head { get { return head; } }
 
     [SerializeField]
     GameObject tail;
+    public GameObject Tail { get { return tail; } }
 
     [SerializeField]
     bool useLockVel;

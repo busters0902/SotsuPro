@@ -55,6 +55,9 @@ public class VRArcheryController3 : MonoBehaviour
             hasArrow == false)
         {
             bow.CreateArrow();
+            var pos = bow.arrow.Tail.transform.position;
+            bow.StringCenter.position = pos;
+
             hasArrow = true;
             //追尾カメラをセット
             arrowCamera.target = bow.arrow.transform;
@@ -70,19 +73,28 @@ public class VRArcheryController3 : MonoBehaviour
         }
         else if (rDevice.GetTouch(SteamVR_Controller.ButtonMask.Trigger))
         {
+            //弓の弦
+            var cenPos = bow.arrow.Tail.transform.position;
+            bow.StringCenter.position = cenPos;
+
             //弓の引き具合の計算　引いてるほどパワーが強くなる
             var pos = rDevice.transform.pos;
             var curMov = drawingStandard.transform.position - pos;
             var mag = curMov.magnitude;
 
-            bow.SetPower(mag * powerMagnitude);
+            var back = -bow.transform.forward;
+            var dist = Vector3.Dot(back, pos);
+            
+
+
+            bow.SetPower(dist * powerMagnitude);
             //振動
-            rDevice.TriggerHapticPulse((ushort)(mag * vibration));
+            rDevice.TriggerHapticPulse((ushort)(dist * vibration));
 
             UpdateLine();
 
-            Debug.Log("mag: " + mag);
-
+            //Debug.Log("mag: " + mag);
+            Debug.Log("dist: " + dist);
 
         }
         else if (rDevice.GetTouchUp(SteamVR_Controller.ButtonMask.Trigger) &&
