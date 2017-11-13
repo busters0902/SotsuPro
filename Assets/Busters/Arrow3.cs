@@ -113,7 +113,7 @@ public class Arrow3 : MonoBehaviour
         useLockVel = true;
         curPos = prevPos = transform.position;
 
-        Destroy(gameObject, 10f);
+        //Destroy(gameObject, 10f);
     }
 
     public void SetPosFromTail(Vector3 tailPos)

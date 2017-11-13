@@ -13,5 +13,32 @@ public static class Utility
 
         Object.Destroy(obj);
     }
+
+    public static IEnumerator TimeCrou(float limTime, System.Action<float> act)
+    {
+        Debug.Log("Start TimeCrou");
+        var timer = new Timer();
+        timer.Initialize();
+
+        while(true)
+        {
+            
+            timer.Update();
+            Debug.Log("timer: " + timer.time);
+
+            if (timer.time >= limTime) break;
+
+            var t = timer.time / limTime;
+
+            act(t);
+
+            yield return null;
+        }
+        act(limTime);
+
+
+        Debug.Log("End TimeCrou");
+    }
+
        
 }

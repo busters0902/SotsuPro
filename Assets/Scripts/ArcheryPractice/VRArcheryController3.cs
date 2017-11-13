@@ -64,9 +64,14 @@ public class VRArcheryController3 : MonoBehaviour
             bow.StringCenter.position = pos;
 
             hasArrow = true;
+
             //追尾カメラをセット
             arrowCamera.target = bow.arrow.transform;
             arrowCamera.onUsed = true;
+
+            //予測線のアルファ値の初期化
+            var col = preLine.lineRend.material.color;
+            col.a = 1.0f;
         }
 
         if (rDevice.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger))
@@ -96,10 +101,12 @@ public class VRArcheryController3 : MonoBehaviour
             bow.arrow.SetPosFromTail(bow.StringCenter.position);
 
             bow.SetPower(dist * powerMagnitude);
+
             //振動
             rDevice.TriggerHapticPulse((ushort)(dist * vibration));
 
             UpdateLine();
+            preLine.lineRend.material.color = new Color(1f, 0f, 0f, 1f);
 
             //Debug.Log("mag: " + mag);
             Debug.Log("dist: " + dist);
@@ -113,6 +120,13 @@ public class VRArcheryController3 : MonoBehaviour
             arrowCamera.target = bow.arrow.transform;
 
             bow.StringCenter.position = bow.StringBasePos.position;
+
+            StartCoroutine(Utility.TimeCrou(1.0f, 
+                (f) => 
+                {
+                    var col = preLine.lineRend.material.color;
+                    preLine.lineRend.material.color = new Color(col.r, col.g, col.b, 1.0f - f);
+                }));
 
             Debug.Log("ShotPower " + bow.curPower);
 

@@ -7,7 +7,7 @@ using UnityEngine;
 public class PredictionLine : MonoBehaviour
 {
     [SerializeField]
-    LineRenderer lineRend;
+    public LineRenderer lineRend;
 
     
     //分割数
