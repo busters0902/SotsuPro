@@ -121,7 +121,7 @@ public class Arrow3 : MonoBehaviour
         //弓のサイズの半分前に
         Debug.Log("tail scale: " + tail.transform.lossyScale);
         var scl = tail.transform.lossyScale;
-        transform.position = tailPos + transform.up * scl.y;
+        transform.position = tailPos + transform.forward * scl.y * 0.4f ;
     }
 
     //移動法を向く
@@ -153,6 +153,8 @@ public class Arrow3 : MonoBehaviour
     {
 
         if (isFarstHit) return;
+
+        Debug.Log(col.gameObject);
 
         //衝突したら物理挙動
         rig.useGravity = true;

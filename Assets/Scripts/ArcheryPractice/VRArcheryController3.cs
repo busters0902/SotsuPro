@@ -37,11 +37,16 @@ public class VRArcheryController3 : MonoBehaviour
     [SerializeField]
     PredictionLine preLine;
 
+    [SerializeField]
+    float drawLimit;
+
     private void Start()
     {
         drawingStandard = new GameObject("ArrowStandard");
         drawingStandard.transform.SetParent(bow.transform);
         preLine.CreateLine();
+
+        bow.StringCenter.position = bow.StringBasePos.position;
     }
 
     void Update()
@@ -79,13 +84,16 @@ public class VRArcheryController3 : MonoBehaviour
 
             //弓の引き具合の計算　引いてるほどパワーが強くなる
             var pos = rDevice.transform.pos;
-            var curMov = drawingStandard.transform.position - pos;
+            var curMov = pos - drawingStandard.transform.position;
             var mag = curMov.magnitude;
 
             var back = -bow.transform.forward;
-            var dist = Vector3.Dot(back, pos);
+            var dist = Vector3.Dot(back, curMov);
+
+            if (dist > drawLimit) dist = drawLimit;
 
             bow.StringCenter.position = bow.StringBasePos.position + back * dist;
+            bow.arrow.SetPosFromTail(bow.StringCenter.position);
 
             bow.SetPower(dist * powerMagnitude);
             //振動
@@ -103,6 +111,8 @@ public class VRArcheryController3 : MonoBehaviour
             bow.Shoot();
             hasArrow = false;
             arrowCamera.target = bow.arrow.transform;
+
+            bow.StringCenter.position = bow.StringBasePos.position;
 
             Debug.Log("ShotPower " + bow.curPower);
 

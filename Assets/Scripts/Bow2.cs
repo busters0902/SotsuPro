@@ -57,6 +57,7 @@ public class Bow2 : MonoBehaviour
         arr.calcData = CalculatedData.Create(this.transform.forward, curPower);
         arrow = arr;
         arrow.gameObject.transform.SetParent(gameObject.transform);
+        arrow.SetPosFromTail(stringBasePos.position);
 
         hasArrow = true;
 
