@@ -1,13 +1,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HitStopObject : MonoBehaviour
 {
+    ScoreCalculation scoreCalculation;
+    [SerializeField]
+    Text text;
+
+    [SerializeField]
+    ScoreTotal scoreTotal;
+
 
     void Start()
     {
         Debug.Log("hoge");
+        scoreCalculation = GetComponent<ScoreCalculation>();
+        
     }
     
     private void OnCollisionEnter(Collision collision)
@@ -18,6 +28,7 @@ public class HitStopObject : MonoBehaviour
         {
             var bul = collision.gameObject.GetComponent<BulletTag>();
 
+
             Debug.Log("Stop Bullet");
 
             var size = transform.localScale;
@@ -26,6 +37,10 @@ public class HitStopObject : MonoBehaviour
             bul.rig.transform.rotation = Quaternion.identity;
             bul.Stop();
             bul.rig.isKinematic = true;
+
+            var get_score = scoreCalculation.getScore(collision.gameObject);
+            text.text = "score : " + get_score.ToString();
+            scoreTotal.addScore(get_score);
         }
 
     }
