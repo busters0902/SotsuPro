@@ -40,5 +40,12 @@ public static class Utility
         Debug.Log("End TimeCrou");
     }
 
+    //public float Renge(float len, float min, float max)
+    //{
+    //    if (min > len) return min;
+    //    else if(max < len)
+
+    //}
+
        
 }

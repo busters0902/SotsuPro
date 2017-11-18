@@ -47,6 +47,8 @@ public class VRArcheryController3 : MonoBehaviour
         preLine.CreateLine();
 
         bow.StringCenter.position = bow.StringBasePos.position;
+
+        var am = AudioManager.Instance;
     }
 
     void Update()

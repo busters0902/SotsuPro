@@ -11,7 +11,7 @@ public class HitStopObject : MonoBehaviour
 
     [SerializeField]
     ScoreTotal scoreTotal;
-
+    
 
     void Start()
     {
@@ -38,8 +38,14 @@ public class HitStopObject : MonoBehaviour
             bul.Stop();
             bul.rig.isKinematic = true;
 
+            AudioManager.Instance.PlaySE("弓矢・矢が刺さる01");
+
             var get_score = scoreCalculation.getScore(collision.gameObject);
-            text.text = "score : " + get_score.ToString();
+           if (get_score == 0){
+                bul.rig.isKinematic = false;
+                bul.rig.useGravity = true;
+            }
+            text.text = "Score : " + get_score.ToString();
             scoreTotal.addScore(get_score);
         }
 

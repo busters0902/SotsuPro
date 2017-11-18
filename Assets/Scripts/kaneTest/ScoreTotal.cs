@@ -11,7 +11,7 @@ public class ScoreTotal : MonoBehaviour {
     public void addScore(int num)
     {
         totalScore += num;
-        text.text = "score : " + totalScore.ToString();
+        text.text = "Total : " + totalScore.ToString();
     }
     // Use this for initialization
     void Start () {
