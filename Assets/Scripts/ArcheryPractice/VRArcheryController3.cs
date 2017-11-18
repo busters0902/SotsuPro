@@ -97,7 +97,8 @@ public class VRArcheryController3 : MonoBehaviour
             var back = -bow.transform.forward;
             var dist = Vector3.Dot(back, curMov);
 
-            if (dist > drawLimit) dist = drawLimit;
+            //if (dist > drawLimit) dist = drawLimit;
+            dist = Mathf.Clamp(dist, 0.0f, drawLimit);
 
             //弓の弦に合った位置に矢を移動させる
             bow.StringCenter.position = bow.StringBasePos.position + back * dist;
