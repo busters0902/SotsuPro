@@ -154,7 +154,7 @@ public class Arrow3 : MonoBehaviour
 
         if (isFarstHit) return;
 
-        Debug.Log(col.gameObject);
+        Debug.Log(col.gameObject.tag);
 
         //衝突したら物理挙動
         rig.useGravity = true;
@@ -169,6 +169,12 @@ public class Arrow3 : MonoBehaviour
 
         rig.AddForce(accel, ForceMode.Acceleration);
         isFarstHit = true;
+
+
+        //衝突SE
+        if (col.gameObject.tag == "Target") AudioManager.Instance.PlaySE("弓矢・矢が刺さる01");
+        else if (col.gameObject.tag == "Wall") AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
+
 
     }
 
