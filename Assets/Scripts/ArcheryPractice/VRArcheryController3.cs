@@ -2,8 +2,36 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+Stance スタンス（足踏み）
+Set セット（胴造り）
+Nocking ノッキング（矢つがえ）
+Set up セットアップ（打ちおこし）
+Drawing ドローイング（引き分け）
+Full Draw フルドロー （会）
+Release リリース（離れ）
+Follow Through フォロースルー（残身(残心とも)）
+*/
+
+public enum ArcheryState
+{
+    NONE = 0,           
+    STANCE,
+    SET,
+    NOCKING,
+    SET_UP,
+    DRAWING,
+    FULL_DRAW,
+    RELEASE,
+    FOLLOW_THROUGH,
+    NUM,
+}
+
 public class VRArcheryController3 : MonoBehaviour
 {
+
+    public ArcheryState archeryState;
+
     [SerializeField]
     Bow2 bow;
 

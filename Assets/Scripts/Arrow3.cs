@@ -124,7 +124,7 @@ public class Arrow3 : MonoBehaviour
         transform.position = tailPos + transform.forward * scl.y * 0.4f ;
     }
 
-    //移動法を向く
+    //移動方向を向く
     public void LookVelocity()
     {
         if (!rig.isKinematic)
