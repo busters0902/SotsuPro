@@ -105,14 +105,16 @@ public class VRArcheryController3 : MonoBehaviour
             col.a = 1.0f;
         }
 
-        if (rDevice.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger))
+        if (rDevice.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger) ||
+            rDevice.GetPressDown(SteamVR_Controller.ButtonMask.Touchpad))
         {
             var pos = rDevice.transform.pos;
             basePos = pos;
             drawingStandard.transform.position = pos;
             UpdateLine();
         }
-        else if (rDevice.GetTouch(SteamVR_Controller.ButtonMask.Trigger) &&
+        else if (rDevice.GetTouch(SteamVR_Controller.ButtonMask.Trigger)||
+            rDevice.GetPress(SteamVR_Controller.ButtonMask.Touchpad) &&
             hasArrow == true)
         {
             //弓の弦
@@ -145,7 +147,8 @@ public class VRArcheryController3 : MonoBehaviour
             Debug.Log("dist: " + dist);
 
         }
-        else if (rDevice.GetTouchUp(SteamVR_Controller.ButtonMask.Trigger) &&
+        else if (rDevice.GetTouchUp(SteamVR_Controller.ButtonMask.Trigger)||
+            rDevice.GetPressUp(SteamVR_Controller.ButtonMask.Touchpad) &&
             hasArrow == true)
         {
             bow.Shoot();
