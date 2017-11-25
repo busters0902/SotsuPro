@@ -38,7 +38,7 @@ public class HitStopObject : MonoBehaviour
             bul.Stop();
             bul.rig.isKinematic = true;
 
-            AudioManager.Instance.PlaySE("弓矢・矢が刺さる01");
+            //AudioManager.Instance.PlaySE("弓矢・矢が刺さる01");
 
             var get_score = scoreCalculation.getScore(collision.gameObject);
            if (get_score == 0){

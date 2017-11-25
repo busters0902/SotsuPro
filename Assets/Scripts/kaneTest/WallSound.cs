@@ -9,7 +9,7 @@ public class WallSound : MonoBehaviour
     {
         if (collision.gameObject.tag == "Bullet")
         {
-            AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
+            // AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
 
         }
     }
