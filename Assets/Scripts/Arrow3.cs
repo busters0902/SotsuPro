@@ -70,7 +70,13 @@ public class Arrow3 : MonoBehaviour
 
     public float angleLerp;
 
-    bool isFarstHit;
+    public bool isFarstHit;
+    public int hitFlameCount;
+
+    public bool isHitTarget;
+    public bool isHitWall;
+    public GameObject hitTargetObject;
+    public GameObject hitWallObject;
 
     public void Awake()
     {
@@ -78,6 +84,9 @@ public class Arrow3 : MonoBehaviour
         rig.useGravity = false;
         var pos = head.transform.localPosition;
         rig.centerOfMass = pos * 0.4f;
+
+        isHitTarget = false;
+        isHitWall = false;
     }
 
     public void Start()
@@ -99,6 +108,30 @@ public class Arrow3 : MonoBehaviour
         }
 
         if (useLockVel) LookVelocity();
+
+        //衝突したオブジェが同フレームでぶつかった場合
+        if (isFarstHit) hitFlameCount++;
+        if(hitFlameCount == 1 )
+        {
+            Debug.Log("Play SE from Arrow3");
+            if(isHitTarget)
+            {
+                //範囲内であれば
+                var score = hitTargetObject.GetComponent<ScoreCalculation>();
+                int point = score.getScore(this.gameObject);
+                if(point > 0)
+                {
+                    AudioManager.Instance.PlaySE("弓矢・矢が刺さる01");
+                }
+                else AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
+
+            }
+            else //if (isHitWall)
+            {
+                AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
+            }
+        }
+
     }
 
     public void Shot(CalculatedData data)
@@ -151,6 +184,19 @@ public class Arrow3 : MonoBehaviour
 
     public void OnCollisionEnter(Collision col)
     {
+        if (hitFlameCount == 0)
+        {
+            if (col.gameObject.tag == "Target")
+            {
+                isHitTarget = true;
+                hitTargetObject = col.gameObject;
+            }
+            else if (col.gameObject.tag == "Wall")
+            {
+                isHitWall = true;
+                hitWallObject = col.gameObject;
+            }
+        }
 
         if (isFarstHit) return;
 
@@ -170,11 +216,9 @@ public class Arrow3 : MonoBehaviour
         rig.AddForce(accel, ForceMode.Acceleration);
         isFarstHit = true;
 
-
         //衝突SE
-        if (col.gameObject.tag == "Target") AudioManager.Instance.PlaySE("弓矢・矢が刺さる01");
-        else if (col.gameObject.tag == "Wall") AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
-
+        //if (col.gameObject.tag == "Target") AudioManager.Instance.PlaySE("弓矢・矢が刺さる01");
+        //else if (col.gameObject.tag == "Wall") AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
 
     }
 
