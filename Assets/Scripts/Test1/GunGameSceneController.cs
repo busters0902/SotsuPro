@@ -139,11 +139,6 @@ public class GunGameSceneController : MonoBehaviour
 
 		while (true)
 		{
-			//if (inputTriggerDown == null)
-			//{
-			//	Debug.Log("入力のトリガーが設定されてません");
-			//	yield break;
-			//}
             
 			yield return StartCoroutine(WaitPullTheTrigger());
 

@@ -17,12 +17,11 @@ public class _Initialize : MonoBehaviour
         //GameObject.DontDestroyOnLoad(obj);
 
         //フェードマネージャーの作成
-        //var fadeObj = (GameObject)Instantiate(Resources.Load("Prefabs/FadeManager"));//(GameObject)Resources.Load("Prefabs/FadeManager");
+        //var fadeObj = (GameObject)Instantiate(Resources.Load("Prefabs/FadeManager")); //(GameObject)Resources.Load("Prefabs/FadeManager");
         //DontDestroyOnLoad(fadeObj);
 
         var obj = AudioManager.Instance.gameObject;
         DontDestroyOnLoad(obj);
-
 
 		//Application.targetFrameRate = asset.targetFps;
 		Debug.Log("target fps: " + Application.targetFrameRate);

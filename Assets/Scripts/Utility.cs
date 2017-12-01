@@ -39,6 +39,5 @@ public static class Utility
 
         Debug.Log("End TimeCrou");
     }
-
        
 }
