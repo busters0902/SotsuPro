@@ -32,7 +32,7 @@ public class ViveController : MonoBehaviour
     public SteamVR_TrackedObject RightController;
     public SteamVR_TrackedObject LeftController;
 
-    public SteamVR_Controller.Device GetRightDevice(){return SteamVR_Controller.Input((int)RightController.index); }
+    public SteamVR_Controller.Device GetRightDevice(){ return SteamVR_Controller.Input((int)RightController.index); }
 	public SteamVR_Controller.Device GetLeftDevice() { return SteamVR_Controller.Input((int)LeftController.index); }
 
 	public void SetRightController(SteamVR_TrackedObject obj)
