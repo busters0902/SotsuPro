@@ -3,23 +3,53 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class FadeControl : MonoBehaviour {
+public class FadeControl : MonoBehaviour
+{
 
-	// Use this for initialization
-	void Start () {
-		
-        material = gameObject.GetComponent<Renderer>().material;
-        FadeStart();
-
+    static FadeControl instance;
+    static public FadeControl Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                var obj = Resources.Load("Prefabs/Fade/FadeQuad");
+                var _instance = Instantiate(obj);
+            }
+            return instance;
+        }
     }
 
-    void FadeStart(Action callback = null)
-    {
-        StartCoroutine(Easing.Tween(3, (t) => {
-            material.SetFloat("_Alpha", t);
-        },()=> {
+    private Material material;
 
-            StartCoroutine(Easing.Tween(3,(t)=> {
+    void Awake()
+    {
+        instance = this;
+    }
+
+    void Start()
+    {
+        material = gameObject.GetComponent<Renderer>().material;
+        //FadeStart();
+    }
+
+    public void SetGemeobject(GameObject obj)
+    {
+        var buf_pos = transform.localPosition;
+        transform.SetParent(obj.transform);
+        transform.transform.localPosition = buf_pos;
+    }
+
+    public void FadeStart(Action callback = null)
+    {
+        StartCoroutine(Easing.Tween(3, (t) =>
+        {
+            material.SetFloat("_Alpha", t);
+        }, () =>
+        {
+
+            StartCoroutine(Easing.Tween(3, (t) =>
+            {
                 material.SetFloat("_Alpha", 1 - t);
             }));
             if (callback != null)
@@ -27,12 +57,5 @@ public class FadeControl : MonoBehaviour {
         }));
         material.SetFloat("_Alpha", 1.0f);
     }
-
-    private Material material;
-    // Update is called once per frame
-    void Update () {
-
-    }
-
     
 }
