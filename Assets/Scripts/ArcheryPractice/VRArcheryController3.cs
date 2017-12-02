@@ -103,6 +103,7 @@ public class VRArcheryController3 : MonoBehaviour
 
     public void UseBow()
     {
+        //Debug.Log("nu");
         var lDevice = ViveController.Instance.GetLeftDevice();
         var rDevice = ViveController.Instance.GetRightDevice();
 
@@ -110,9 +111,10 @@ public class VRArcheryController3 : MonoBehaviour
 
         //矢を生成して、弓にセットする(両デバイスでトリガーを押す)
         if (lDevice.GetTouch(SteamVR_Controller.ButtonMask.Trigger) &&
-            rDevice.GetTouch(SteamVR_Controller.ButtonMask.Trigger) &&
+            //rDevice.GetTouch(SteamVR_Controller.ButtonMask.Trigger) &&
             hasArrow == false)
         {
+            Debug.Log("create arrow");
             var ar = bow.CreateArrow();
             var pos = bow.arrow.Tail.transform.position;
             bow.StringCenter.position = pos;

@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TextManager : MonoBehaviour {
+public class TextManager : MonoBehaviour
+{
 
     static private TextManager instance;
     static public TextManager Instance
@@ -38,7 +39,7 @@ public class TextManager : MonoBehaviour {
     GameObject textPrefab;
 
 
-    public Text addText(Vector3 pos, Vector3 size,string _name, string _text , bool _isFrash = false)
+    public Text addText(Vector3 pos, Vector3 size, string _name, string _text, bool _isFrash = false)
     {
 
         var text = createNewText(_name);
@@ -46,7 +47,7 @@ public class TextManager : MonoBehaviour {
         Texts.Add(textPrefab);
         text.transform.position = pos;
         text.transform.localScale = size;
-        text.transform.SetParent(canv.transform,false);
+        text.transform.SetParent(canv.transform, false);
         var textFrash = text.gameObject.GetComponent<TextFrash>();
         textFrash.useFrash = _isFrash;
         return text;
@@ -65,7 +66,7 @@ public class TextManager : MonoBehaviour {
 
 
         return text;
-        
+
     }
 
     //public GameObject frashText;
@@ -81,5 +82,15 @@ public class TextManager : MonoBehaviour {
     //        GameObject.Instantiate(stopText);
     //    }
     //}
-   
+
+    public void SetPrefab( GameObject obj )
+    {
+        textPrefab = obj;
+    }
+
+    public void SetCanvas(Canvas c)
+    {
+        canv = c;
+    }
+
 }

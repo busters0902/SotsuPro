@@ -22,14 +22,14 @@ public class HitStopObject : MonoBehaviour
     
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("hogehoge");
+        //Debug.Log("hogehoge");
 
         if (collision.gameObject.tag == "Bullet")
         {
             var bul = collision.gameObject.GetComponent<BulletTag>();
 
 
-            Debug.Log("Stop Bullet");
+            //Debug.Log("Stop Bullet");
 
             var size = transform.localScale;
             var pos = bul.rig.transform.position;
