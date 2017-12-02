@@ -152,7 +152,7 @@ public class Arrow3 : MonoBehaviour
     public void SetPosFromTail(Vector3 tailPos)
     {
         //弓のサイズの半分前に
-        Debug.Log("tail scale: " + tail.transform.lossyScale);
+        //Debug.Log("tail scale: " + tail.transform.lossyScale);
         var scl = tail.transform.lossyScale;
         transform.position = tailPos + transform.forward * scl.y * 0.4f ;
     }

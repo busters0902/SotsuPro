@@ -17,7 +17,7 @@ public class burekeigen : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         var angle = Quaternion.Angle(transform.rotation, prevQuat);
-        Debug.Log(angle);
+        //Debug.Log(angle);
 
         if(angle > 1)
         {
@@ -27,7 +27,6 @@ public class burekeigen : MonoBehaviour {
         {
             transform.rotation = Quaternion.Lerp(transform.rotation, prevQuat, 0.5f);
         }
-
 
         prevQuat = transform.rotation;
     }

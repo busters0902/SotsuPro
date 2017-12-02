@@ -63,14 +63,22 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
     [SerializeField]
     ScoreTotal scoreTortal;
+    [SerializeField]
+    GameObject head;
+
+
 
     void Start ()
     {
         StartCoroutine(Setup());
+        
 	}
 
     IEnumerator Setup()
     {
+        //FadeControl.Instance.SetGemeobject(head);
+
+        //FadeControl.Instance.FadeStart();
         Debug.Log("SceneController.Setup");
 
         yield return null;
