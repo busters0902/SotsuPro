@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class NoVRSceneController : MonoBehaviour
 {
 
-
 	public bool isGameEnd;
 
 	Timer timer;

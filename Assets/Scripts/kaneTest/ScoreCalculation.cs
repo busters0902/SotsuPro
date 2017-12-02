@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ScoreCalculation : MonoBehaviour {
 
-	int getScore(GameObject arrow)
+	public int getScore(GameObject arrow)
     {
         var dis = Vector3.Distance(arrow.transform.position,transform.position);
         for(int i = 10; i >= 0; i--)

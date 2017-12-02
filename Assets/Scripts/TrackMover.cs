@@ -9,9 +9,4 @@ public class TrackMover
     [SerializeField]
     float moveSpeed;
 
-    private void Update()
-    {
-        
-    }
-
 }

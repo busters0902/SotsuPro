@@ -70,19 +70,28 @@ public class Arrow3 : MonoBehaviour
 
     public float angleLerp;
 
-    bool isFarstHit;
+    public bool isFarstHit;
+    public int hitFlameCount;
+
+    public bool isHitTarget;
+    public bool isHitWall;
+    public GameObject hitTargetObject;
+    public GameObject hitWallObject;
 
     public void Awake()
     {
+        rig.isKinematic = true;
+        rig.useGravity = false;
+        var pos = head.transform.localPosition;
+        rig.centerOfMass = pos * 0.4f;
 
+        isHitTarget = false;
+        isHitWall = false;
     }
+
     public void Start()
     {
-        rig.isKinematic = true;
-        var pos = head.transform.localPosition;
-
-
-        rig.centerOfMass = pos * 0.4f;
+        
     }
 
     private void Update()
@@ -99,6 +108,30 @@ public class Arrow3 : MonoBehaviour
         }
 
         if (useLockVel) LookVelocity();
+
+        //衝突したオブジェが同フレームでぶつかった場合
+        if (isFarstHit) hitFlameCount++;
+        if(hitFlameCount == 1 )
+        {
+            Debug.Log("Play SE from Arrow3");
+            if(isHitTarget)
+            {
+                //範囲内であれば
+                var score = hitTargetObject.GetComponent<ScoreCalculation>();
+                int point = score.getScore(this.gameObject);
+                if(point > 0)
+                {
+                    AudioManager.Instance.PlaySE("弓矢・矢が刺さる01");
+                }
+                else AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
+
+            }
+            else //if (isHitWall)
+            {
+                AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
+            }
+        }
+
     }
 
     public void Shot(CalculatedData data)
@@ -113,7 +146,7 @@ public class Arrow3 : MonoBehaviour
         useLockVel = true;
         curPos = prevPos = transform.position;
 
-        Destroy(gameObject, 10f);
+        //Destroy(gameObject, 10f);
     }
 
     public void SetPosFromTail(Vector3 tailPos)
@@ -121,10 +154,10 @@ public class Arrow3 : MonoBehaviour
         //弓のサイズの半分前に
         Debug.Log("tail scale: " + tail.transform.lossyScale);
         var scl = tail.transform.lossyScale;
-        transform.position = tailPos + transform.up * scl.y;
+        transform.position = tailPos + transform.forward * scl.y * 0.4f ;
     }
 
-    //移動法を向く
+    //移動方向を向く
     public void LookVelocity()
     {
         if (!rig.isKinematic)
@@ -151,8 +184,23 @@ public class Arrow3 : MonoBehaviour
 
     public void OnCollisionEnter(Collision col)
     {
+        if (hitFlameCount == 0)
+        {
+            if (col.gameObject.tag == "Target")
+            {
+                isHitTarget = true;
+                hitTargetObject = col.gameObject;
+            }
+            else if (col.gameObject.tag == "Wall")
+            {
+                isHitWall = true;
+                hitWallObject = col.gameObject;
+            }
+        }
 
         if (isFarstHit) return;
+
+        Debug.Log(col.gameObject.tag);
 
         //衝突したら物理挙動
         rig.useGravity = true;
@@ -167,6 +215,10 @@ public class Arrow3 : MonoBehaviour
 
         rig.AddForce(accel, ForceMode.Acceleration);
         isFarstHit = true;
+
+        //衝突SE
+        //if (col.gameObject.tag == "Target") AudioManager.Instance.PlaySE("弓矢・矢が刺さる01");
+        //else if (col.gameObject.tag == "Wall") AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
 
     }
 
