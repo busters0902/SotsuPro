@@ -25,13 +25,9 @@ public class FadeControl : MonoBehaviour
     void Awake()
     {
         instance = this;
+        material = gameObject.GetComponent<Renderer>().material;
     }
 
-    void Start()
-    {
-        material = gameObject.GetComponent<Renderer>().material;
-        //FadeStart();
-    }
 
     public void SetGemeobject(GameObject obj)
     {
@@ -42,13 +38,14 @@ public class FadeControl : MonoBehaviour
 
     public void FadeStart(Action callback = null)
     {
-        StartCoroutine(Easing.Tween(3, (t) =>
+        
+        StartCoroutine(Easing.Tween(1, (t) =>
         {
             material.SetFloat("_Alpha", t);
         }, () =>
         {
 
-            StartCoroutine(Easing.Tween(3, (t) =>
+            StartCoroutine(Easing.Tween(1, (t) =>
             {
                 material.SetFloat("_Alpha", 1 - t);
             }));
@@ -57,5 +54,5 @@ public class FadeControl : MonoBehaviour
         }));
         material.SetFloat("_Alpha", 1.0f);
     }
-    
+
 }
