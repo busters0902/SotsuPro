@@ -28,9 +28,9 @@ public class TextManager : MonoBehaviour
         instance = this;
     }
 
-    [SerializeField]
-    public List<GameObject> Texts = new List<GameObject>();
-
+    [HideInInspector]
+    public Dictionary<string,GameObject> texts = new Dictionary<string,GameObject>();
+    
 
     [SerializeField]
     Canvas canv;
@@ -39,22 +39,22 @@ public class TextManager : MonoBehaviour
     GameObject textPrefab;
 
 
-    public Text addText(Vector3 pos, Vector3 size, string _name, string _text, bool _isFrash = false)
+    public Text addTextFrash(Vector3 pos, Vector3 size, string _name, string _text, bool _isFrash = false)
     {
 
-        var text = createNewText(_name);
+        var text = createNewTextFrash(_name);
         text.text = _text;
-        Texts.Add(textPrefab);
         text.transform.position = pos;
         text.transform.localScale = size;
         text.transform.SetParent(canv.transform, false);
         var textFrash = text.gameObject.GetComponent<TextFrash>();
         textFrash.useFrash = _isFrash;
+        texts.Add(_name, text.gameObject);
         return text;
 
     }
 
-    public Text createNewText(string _name)
+    public Text createNewTextFrash(string _name)
     {
 
         var obj = Instantiate(textPrefab);

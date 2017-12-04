@@ -14,13 +14,18 @@ public class TextFrash : MonoBehaviour {
     void Start()
     {
         a_color = 0;
+        textColor_red = 1;
+        textColor_green = 1;
+        textColor_blue = 1;
+
     }
     // Update is called once per frame
     void Update()
     {
+
         if (useFrash == true) {
             //テキストの透明度を変更する
-            Qtext.color = new Color(1, 1, 1, a_color);
+            Qtext.color = new Color(textColor_red, textColor_green, textColor_blue, a_color);
             if (flag_G)
                 a_color -= Time.deltaTime;
             else
@@ -36,6 +41,42 @@ public class TextFrash : MonoBehaviour {
                 flag_G = true;
             }
         }
+       
     }
 
+
+
+
+    [SerializeField]
+    public float textColor_red;
+    [SerializeField]
+    public float textColor_green;
+    [SerializeField]
+    public float textColor_blue;
+
+    public void setColor(float _red, float _green,float _blue)
+    {
+        textColor_red = _red;
+        textColor_green = _green;
+        textColor_blue = _blue;
+        Qtext.color = new Color(textColor_red, textColor_green, textColor_blue, a_color);
+    }
+
+    public void setAlpha(float _alpha)
+    {
+        a_color = _alpha;
+        Qtext.color = new Color(textColor_red, textColor_green, textColor_blue, a_color);
+    }
+
+    public void setPos(Vector3 _pos)
+    {
+        Qtext.transform.localPosition = new Vector3(_pos.x,_pos.y,_pos.z);
+    }
+
+    public void setSize(Vector3 _size)
+    {
+        Qtext.transform.localScale = new Vector3(_size.x, _size.y, _size.z);
+    }
 }
+
+
