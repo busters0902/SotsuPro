@@ -239,4 +239,9 @@ public class VRArcheryController3 : MonoBehaviour
         
     }
 
+    public Arrow3 GetArrow()
+    {
+        return bow.arrow;
+    }
+
 }

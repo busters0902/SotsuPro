@@ -157,7 +157,10 @@ public class ArcheryPracticeSceneController : MonoBehaviour
             Debug.Log("shooted : " + shotTimes + "回目");
             flashText.text.text = shotTimes + 1 + "回目";
             timesText.text = "Times : " + (shotTimes + 1) + "/6";
+            archeryController.GetArrow().HitCall = () => Debug.Log("Arrow.HitCall");
         };
+
+        
 
         while (shotTimes < shotTimesLimit)
         {
@@ -168,6 +171,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         }
 
         flashText.text.text = "";
+        timesText.text = "Times : " + (shotTimes) + "/6";
         yield return new WaitForSeconds(2.0f);
 
         Debug.Log("SceneController.PlayGame End");
@@ -176,12 +180,14 @@ public class ArcheryPracticeSceneController : MonoBehaviour
     IEnumerator ShotResult()
     {
         Debug.Log("リザルト");
-        //yield return new WaitForSeconds(2.0f);
 
         //1ゲーム終了、歓声
         flashText.text.text = "ゲーム終了: " + scoreTortal.TotalScore;
+        flashText.flash.useFrash = true;
+        yield return new WaitUntil(() => ViveController.Instance.ViveRightDown);
+        
+        yield return new WaitForSeconds(1.0f);
 
-        yield return new WaitForSeconds(2.0f);
     }
 
     void Reset()

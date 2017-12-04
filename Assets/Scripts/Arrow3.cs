@@ -78,6 +78,8 @@ public class Arrow3 : MonoBehaviour
     public GameObject hitTargetObject;
     public GameObject hitWallObject;
 
+    public System.Action HitCall;
+
     public void Awake()
     {
         rig.isKinematic = true;
@@ -200,7 +202,9 @@ public class Arrow3 : MonoBehaviour
 
         if (isFarstHit) return;
 
-        Debug.Log(col.gameObject.tag);
+        Debug.Log(col.gameObject.name);
+
+        HitCall();
 
         //衝突したら物理挙動
         rig.useGravity = true;
