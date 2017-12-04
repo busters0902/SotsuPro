@@ -208,7 +208,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
     FlashTextObject CreateGameTelop()
     {
-        var text_ = TextManager.Instance.addText(new Vector3(0,5,5), Vector3.one, "GameTelop", "ゲームスタート" );
+        var text_ = TextManager.Instance.addTextFrash(new Vector3(0,5,5), Vector3.one, "GameTelop", "ゲームスタート" );
         var flash_ = text_.gameObject.GetComponent<TextFrash>();
         var obj = new FlashTextObject(text_, flash_);
         return obj;
