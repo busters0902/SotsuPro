@@ -76,9 +76,11 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
     IEnumerator Setup()
     {
-        //FadeControl.Instance.SetGemeobject(head);
+        
+        FadeControl.Instance.SetGemeobject(head);
 
-        //FadeControl.Instance.FadeStart();
+
+
         Debug.Log("SceneController.Setup");
 
         yield return null;
@@ -90,8 +92,8 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         flashText.Set(flashTextSettings);
         flashText.text.text = "初期化";
 
-
         //フェードアウト
+        FadeControl.Instance.FadeIn(3, 1);
 
         yield return StartCoroutine(GameMain());
     }
@@ -99,6 +101,8 @@ public class ArcheryPracticeSceneController : MonoBehaviour
     IEnumerator GameMain()
     {
         Debug.Log("SceneController.GameMain");
+
+        
 
         yield return null;
 
