@@ -20,7 +20,7 @@ public class TextFrash : MonoBehaviour {
     {
         if (useFrash == true) {
             //テキストの透明度を変更する
-            Qtext.color = new Color(0, 0, 0, a_color);
+            Qtext.color = new Color(1, 1, 1, a_color);
             if (flag_G)
                 a_color -= Time.deltaTime;
             else

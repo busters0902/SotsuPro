@@ -24,7 +24,7 @@ public static class Utility
         {
             
             timer.Update();
-            Debug.Log("timer: " + timer.time);
+            //Debug.Log("timer: " + timer.time);
 
             if (timer.time >= limTime) break;
 
@@ -37,7 +37,7 @@ public static class Utility
         act(limTime);
 
 
-        Debug.Log("End TimeCrou");
+        //Debug.Log("End TimeCrou");
     }
        
 }

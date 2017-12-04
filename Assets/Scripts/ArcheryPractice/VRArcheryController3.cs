@@ -64,6 +64,7 @@ public class VRArcheryController3 : MonoBehaviour
     public GameObject drawingStandard;
 
     public bool hasArrow;
+    private bool isDrawing;
 
     public Vector3 basePos = Vector3.zero;
 
@@ -103,6 +104,7 @@ public class VRArcheryController3 : MonoBehaviour
 
     public void UseBow()
     {
+        //Debug.Log("nu");
         var lDevice = ViveController.Instance.GetLeftDevice();
         var rDevice = ViveController.Instance.GetRightDevice();
 
@@ -110,9 +112,10 @@ public class VRArcheryController3 : MonoBehaviour
 
         //矢を生成して、弓にセットする(両デバイスでトリガーを押す)
         if (lDevice.GetTouch(SteamVR_Controller.ButtonMask.Trigger) &&
-            rDevice.GetTouch(SteamVR_Controller.ButtonMask.Trigger) &&
+            //rDevice.GetTouch(SteamVR_Controller.ButtonMask.Trigger) &&
             hasArrow == false)
         {
+            Debug.Log("create arrow");
             var ar = bow.CreateArrow();
             var pos = bow.arrow.Tail.transform.position;
             bow.StringCenter.position = pos;
@@ -132,15 +135,17 @@ public class VRArcheryController3 : MonoBehaviour
 
         //
         if (rDevice.GetPressDown(SteamVR_Controller.ButtonMask.Touchpad)
-            && IsAreaDrawingString(rDevice.transform.pos, drawingDist))
+            && IsAreaDrawingString(rDevice.transform.pos, drawingDist)
+            && isDrawing == false)
         {
             var pos = rDevice.transform.pos;
             basePos = pos;
             drawingStandard.transform.position = pos;
+            isDrawing = true;
             UpdateLine();
         }
-        else if (rDevice.GetPress(SteamVR_Controller.ButtonMask.Touchpad) 
-            && hasArrow == true)
+        else if (rDevice.GetPress(SteamVR_Controller.ButtonMask.Touchpad)
+            && isDrawing == true)
         {
             //弓の弦
             var cenPos = bow.arrow.Tail.transform.position;
@@ -169,14 +174,15 @@ public class VRArcheryController3 : MonoBehaviour
             UpdateLine();
             preLine.lineRend.material.color = new Color(1f, 0f, 0f, 1f);
 
-            Debug.Log("dist: " + dist);
+            //Debug.Log("dist: " + dist);
 
         }
-        else if ( rDevice.GetPressUp(SteamVR_Controller.ButtonMask.Touchpad) 
-            && hasArrow == true)
+        else if (rDevice.GetPressUp(SteamVR_Controller.ButtonMask.Touchpad)
+            && isDrawing == true)
         {
             bow.Shoot();
             hasArrow = false;
+            isDrawing = false;
             arrowCamera.target = bow.arrow.transform;
 
             bow.StringCenter.position = bow.StringBasePos.position;
@@ -220,9 +226,10 @@ public class VRArcheryController3 : MonoBehaviour
 
     bool IsAreaDrawingString(Vector3 pos, float dist)
     {
-        var v = bow.StringCenter.position - pos;
+        //var v = bow.StringCenter.position - pos;
+        var v = bow.StringBasePos.position - pos;
         //bow.StringBasePos.position;
-        if(v.magnitude < dist)
+        if (v.magnitude < dist)
         {
             Debug.Log("弦を引けます");
             return true;
@@ -230,6 +237,11 @@ public class VRArcheryController3 : MonoBehaviour
         Debug.Log("弦を引く距離が遠すぎます: " + v.magnitude );
         return false;
         
+    }
+
+    public Arrow3 GetArrow()
+    {
+        return bow.arrow;
     }
 
 }

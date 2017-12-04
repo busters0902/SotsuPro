@@ -54,23 +54,42 @@ public class ArcheryPracticeSceneController : MonoBehaviour
     FlashTextSettings flashTextSettings;
 
     //ゲーム進行用のテロップ
+    [SerializeField]
+    Text timesText;
+
+    //テキストマネージャー用
+    [SerializeField]
+    Canvas canvas;
+
+    [SerializeField]
+    ScoreTotal scoreTortal;
+    [SerializeField]
+    GameObject head;
+
 
 
     void Start ()
     {
         StartCoroutine(Setup());
+        
 	}
 
     IEnumerator Setup()
     {
+        //FadeControl.Instance.SetGemeobject(head);
+
+        //FadeControl.Instance.FadeStart();
         Debug.Log("SceneController.Setup");
 
         yield return null;
 
+        TextManager.Instance.SetCanvas(canvas);
+        TextManager.Instance.SetPrefab((GameObject)Resources.Load("Model/Prefabs/Text"));
+
         flashText = CreateGameTelop();
         flashText.Set(flashTextSettings);
         flashText.text.text = "初期化";
-        //初期化
+
 
         //フェードアウト
 
@@ -118,6 +137,9 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         yield return new WaitUntil( () => ViveController.Instance.ViveRightDown  );
         Debug.Log("トリガーを引いた");
 
+        flashText.text.text = 1 + "回目";
+        flashText.flash.useFrash = false;
+
     }
 
     IEnumerator PlayGame()
@@ -125,13 +147,20 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         Debug.Log("SceneController.PlayGame Sta");
 
         int shotTimes = 0;
+        timesText.text = "Times : " + (shotTimes + 1) +  "/6";
+        
 
         //打った後のアクションをセット
         archeryController.ShotedCall = () =>
         {
             shotTimes++;
             Debug.Log("shooted : " + shotTimes + "回目");
+            flashText.text.text = shotTimes + 1 + "回目";
+            timesText.text = "Times : " + (shotTimes + 1) + "/6";
+            archeryController.GetArrow().HitCall = () => Debug.Log("Arrow.HitCall");
         };
+
+        
 
         while (shotTimes < shotTimesLimit)
         {
@@ -141,29 +170,36 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         }
 
+        flashText.text.text = "";
+        timesText.text = "Times : " + (shotTimes) + "/6";
+        yield return new WaitForSeconds(2.0f);
+
         Debug.Log("SceneController.PlayGame End");
     }
 
     IEnumerator ShotResult()
     {
-        yield return new WaitForSeconds(2.0f);
+        Debug.Log("リザルト");
 
         //1ゲーム終了、歓声
-
+        flashText.text.text = "ゲーム終了: " + scoreTortal.TotalScore;
+        flashText.flash.useFrash = true;
         yield return new WaitUntil(() => ViveController.Instance.ViveRightDown);
+        
+        yield return new WaitForSeconds(1.0f);
 
-
-        yield return new WaitForSeconds(3.0f);
     }
 
     void Reset()
     {
         //矢の破棄
         archeryController.ClearArrows();
-        
+
         //UIの初期化
+        scoreTortal.ResetScore();
 
         //点数
+        
     }
 
     FlashTextObject CreateGameTelop()

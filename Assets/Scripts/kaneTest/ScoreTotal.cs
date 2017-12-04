@@ -6,6 +6,9 @@ using UnityEngine.UI;
 public class ScoreTotal : MonoBehaviour {
 
     int totalScore = 0;
+    public int TotalScore{ get { return totalScore;} }
+
+    [SerializeField]
     Text text;
     
     public void addScore(int num)
@@ -15,11 +18,12 @@ public class ScoreTotal : MonoBehaviour {
     }
     // Use this for initialization
     void Start () {
-        text = GetComponent<Text>();
+        //text = GetComponent<Text>();
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
+    public void ResetScore()
+    {
+        totalScore = 0;
+        text.text = "Total : 0"; 
+    }
 }

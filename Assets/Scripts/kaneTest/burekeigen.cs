@@ -2,31 +2,32 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//親のオブジェクトを
 public class burekeigen : MonoBehaviour {
     Quaternion prevQuat;
-	// Use this for initialization
-	void Start () {
+
+    Quaternion thisQuat;
+
+    // Use this for initialization
+    void Start () {
         prevQuat = transform.parent.rotation;
 
     }
 	
 	// Update is called once per frame
 	void Update () {
-
-         var angle = 
-        Quaternion.Angle(transform.rotation, prevQuat);
+        var angle = Quaternion.Angle(transform.rotation, prevQuat);
+        //Debug.Log(angle);
 
         if(angle > 1)
         {
-            transform.rotation = Quaternion.identity; 
+            transform.localRotation= Quaternion.identity; 
         }
         else
         {
-            transform.rotation = Quaternion.Lerp(transform.rotation, prevQuat, 0.9f);
+            transform.rotation = Quaternion.Lerp(transform.rotation, prevQuat, 0.5f);
         }
-            Debug.Log(angle);
 
-
-        prevQuat = transform.parent.rotation;
+        prevQuat = transform.rotation;
     }
 }
