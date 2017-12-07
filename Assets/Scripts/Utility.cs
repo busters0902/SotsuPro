@@ -38,7 +38,7 @@ public static class Utility
 
     }
 
-    public static IEnumerator Vibration( float spd, float rate, System.Action<float> act)
+    public static IEnumerator Vibration(float spd, float rate, System.Action<float> act)
     {
 
         Debug.Log("Start TimeCrou");
@@ -63,6 +63,10 @@ public static class Utility
 
     }
 
+    public static float CosWave(float timeRate, float width)
+    {
+        return Mathf.Cos(timeRate) * width;
+    }
 
 
 
