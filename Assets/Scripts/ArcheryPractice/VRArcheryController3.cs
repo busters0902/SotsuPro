@@ -116,6 +116,10 @@ public class VRArcheryController3 : MonoBehaviour
             hasArrow == false)
         {
             Debug.Log("create arrow");
+
+            //※セットした音
+            //AudioManager.Instance.PlaySE();
+
             var ar = bow.CreateArrow();
             var pos = bow.arrow.Tail.transform.position;
             bow.StringCenter.position = pos;
@@ -143,6 +147,9 @@ public class VRArcheryController3 : MonoBehaviour
             drawingStandard.transform.position = pos;
             isDrawing = true;
             UpdateLine();
+
+            //※弓を引く音
+            AudioManager.Instance.PlaySE("弦引き");
         }
         else if (rDevice.GetPress(SteamVR_Controller.ButtonMask.Touchpad)
             && isDrawing == true)
@@ -170,6 +177,9 @@ public class VRArcheryController3 : MonoBehaviour
 
             //振動
             rDevice.TriggerHapticPulse((ushort)(dist * vibration));
+
+            //※弓を引く音 クリップの延長??
+            //AudioManager.Instance.PlaySE();
 
             UpdateLine();
             preLine.lineRend.material.color = new Color(1f, 0f, 0f, 1f);
@@ -228,16 +238,18 @@ public class VRArcheryController3 : MonoBehaviour
         arrows.Clear();
     }
 
+    //弓の弦をつかめる距離
     bool IsAreaDrawingString(Vector3 pos, float dist)
     {
-        //var v = bow.StringCenter.position - pos;
+        
         var v = bow.StringBasePos.position - pos;
-        //bow.StringBasePos.position;
+
         if (v.magnitude < dist)
         {
-            Debug.Log("弦を引けます");
+            //Debug.Log("弦を引けます");
             return true;
         }
+
         Debug.Log("弦を引く距離が遠すぎます: " + v.magnitude );
         return false;
         

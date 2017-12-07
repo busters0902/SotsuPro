@@ -71,15 +71,12 @@ public class ArcheryPracticeSceneController : MonoBehaviour
     void Start ()
     {
         StartCoroutine(Setup());
-        
 	}
 
     IEnumerator Setup()
     {
         
         FadeControl.Instance.SetGemeobject(head);
-
-
 
         Debug.Log("SceneController.Setup");
 
@@ -143,6 +140,9 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         flashText.text.text = 1 + "回目";
         flashText.flash.useFrash = false;
+        flashText.flash.setAlpha(1.0f);
+        flashText.flash.setSize(Vector3.one * 3.0f);
+        flashText.flash.setPos(new Vector3( -2, 3, 7));
 
     }
 
@@ -150,23 +150,31 @@ public class ArcheryPracticeSceneController : MonoBehaviour
     {
         Debug.Log("SceneController.PlayGame Sta");
 
-        int shotTimes = 0;
-        timesText.text = "Times : " + (shotTimes + 1) +  "/6";
+        int shotTimes = 1;
+        timesText.text = "Times : " + (shotTimes) +  "/6";
         
+        //BGM(環境音)
+        AudioManager.Instance.PlayBGM("がやがや");
 
         //打った後のアクションをセット
         archeryController.ShotedCall = () =>
         {
             shotTimes++;
-            Debug.Log("shooted : " + shotTimes + "回目");
-            flashText.text.text = shotTimes + 1 + "回目";
-            timesText.text = "Times : " + (shotTimes + 1) + "/6";
-            archeryController.GetArrow().HitCall = () => Debug.Log("Arrow.HitCall");
+            Debug.Log("shotTimes : " + shotTimes + "回目");
+            flashText.text.text = shotTimes + "回目";
+            timesText.text = "Times : " + (shotTimes) + "/6";
+            archeryController.GetArrow().HitCall = (s) =>
+            {
+                Debug.Log("Arrow.HitCall");
+                StartCoroutine(Utility.TimerCrou(3.0f, () => AudioManager.Instance.PlayBGM("がやがや"))　);
+            };
+
+            if (shotTimes >= shotTimesLimit) Debug.Log("last shoted call");
         };
 
         
 
-        while (shotTimes < shotTimesLimit)
+        while (shotTimes < shotTimesLimit + 1 )
         {
             yield return null;
 
@@ -175,7 +183,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         }
 
         flashText.text.text = "";
-        timesText.text = "Times : " + (shotTimes) + "/6";
+        timesText.text = "Times : " + (shotTimes - 1 ) + "/6";
         yield return new WaitForSeconds(2.0f);
 
         Debug.Log("SceneController.PlayGame End");
@@ -204,8 +212,11 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         //点数
         
+
+
     }
 
+    //画面中央のテロップ
     FlashTextObject CreateGameTelop()
     {
         var text_ = TextManager.Instance.addTextFrash(new Vector3(0,5,5), Vector3.one, "GameTelop", "ゲームスタート" );

@@ -78,7 +78,7 @@ public class Arrow3 : MonoBehaviour
     public GameObject hitTargetObject;
     public GameObject hitWallObject;
 
-    public System.Action HitCall;
+    public System.Action<string> HitCall;
 
     public void Awake()
     {
@@ -89,11 +89,6 @@ public class Arrow3 : MonoBehaviour
 
         isHitTarget = false;
         isHitWall = false;
-    }
-
-    public void Start()
-    {
-        
     }
 
     private void Update()
@@ -121,11 +116,16 @@ public class Arrow3 : MonoBehaviour
                 //範囲内であれば
                 var score = hitTargetObject.GetComponent<ScoreCalculation>();
                 int point = score.getScore(this.gameObject);
-                if(point > 0)
+                if (point > 0)
                 {
                     AudioManager.Instance.PlaySE("弓矢・矢が刺さる01");
+                    AudioManager.Instance.PlaySE("いえーい");
                 }
-                else AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
+                else
+                {
+                    AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
+                    AudioManager.Instance.PlaySE("えー");
+                }
 
             }
             else //if (isHitWall)
@@ -147,6 +147,9 @@ public class Arrow3 : MonoBehaviour
         useCalc = true;
         useLockVel = true;
         curPos = prevPos = transform.position;
+
+        //※矢の風を切る音
+        //AudioManager.Instance.PlaySE("");
 
         //Destroy(gameObject, 10f);
     }
@@ -204,7 +207,10 @@ public class Arrow3 : MonoBehaviour
 
         Debug.Log(col.gameObject.name);
 
-        HitCall();
+        //矢が風を切る音を止める
+        //AudioManager.Instance.StopSE("");
+
+        HitCall(col.gameObject.tag);
 
         //衝突したら物理挙動
         rig.useGravity = true;

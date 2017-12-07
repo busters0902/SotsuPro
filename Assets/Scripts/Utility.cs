@@ -38,6 +38,15 @@ public static class Utility
 
     }
 
+    public static IEnumerator TimerCrou(float limTime, System.Action act)
+    {
+        Debug.Log("Start TimerCrou");
+
+        yield return new WaitForSeconds(limTime);
+
+        act();
+    }
+
     public static IEnumerator Vibration( float spd, float rate, System.Action<float> act)
     {
 
