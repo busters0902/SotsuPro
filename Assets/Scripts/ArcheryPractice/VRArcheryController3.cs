@@ -221,6 +221,10 @@ public class VRArcheryController3 : MonoBehaviour
 
     public void ClearArrows()
     {
+        foreach( var obj in arrows)
+        {
+            Destroy(obj.gameObject);
+        }
         arrows.Clear();
     }
 
