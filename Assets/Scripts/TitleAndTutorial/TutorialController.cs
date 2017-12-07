@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class TutorialController : MonoBehaviour
 {
-    	
+
 	void Update ()
     {
 		
@@ -14,8 +14,6 @@ public class TutorialController : MonoBehaviour
         {
             SceneManager.LoadScene("ArcheryPractice");
         }
-
-
 
 	}
 

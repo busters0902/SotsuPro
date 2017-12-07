@@ -20,9 +20,9 @@ public static class Utility
         var timer = new Timer();
         timer.Initialize();
 
-        while(true)
+        while (true)
         {
-            
+
             timer.Update();
             //Debug.Log("timer: " + timer.time);
 
@@ -36,8 +36,34 @@ public static class Utility
         }
         act(limTime);
 
-
-        //Debug.Log("End TimeCrou");
     }
-       
+
+    public static IEnumerator Vibration( float spd, float rate, System.Action<float> act)
+    {
+
+        Debug.Log("Start TimeCrou");
+        var timer = new Timer();
+        timer.Initialize();
+
+        while (true)
+        {
+            timer.Update();
+            float b = rate * (spd - timer.time);
+            float timeRate = timer.time * spd;
+            var a = Mathf.Cos(timeRate) * b;
+
+            act(a);
+
+            if (timeRate > 0.01f) break;
+
+            yield return null;
+        }
+
+        Debug.Log("終了");
+
+    }
+
+
+
+
 }
