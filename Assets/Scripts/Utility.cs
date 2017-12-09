@@ -38,7 +38,6 @@ public static class Utility
 
     }
 
-<<<<<<< HEAD
     public static IEnumerator TimerCrou(float limTime, System.Action act)
     {
         Debug.Log("Start TimerCrou");
@@ -48,10 +47,7 @@ public static class Utility
         act();
     }
 
-    public static IEnumerator Vibration( float spd, float rate, System.Action<float> act)
-=======
     public static IEnumerator Vibration(float spd, float rate, System.Action<float> act)
->>>>>>> eb83549e861e57f497a8c0f70fc7c04d84d4810c
     {
 
         Debug.Log("Start TimeCrou");

@@ -61,8 +61,6 @@ public class FadeControl : MonoBehaviour
         StartCoroutine(Easing.Deyray(dyray, () =>
         {
 
-
-
             StartCoroutine(Easing.Tween(time, (t) =>
             {
                 material.SetFloat("_Alpha", 1 - t);

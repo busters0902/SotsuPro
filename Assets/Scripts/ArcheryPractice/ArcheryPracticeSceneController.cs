@@ -141,20 +141,20 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         flashText.text.text = 1 + "回目";
         flashText.flash.useFrash = false;
         flashText.flash.setAlpha(1.0f);
-        flashText.flash.setSize(Vector3.one * 3.0f);
-        flashText.flash.setPos(new Vector3( -2, 3, 7));
+        flashText.flash.setSize(Vector3.one * 2.0f);
+        flashText.flash.setPos(new Vector3( -200f, 150f, 1f));
 
     }
 
     IEnumerator PlayGame()
     {
-        Debug.Log("SceneController.PlayGame Sta");
+        Debug.Log("SceneController.PlayGame Start");
 
         int shotTimes = 1;
         timesText.text = "Times : " + (shotTimes) +  "/6";
         
         //BGM(環境音)
-        AudioManager.Instance.PlayBGM("がやがや");
+        //AudioManager.Instance.PlayBGM("がやがや");
 
         //打った後のアクションをセット
         archeryController.ShotedCall = () =>
@@ -166,7 +166,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
             archeryController.GetArrow().HitCall = (s) =>
             {
                 Debug.Log("Arrow.HitCall");
-                StartCoroutine(Utility.TimerCrou(3.0f, () => AudioManager.Instance.PlayBGM("がやがや"))　);
+                //StartCoroutine(Utility.TimerCrou(3.0f, () => AudioManager.Instance.PlayBGM("がやがや"))　);
             };
 
             if (shotTimes >= shotTimesLimit) Debug.Log("last shoted call");
@@ -212,7 +212,6 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         //点数
         
-
 
     }
 

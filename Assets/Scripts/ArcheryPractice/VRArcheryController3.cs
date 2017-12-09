@@ -137,7 +137,6 @@ public class VRArcheryController3 : MonoBehaviour
             arrows.Add(ar);
         }
 
-        //
         if (rDevice.GetPressDown(SteamVR_Controller.ButtonMask.Touchpad)
             && IsAreaDrawingString(rDevice.transform.pos, drawingDist)
             && isDrawing == false)
@@ -149,7 +148,7 @@ public class VRArcheryController3 : MonoBehaviour
             UpdateLine();
 
             //※弓を引く音
-            AudioManager.Instance.PlaySE("弦引き");
+            //AudioManager.Instance.PlaySE("弦引き");
         }
         else if (rDevice.GetPress(SteamVR_Controller.ButtonMask.Touchpad)
             && isDrawing == true)
