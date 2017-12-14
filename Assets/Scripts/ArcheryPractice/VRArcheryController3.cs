@@ -77,11 +77,50 @@ public class VRArcheryController3 : MonoBehaviour
     //updateで処理するか
     public bool useBow;
 
+    public bool isReverse;
+
+    [SerializeField]
+    GameObject bowObject;
+
+    [SerializeField]
+    GameObject leftHand;
+
+    [SerializeField]
+    GameObject rightHand;
+
+    [SerializeField]
+    burekeigen shakeMitig;
+
+
+    bool isMaxDrawing;
+    bool isMaxDrawingFirst;
+
     //動作ごとのコールバック
     private System.Action shotedCall;
     public System.Action ShotedCall { set { shotedCall = value; } }
 
     private List<Arrow3> arrows;
+
+    void ResetReverseMode()
+    {
+        bowObject.transform.SetParent(null);
+
+        if(isReverse)
+        {
+            leftHand.transform.GetChild(0).gameObject.SetActive(true);
+            rightHand.transform.GetChild(0).gameObject.SetActive(false);
+            bowObject.transform.SetParent(rightHand.transform);
+        }
+        else
+        {
+            leftHand.transform.GetChild(0).gameObject.SetActive(false);
+            rightHand.transform.GetChild(0).gameObject.SetActive(true);
+            bowObject.transform.SetParent(leftHand.transform);
+        }
+
+    }
+
+
 
     private void Start()
     {
@@ -89,12 +128,18 @@ public class VRArcheryController3 : MonoBehaviour
         drawingStandard.transform.SetParent(bow.transform);
         preLine.CreateLine();
 
+        isMaxDrawing       = false ;
+        isMaxDrawingFirst  = false ;
+        shakeMitig.enabled = false ;
+
         bow.StringCenter.position = bow.StringBasePos.position;
 
         var am = AudioManager.Instance;
 
         arrows = new List<Arrow3>();
 
+        ResetReverseMode();
+        
     }
 
     void Update()
@@ -105,17 +150,27 @@ public class VRArcheryController3 : MonoBehaviour
     public void UseBow()
     {
         //Debug.Log("nu");
-        var lDevice = ViveController.Instance.GetLeftDevice();
-        var rDevice = ViveController.Instance.GetRightDevice();
+
+        SteamVR_Controller.Device bowDevice = null;
+        SteamVR_Controller.Device hundleDevice = null;
+        if (isReverse)
+        {
+            bowDevice = ViveController.Instance.GetRightDevice();
+            hundleDevice = ViveController.Instance.GetLeftDevice();
+        }
+        else
+        {
+            bowDevice = ViveController.Instance.GetLeftDevice();
+            hundleDevice = ViveController.Instance.GetRightDevice();
+        }
 
         var rTransform = ViveController.Instance.RightController.transform;
 
         //矢を生成して、弓にセットする(両デバイスでトリガーを押す)
-        if (lDevice.GetTouch(SteamVR_Controller.ButtonMask.Trigger) &&
+        if (bowDevice.GetTouch(SteamVR_Controller.ButtonMask.Trigger) &&
             //rDevice.GetTouch(SteamVR_Controller.ButtonMask.Trigger) &&
             hasArrow == false)
         {
-            Debug.Log("create arrow");
 
             //※セットした音
             //AudioManager.Instance.PlaySE();
@@ -137,11 +192,11 @@ public class VRArcheryController3 : MonoBehaviour
             arrows.Add(ar);
         }
 
-        if (rDevice.GetPressDown(SteamVR_Controller.ButtonMask.Touchpad)
-            && IsAreaDrawingString(rDevice.transform.pos, drawingDist)
+        if (hundleDevice.GetPressDown(SteamVR_Controller.ButtonMask.Touchpad)
+            && IsAreaDrawingString(hundleDevice.transform.pos, drawingDist)
             && isDrawing == false)
         {
-            var pos = rDevice.transform.pos;
+            var pos = hundleDevice.transform.pos;
             basePos = pos;
             drawingStandard.transform.position = pos;
             isDrawing = true;
@@ -150,7 +205,7 @@ public class VRArcheryController3 : MonoBehaviour
             //※弓を引く音
             //AudioManager.Instance.PlaySE("弦引き");
         }
-        else if (rDevice.GetPress(SteamVR_Controller.ButtonMask.Touchpad)
+        else if (hundleDevice.GetPress(SteamVR_Controller.ButtonMask.Touchpad)
             && isDrawing == true)
         {
             //弓の弦
@@ -158,7 +213,7 @@ public class VRArcheryController3 : MonoBehaviour
             bow.StringCenter.position = cenPos;
 
             //弓の引き具合の計算　引いてるほどパワーが強くなる
-            var pos = rDevice.transform.pos;
+            var pos = hundleDevice.transform.pos;
             var curMov = pos - drawingStandard.transform.position;
             var mag = curMov.magnitude;
 
@@ -168,6 +223,19 @@ public class VRArcheryController3 : MonoBehaviour
             //if (dist > drawLimit) dist = drawLimit;
             dist = Mathf.Clamp(dist, 0.0f, drawLimit);
 
+            //手ブレ補正を使う
+            if (isMaxDrawingFirst == false)
+            {
+                if (dist == drawLimit)
+                {
+                    isMaxDrawing = true;
+                    isMaxDrawingFirst = true;
+                    Debug.Log("Use 手ぶれ補正");
+                    shakeMitig.enabled = true;
+                }
+            }
+
+
             //弓の弦に合った位置に矢を移動させる
             bow.StringCenter.position = bow.StringBasePos.position + back * dist;
             bow.arrow.SetPosFromTail(bow.StringCenter.position);
@@ -175,7 +243,7 @@ public class VRArcheryController3 : MonoBehaviour
             bow.SetPower(dist * powerMagnitude);
 
             //振動
-            rDevice.TriggerHapticPulse((ushort)(dist * vibration));
+            hundleDevice.TriggerHapticPulse((ushort)(dist * vibration));
 
             //※弓を引く音 クリップの延長??
             //AudioManager.Instance.PlaySE();
@@ -186,7 +254,7 @@ public class VRArcheryController3 : MonoBehaviour
             //Debug.Log("dist: " + dist);
 
         }
-        else if (rDevice.GetPressUp(SteamVR_Controller.ButtonMask.Touchpad)
+        else if (hundleDevice.GetPressUp(SteamVR_Controller.ButtonMask.Touchpad)
             && isDrawing == true)
         {
             bow.Shoot();
@@ -204,10 +272,15 @@ public class VRArcheryController3 : MonoBehaviour
                     preLine.lineRend.material.color = new Color(col.r, col.g, col.b, 1.0f - f);
                 }));
 
+            //手ブレ補正を切る
+            isMaxDrawing = false;
+            isMaxDrawingFirst = false;
+            shakeMitig.enabled = false;
+
             //コールバック
             shotedCall();
 
-            Debug.Log("ShotPower " + bow.curPower);
+            //Debug.Log("ShotPower " + bow.curPower);
 
         }
 
@@ -249,7 +322,7 @@ public class VRArcheryController3 : MonoBehaviour
             return true;
         }
 
-        Debug.Log("弦を引く距離が遠すぎます: " + v.magnitude );
+        //Debug.Log("弦を引く距離が遠すぎます: " + v.magnitude );
         return false;
         
     }

@@ -97,9 +97,8 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
     IEnumerator GameMain()
     {
-        Debug.Log("SceneController.GameMain");
 
-        
+        Debug.Log("SceneController.GameMain");
 
         yield return null;
 
