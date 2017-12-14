@@ -11,10 +11,14 @@ public class HitStopObject : MonoBehaviour
 
     [SerializeField]
     ScoreTotal scoreTotal;
-    
+
+    [SerializeField]
+    ParticleSystem particle;
+
 
     void Start()
     {
+        
         Debug.Log("hoge");
         scoreCalculation = GetComponent<ScoreCalculation>();
         
@@ -27,8 +31,7 @@ public class HitStopObject : MonoBehaviour
         if (collision.gameObject.tag == "Bullet")
         {
             var bul = collision.gameObject.GetComponent<BulletTag>();
-
-
+            
             //Debug.Log("Stop Bullet");
 
             var size = transform.localScale;
@@ -38,15 +41,18 @@ public class HitStopObject : MonoBehaviour
             bul.Stop();
             bul.rig.isKinematic = true;
 
+            particle.transform.position = new Vector3(pos.x, pos.y, particle.transform.position.z);
+            particle.Play(true);
+
             //AudioManager.Instance.PlaySE("弓矢・矢が刺さる01");
 
             var get_score = scoreCalculation.getScore(collision.gameObject);
            if (get_score == 0){
                 bul.rig.isKinematic = false;
                 bul.rig.useGravity = true;
-            }
-            text.text = "Score : " + get_score.ToString();
-            scoreTotal.addScore(get_score);
+           }
+           text.text = "Score : " + get_score.ToString();
+           scoreTotal.addScore(get_score);
         }
 
     }
