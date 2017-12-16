@@ -134,7 +134,7 @@ public class VRArcheryController3 : MonoBehaviour
 
         bow.StringCenter.position = bow.StringBasePos.position;
 
-        var am = AudioManager.Instance;
+        //var am = AudioManager.Instance;
 
         arrows = new List<Arrow3>();
 

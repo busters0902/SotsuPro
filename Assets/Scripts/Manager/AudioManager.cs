@@ -12,7 +12,7 @@ public class AudioManager : MonoBehaviour
         {
             if (instance == null)
             {
-                var obj = Instantiate(new GameObject("AudioManager"));
+                var obj = new GameObject("AudioManager");
                 var _instans = obj.AddComponent<AudioManager>();
                 instance = _instans;
             }
