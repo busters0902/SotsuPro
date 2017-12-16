@@ -194,7 +194,7 @@ public class VRArcheryController3 : MonoBehaviour
 
         if (hundleDevice.GetPressDown(SteamVR_Controller.ButtonMask.Touchpad)
             && IsAreaDrawingString(hundleDevice.transform.pos, drawingDist)
-            && isDrawing == false)
+            && isDrawing == false && hasArrow == true)
         {
             var pos = hundleDevice.transform.pos;
             basePos = pos;
@@ -206,8 +206,12 @@ public class VRArcheryController3 : MonoBehaviour
             //AudioManager.Instance.PlaySE("弦引き");
         }
         else if (hundleDevice.GetPress(SteamVR_Controller.ButtonMask.Touchpad)
-            && isDrawing == true)
+            && isDrawing == true && hasArrow == true)
         {
+            Debug.Log(bow);
+            Debug.Log(bow.arrow);
+            Debug.Log(bow.arrow.Tail);
+
             //弓の弦
             var cenPos = bow.arrow.Tail.transform.position;
             bow.StringCenter.position = cenPos;

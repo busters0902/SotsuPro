@@ -14,7 +14,8 @@ public class TrackingTransform : MonoBehaviour
     private void Update()
     {
 
-        if(onUsed)  transform.position = target.transform.position + distance;
+        if(target != null)
+            if(onUsed)  transform.position = target.transform.position + distance;
 
     }
 

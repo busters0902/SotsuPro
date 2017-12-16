@@ -129,12 +129,12 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         yield return null;
 
-        Debug.Log("ゲームを開始します。右トリガーを引いてください");
+        Debug.Log("ゲームを開始します。トリガーを引いてください");
 
-        flashText.text.text = "ゲームを開始します。右トリガーを引いてください";
+        flashText.text.text = "ゲームを開始します。トリガーを引いてください";
         flashText.flash.useFrash = true;
 
-        yield return new WaitUntil( () => ViveController.Instance.ViveRightDown  );
+        yield return new WaitUntil( () => ViveController.Instance.ViveRightDown || ViveController.Instance.ViveLeftDown);
         Debug.Log("トリガーを引いた");
 
         flashText.text.text = 1 + "回目";

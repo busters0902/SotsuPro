@@ -117,12 +117,14 @@ public class Arrow3 : MonoBehaviour
                 var score = hitTargetObject.GetComponent<ScoreCalculation>();
                 int point = score.getScore(this.gameObject);
 
+                Debug.Log("点P  :" + gameObject.transform.position);
                 Debug.Log("点数 :" + point);
 
                 if (point > 0)
                 {
                     //AudioManager.Instance.PlaySE("弓矢・矢が刺さる01");
                     //AudioManager.Instance.PlaySE("いえーい");
+                    rig.velocity = Vector3.one;
                 }
                 else
                 {
@@ -153,8 +155,8 @@ public class Arrow3 : MonoBehaviour
 
         //※矢の風を切る音
         //AudioManager.Instance.PlaySE("");
-
         //Destroy(gameObject, 10f);
+
     }
 
     public void SetPosFromTail(Vector3 tailPos)
@@ -192,6 +194,7 @@ public class Arrow3 : MonoBehaviour
 
     public void OnCollisionEnter(Collision col)
     {
+        
         if (hitFlameCount == 0)
         {
             if (col.gameObject.tag == "Target")
@@ -208,6 +211,7 @@ public class Arrow3 : MonoBehaviour
 
         if (isFarstHit) return;
 
+        Debug.Log("Arrow hit Coll :" + col.transform.position);
         Debug.Log("Arraw hit : " + col.gameObject.name);
 
         //矢が風を切る音を止める
@@ -224,9 +228,9 @@ public class Arrow3 : MonoBehaviour
         // v = v0 + gt
         var accel = calcData.dir * calcData.speed + new Vector3(0, -calcData.grav, 0) * elapsedTime;
         accel.y = -accel.y;
-        //Debug.Log(accel);
 
-        rig.AddForce(accel, ForceMode.Acceleration);
+        //Debug.Log("reflect :" + accel);
+        //if(col.gameObject.name != "Target") rig.AddForce(accel, ForceMode.Acceleration);
         isFarstHit = true;
 
         //衝突SE

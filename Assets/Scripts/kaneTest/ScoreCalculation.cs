@@ -6,7 +6,7 @@ public class ScoreCalculation : MonoBehaviour {
 
 	public int getScore(GameObject arrow)
     {
-        var dis = Vector3.Distance(arrow.transform.position,transform.position);
+        var dis = Vector2.Distance(arrow.transform.position,transform.position);
         for(int i = 10; i >= 0; i--)
         {
             if(dis > i * di * transform.localScale.x)
@@ -16,14 +16,8 @@ public class ScoreCalculation : MonoBehaviour {
         }
         return 0;
     }
-    [SerializeField]
-    float di = 0.046f;
 
     [SerializeField]
-    GameObject obj;
-    void Update()
-    {
-        //Debug.Log(getScore(obj));
-    }
+    float di = 0.046f;
 
 }
