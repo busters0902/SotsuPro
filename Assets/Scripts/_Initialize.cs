@@ -11,20 +11,29 @@ public class _Initialize : MonoBehaviour
 	[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
 	static void Initialize()
 	{
-		//データマネージャーの生成
-		Debug.Log("_Initialize");
-        //GameObject obj = new GameObject("Manager", typeof(DataManager));
-        //GameObject.DontDestroyOnLoad(obj);
+
+        Debug.Log("_Initialize");
+
+        ///マネージャーの生成/////////////////////////////////////////////////
 
         //フェードマネージャーの作成
         //var fadeObj = (GameObject)Instantiate(Resources.Load("Prefabs/FadeManager")); //(GameObject)Resources.Load("Prefabs/FadeManager");
         //DontDestroyOnLoad(fadeObj);
 
-        var obj = AudioManager.Instance.gameObject;
-        DontDestroyOnLoad(obj);
+        //オーディオマネージャー
+        var audio = AudioManager.Instance.gameObject;
+        DontDestroyOnLoad(audio);
 
-		//Application.targetFrameRate = asset.targetFps;
-		Debug.Log("target fps: " + Application.targetFrameRate);
+        //データマネージャー
+        var data = DataManager.Instance.gameObject;
+        DontDestroyOnLoad(data);
+
+        //スコアマネージャー
+        var score = ScoreManager.Instance.gameObject;
+        DontDestroyOnLoad(score);
+
+        //Application.targetFrameRate = asset.targetFps;
+        Debug.Log("target fps: " + Application.targetFrameRate);
 	}
 
 }

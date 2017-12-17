@@ -87,14 +87,16 @@ public class bustersSceneController : MonoBehaviour
             AudioManager.Instance.PlaySE("矢の飛来");
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha5))
+        var keyTest = KeyCode.Alpha6;
+        if (Input.GetKeyDown(keyTest))
         {
             AudioManager.Instance.PlaySELoop("テスト","引き絞り");
         }
-        else if(Input.GetKeyUp(KeyCode.Alpha5))
+        else if(Input.GetKeyUp(keyTest))
         {
             AudioManager.Instance.StopSELoop("テスト");
         }
+
     }
 
     void UpdateLine()
