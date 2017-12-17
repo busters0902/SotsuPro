@@ -202,7 +202,9 @@ public class VRArcheryController3 : MonoBehaviour
             UpdateLine();
 
             //※弓を引く音
-            //AudioManager.Instance.PlaySE("弦引き");
+            AudioManager.Instance.PlaySE("弦引き");
+            Debug.Log("Played SE: 弦引き");
+
         }
         else if (hundleDevice.GetPress(SteamVR_Controller.ButtonMask.Touchpad)
             && isDrawing == true && hasArrow == true)
@@ -282,6 +284,10 @@ public class VRArcheryController3 : MonoBehaviour
 
             //コールバック
             shotedCall();
+
+            //矢を射る音
+            AudioManager.Instance.PlaySE("矢の飛来");
+            Debug.Log("Played SE: 矢の飛来");
 
         }
     }
