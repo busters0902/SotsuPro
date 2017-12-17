@@ -90,7 +90,7 @@ public class bustersSceneController : MonoBehaviour
         var keyTest = KeyCode.Alpha6;
         if (Input.GetKeyDown(keyTest))
         {
-            AudioManager.Instance.PlaySELoop("テスト","引き絞り");
+            AudioManager.Instance.PlaySELoop("テスト","引き絞り2");
         }
         else if(Input.GetKeyUp(keyTest))
         {
