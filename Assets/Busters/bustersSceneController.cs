@@ -61,6 +61,40 @@ public class bustersSceneController : MonoBehaviour
             UpdateLine();
         }
 
+
+        if(Input.GetKeyDown(KeyCode.Alpha0))
+        {
+            AudioManager.Instance.ShowSeNames();
+        }
+
+        if(Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            AudioManager.Instance.PlaySE("引き絞り");
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            AudioManager.Instance.PlaySE("弦引き");
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            AudioManager.Instance.PlaySE("的に当たる");
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            AudioManager.Instance.PlaySE("矢の飛来");
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            AudioManager.Instance.PlaySELoop("テスト","引き絞り");
+        }
+        else if(Input.GetKeyUp(KeyCode.Alpha5))
+        {
+            AudioManager.Instance.StopSELoop("テスト");
+        }
     }
 
     void UpdateLine()

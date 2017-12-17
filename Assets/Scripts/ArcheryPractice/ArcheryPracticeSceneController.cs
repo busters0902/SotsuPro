@@ -63,6 +63,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
     [SerializeField]
     ScoreTotal scoreTortal;
+
     [SerializeField]
     GameObject head;
 

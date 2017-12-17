@@ -21,16 +21,13 @@ public class AudioManager : MonoBehaviour
     }
     void Awake()
     {
-        instance = this;
-
-
+       //instance = this;
     }
 
     [SerializeField]
     AudioSource bgmAudioSource = null;
 
     private Dictionary<string, AudioClip> seAudioClips = new Dictionary<string, AudioClip>();
-
 
     //SEを鳴らす
     public void PlaySE(string se_name, Vector3? playPos = null)
@@ -58,13 +55,11 @@ public class AudioManager : MonoBehaviour
 
     }
 
-
     //BGMを鳴らす
     public void PlayBGM(string se_name)
     {
         bgmAudioSource.clip = Resources.Load<AudioClip>("Audio/BGM" + se_name);
         bgmAudioSource.Play();
-
     }
 
     //なり終わったら消す
@@ -87,11 +82,42 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    public Dictionary<string, AudioSource> loopSources = new Dictionary<string, AudioSource>();
+    public void PlaySELoop(string source_name, string se_name, float vol = 1.0f)
+    {
+        var audsou = gameObject.AddComponent<AudioSource>();
+        //ディクショナリーに登録しておく
+        loopSources.Add(source_name, audsou);
+
+        audsou.clip = seAudioClips[se_name];
+        audsou.loop = true;
+        vol = Mathf.Clamp(vol, 0.0f, 1.0f);
+        audsou.volume = vol;
+        audsou.Play();
+    }
+
+    public void StopSELoop(string source_name)
+    {
+        if(loopSources.ContainsKey(source_name))
+        {
+            var sou = loopSources[source_name];
+            sou.Stop();
+            loopSources.Remove(source_name);
+            Destroy(sou);
+        }
+    }
+
     void Start()
     {
-
         Load("Audio/SE");
     }
 
+    public void ShowSeNames()
+    {
+        foreach (var a in seAudioClips)
+        {
+            Debug.Log(a.Key);
+        }
+    }
 
 }
