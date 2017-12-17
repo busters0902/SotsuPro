@@ -91,9 +91,12 @@ public class VRArcheryController3 : MonoBehaviour
     [SerializeField]
     burekeigen shakeMitig;
 
-
+    //引き切ったかどうか
     bool isMaxDrawing;
     bool isMaxDrawingFirst;
+
+    bool isPlayDrawingSE;
+    float minPlayDrawingSE;
 
     //動作ごとのコールバック
     private System.Action shotedCall;
@@ -149,7 +152,6 @@ public class VRArcheryController3 : MonoBehaviour
 
     public void UseBow()
     {
-        //Debug.Log("nu");
 
         SteamVR_Controller.Device bowDevice = null;
         SteamVR_Controller.Device hundleDevice = null;
@@ -167,13 +169,10 @@ public class VRArcheryController3 : MonoBehaviour
         var rTransform = ViveController.Instance.RightController.transform;
 
         //矢を生成して、弓にセットする(両デバイスでトリガーを押す)
-        if (bowDevice.GetTouch(SteamVR_Controller.ButtonMask.Trigger) &&
+        if (bowDevice.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger) &&
             //rDevice.GetTouch(SteamVR_Controller.ButtonMask.Trigger) &&
             hasArrow == false)
         {
-
-            //※セットした音
-            //AudioManager.Instance.PlaySE();
 
             var ar = bow.CreateArrow();
             var pos = bow.arrow.Tail.transform.position;
@@ -283,13 +282,6 @@ public class VRArcheryController3 : MonoBehaviour
 
             //コールバック
             shotedCall();
-
-            //Debug.Log("ShotPower " + bow.curPower);
-
-        }
-
-        if (hasArrow)
-        {
 
         }
     }
