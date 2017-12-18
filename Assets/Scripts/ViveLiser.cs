@@ -20,12 +20,6 @@ public class ViveLiser : MonoBehaviour
         line.material = new Material(Shader.Find("Mobile/Particles/Additive"));
     }
 
-
-    void Start()
-    {
-
-    }
-
     void Update ()
     {
         postions[0] = transform.position;
