@@ -70,6 +70,7 @@ public class bustersSceneController : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Alpha1))
         {
             AudioManager.Instance.PlaySE("引き絞り");
+            Debug.Log("引き絞り");
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha2))

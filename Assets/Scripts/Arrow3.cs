@@ -80,6 +80,9 @@ public class Arrow3 : MonoBehaviour
 
     public System.Action<string> HitCall;
 
+    [SerializeField]
+    ParticleSystem windParticle;
+
     public void Awake()
     {
         rig.isKinematic = true;
@@ -141,6 +144,7 @@ public class Arrow3 : MonoBehaviour
 
     }
 
+    //打ったときのメソッド
     public void Shot(CalculatedData data)
     {
         if (data == null) Debug.LogError("data is null");
@@ -156,8 +160,14 @@ public class Arrow3 : MonoBehaviour
         //※矢の風を切る音
         //AudioManager.Instance.PlaySE("");
         //Destroy(gameObject, 10f);
-
+        windParticle.Play();
     }
+
+    //的に当たったときの処理
+    public void HitStopCall() {
+        windParticle.Stop();
+
+    } 
 
     public void SetPosFromTail(Vector3 tailPos)
     {
