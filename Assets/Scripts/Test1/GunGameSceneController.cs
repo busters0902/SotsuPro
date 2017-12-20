@@ -64,17 +64,6 @@ public class GunGameSceneController : MonoBehaviour
         ViveController.Instance.SetLeftController(lController);
         ViveController.Instance.SetRightController(rController);
 
-        ////inputTriggerDown = () => Input.GetMouseButtonDown(0);
-        //inputTriggerDown = () =>
-        //{
-        //    Debug.Log("いんぷっとチェック");
-        //    //var dev = ViveController.Instance.GetRightDevice();
-        //    //bool v = dev.GetPressDown(SteamVR_Controller.ButtonMask.Trigger);
-        //    bool v = false;
-        //    Debug.Log(v);
-        //    return v;
-        //};
-
         Init();
 
 		StartCoroutine(PlayScene());

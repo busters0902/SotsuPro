@@ -92,6 +92,8 @@ public class Arrow3 : MonoBehaviour
 
         isHitTarget = false;
         isHitWall = false;
+
+        InitHitCall();
     }
 
     private void Update()
@@ -247,6 +249,11 @@ public class Arrow3 : MonoBehaviour
         //if (col.gameObject.tag == "Target") AudioManager.Instance.PlaySE("弓矢・矢が刺さる01");
         //else if (col.gameObject.tag == "Wall") AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
 
+    }
+
+    public void InitHitCall()
+    {
+        HitCall = (s) => Debug.Log(s) ;
     }
 
 }

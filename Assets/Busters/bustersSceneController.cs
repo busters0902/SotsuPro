@@ -13,6 +13,18 @@ public class bustersSceneController : MonoBehaviour
 
     bool isSettingArrow;
 
+    [SerializeField]
+    ResultController result;
+
+    Vector3 currMousePos;
+    Vector3 prevMousePos;
+
+    //SEが鳴るまで一定の距離
+    [SerializeField]
+    float soundLengthLimit;
+
+    //現在の距離
+    float soundLength;
 
     void Start()
     {
@@ -29,15 +41,32 @@ public class bustersSceneController : MonoBehaviour
             isSettingArrow = true;
             UpdateLine();
 
+            currMousePos = Input.mousePosition;
+            prevMousePos = currMousePos;
+            //Debug.Log(currMousePos);
+
         }
         else if (Input.GetMouseButton(0) || Input.GetKey(KeyCode.Return))
         {
-         
+            prevMousePos = currMousePos;
+            currMousePos = Input.mousePosition;
+            var mov = Mathf.Abs(prevMousePos.magnitude - currMousePos.magnitude);
+            soundLength += mov;
+            if(soundLength >= soundLengthLimit)
+            {
+                //※音を鳴らす
+                soundLength = 0.0f; //リセット
+                AudioManager.Instance.PlaySE("引き絞り3");
+                Debug.Log("ギィ");
+            }
         }
         else if (Input.GetMouseButtonUp(0) || Input.GetKeyUp(KeyCode.Return))
         {
             bow.Shoot();
             isSettingArrow = false;
+
+            prevMousePos = Vector3.zero;
+            currMousePos = Vector3.zero;
         }
 
         if(Input.GetKey(KeyCode.UpArrow))
@@ -97,6 +126,18 @@ public class bustersSceneController : MonoBehaviour
         {
             AudioManager.Instance.StopSELoop("テスト");
         }
+
+        if (Input.GetKeyDown(KeyCode.Alpha8))
+        {
+            result.HideAll();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha9))
+        {
+            result.ShowResult( () => Debug.Log("リザルト＼(^o^)／ｵﾜﾀ") );
+        }
+
+
 
     }
 

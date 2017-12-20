@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ScoreManager : MonoBehaviour
@@ -29,6 +30,30 @@ public class ScoreManager : MonoBehaviour
             //Debug.Log("Destroy " + this);
             Destroy(this.gameObject);
         }
+    }
+
+    public List<Score> scores = new List<Score>();
+
+    public Score[] GetScores() { return scores.ToArray(); }
+
+    //現在の合計スコア
+    public int GetTotalScore()
+    {
+        var sum = scores.Select((s) => s.point).Sum();
+        return 0;
+    }
+
+    public void AddScore(int times, int point)
+    {
+        var score = new Score();
+        score.name = times + "回目";
+        score.point = point;
+        scores.Add(score);
+    }
+
+    public void ClearScore()
+    {
+        scores = new List<Score>();
     }
 
 }
