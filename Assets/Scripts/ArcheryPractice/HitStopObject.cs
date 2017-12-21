@@ -59,25 +59,30 @@ public class HitStopObject : MonoBehaviour
             }
             text.text = "Score : " + get_score.ToString();
             scoreTotal.addScore(get_score);
-            if (get_score <= 4)
-            {
-                particleNum = 0;
-            }
-            else if (get_score <= 8)
-            {
-                particleNum = 1;
-            }
-            else
-            {
-                particleNum = 2;
-            }
 
-
-            particle[particleNum].transform.position = new Vector3(pos.x, pos.y, particle[particleNum].transform.position.z);
-            particle[particleNum].Play(true);
-
+            if (collision.gameObject.GetComponent<IsPushEffect>() != null)
+            {
+                EffectPlay(pos, get_score);
+            }
         }
 
     }
 
+    private void EffectPlay(Vector3 pos, int get_score)
+    {
+        if (get_score <= 4)
+        {
+            particleNum = 0;
+        }
+        else if (get_score <= 8)
+        {
+            particleNum = 1;
+        }
+        else
+        {
+            particleNum = 2;
+        }
+        particle[particleNum].transform.position = new Vector3(pos.x, pos.y, particle[particleNum].transform.position.z);
+        particle[particleNum].Play(true);
+    }
 }
