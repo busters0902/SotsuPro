@@ -54,6 +54,7 @@ GameObject:
   - component: {fileID: 54550608355875120}
   - component: {fileID: 114388699310473274}
   - component: {fileID: 114991681080148100}
+  - component: {fileID: 114321518449011346}
   m_Layer: 4
   m_Name: Arrow3
   m_TagString: Bullet
@@ -274,6 +275,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rig: {fileID: 54550608355875120}
+--- !u!114 &114321518449011346
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1534616174687102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdc5eae3e481897499b3405fa9e9c3cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114388699310473274
 MonoBehaviour:
   m_ObjectHideFlags: 1
