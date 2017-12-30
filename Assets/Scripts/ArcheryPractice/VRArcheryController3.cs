@@ -169,7 +169,8 @@ public class VRArcheryController3 : MonoBehaviour
         var rTransform = ViveController.Instance.RightController.transform;
 
         //矢を生成して、弓にセットする(両デバイスでトリガーを押す)
-        if (bowDevice.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger) &&
+        //if (bowDevice.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger) &&
+        if (hundleDevice.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger) &&
             //rDevice.GetTouch(SteamVR_Controller.ButtonMask.Trigger) &&
             hasArrow == false)
         {
