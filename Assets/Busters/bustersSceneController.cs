@@ -96,7 +96,8 @@ public class bustersSceneController : MonoBehaviour
             AudioManager.Instance.ShowSeNames();
         }
 
-        if(Input.GetKeyDown(KeyCode.Alpha1))
+        ///サウンドテスト/////////////////////////////////////////////////////////////////
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             AudioManager.Instance.PlaySE("引き絞り");
             Debug.Log("引き絞り");
@@ -127,6 +128,8 @@ public class bustersSceneController : MonoBehaviour
             AudioManager.Instance.StopSELoop("テスト");
         }
 
+
+        ///リザルトテスト/////////////////////////////////////////////////////////////////
         if (Input.GetKeyDown(KeyCode.Alpha8))
         {
             result.HideAll();
@@ -137,6 +140,25 @@ public class bustersSceneController : MonoBehaviour
             result.ShowResult( () => Debug.Log("リザルト＼(^o^)／ｵﾜﾀ") );
         }
 
+
+        ///セーブテスト/////////////////////////////////////////////////////////////////
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            //DataManager.Instance.LoadData();
+            DataManager.Instance.CreateSaveData();
+        }
+
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            //DataManager.Instance.LoadData();
+            DataManager.Instance.LoadData();
+        }
+
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            //DataManager.Instance.SaveData();
+            DataManager.Instance.SaveData();
+        }
 
 
     }
