@@ -28,6 +28,9 @@ public class _Initialize : MonoBehaviour
         var data = DataManager.Instance.gameObject;
         DontDestroyOnLoad(data);
 
+        //データのロード
+        DataManager.Instance.LoadData();
+
         //スコアマネージャー
         var score = ScoreManager.Instance.gameObject;
         DontDestroyOnLoad(score);
