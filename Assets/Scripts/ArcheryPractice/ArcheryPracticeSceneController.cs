@@ -166,13 +166,11 @@ public class ArcheryPracticeSceneController : MonoBehaviour
             archeryController.GetArrow().HitCall = (s) =>
             {
                 Debug.Log("Arrow.HitCall");
-                //StartCoroutine(Utility.TimerCrou(3.0f, () => AudioManager.Instance.PlayBGM("がやがや"))　);
+                //StartCoroutine(　Utility.TimerCrou(3.0f, () => AudioManager.Instance.PlayBGM("がやがや")) );
             };
 
             if (shotTimes >= shotTimesLimit) Debug.Log("last shoted call");
         };
-
-        
 
         while (shotTimes < shotTimesLimit + 1 )
         {

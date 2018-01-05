@@ -95,8 +95,8 @@ public class ManipulationUI : MonoBehaviour
 
     void AnimateTrigger()
     {
-        triggerRotation += 1f;
-        if (triggerRotation >= 30f) triggerRotation = 0f;
+        triggerRotation -= 0.6f;
+        if (triggerRotation <= 0f) triggerRotation = 30f;
 
         var a = triggerAxis.transform.rotation.eulerAngles;
         a.z = -Mathf.Clamp(triggerRotation, 0, 30);

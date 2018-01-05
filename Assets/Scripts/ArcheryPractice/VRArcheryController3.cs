@@ -168,31 +168,10 @@ public class VRArcheryController3 : MonoBehaviour
 
         var rTransform = ViveController.Instance.RightController.transform;
 
-        //矢を生成して、弓にセットする(両デバイスでトリガーを押す)
-        //if (bowDevice.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger) &&
-        if (hundleDevice.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger) &&
-            //rDevice.GetTouch(SteamVR_Controller.ButtonMask.Trigger) &&
-            hasArrow == false)
-        {
+        
 
-            var ar = bow.CreateArrow();
-            var pos = bow.arrow.Tail.transform.position;
-            bow.StringCenter.position = pos;
-
-            hasArrow = true;
-
-            //追尾カメラをセット
-            arrowCamera.target = bow.arrow.transform;
-            arrowCamera.onUsed = true;
-
-            //予測線のアルファ値の初期化
-            var col = preLine.lineRend.material.color;
-            col.a = 1.0f;
-
-            arrows.Add(ar);
-        }
-
-        if (hundleDevice.GetPressDown(SteamVR_Controller.ButtonMask.Touchpad)
+        //矢を引く
+        if ( hundleDevice.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger)
             && IsAreaDrawingString(hundleDevice.transform.pos, drawingDist)
             && isDrawing == false && hasArrow == true)
         {
@@ -207,7 +186,7 @@ public class VRArcheryController3 : MonoBehaviour
             Debug.Log("Played SE: 弦引き");
 
         }
-        else if (hundleDevice.GetPress(SteamVR_Controller.ButtonMask.Touchpad)
+        else if ( hundleDevice.GetTouch(SteamVR_Controller.ButtonMask.Trigger)
             && isDrawing == true && hasArrow == true)
         {
             Debug.Log(bow);
@@ -260,7 +239,7 @@ public class VRArcheryController3 : MonoBehaviour
             //Debug.Log("dist: " + dist);
 
         }
-        else if (hundleDevice.GetPressUp(SteamVR_Controller.ButtonMask.Touchpad)
+        else if ( hundleDevice.GetTouchUp(SteamVR_Controller.ButtonMask.Trigger)
             && isDrawing == true)
         {
             bow.Shoot();
@@ -291,6 +270,30 @@ public class VRArcheryController3 : MonoBehaviour
             Debug.Log("Played SE: 矢の飛来");
 
         }
+
+        //矢を生成して、弓にセットする(両デバイスでトリガーを押す) 
+        //※処理フレームをずらすため 引く処理より後
+        if (hundleDevice.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger) &&
+            hasArrow == false)
+        {
+
+            var ar = bow.CreateArrow();
+            var pos = bow.arrow.Tail.transform.position;
+            bow.StringCenter.position = pos;
+
+            hasArrow = true;
+
+            //追尾カメラをセット
+            arrowCamera.target = bow.arrow.transform;
+            arrowCamera.onUsed = true;
+
+            //予測線のアルファ値の初期化
+            var col = preLine.lineRend.material.color;
+            col.a = 1.0f;
+
+            arrows.Add(ar);
+        }
+
     }
 
     //予測線の更新
