@@ -29,6 +29,8 @@ public class AudioManager : MonoBehaviour
 
     private Dictionary<string, AudioClip> seAudioClips = new Dictionary<string, AudioClip>();
 
+
+
     //SEを鳴らす
     public void PlaySE(string se_name, Vector3? playPos = null)
     {
@@ -111,6 +113,32 @@ public class AudioManager : MonoBehaviour
     {
         Load("Audio/SE");
     }
+
+    public void setBGMLoop(bool _loop)
+    {
+        bgmAudioSource.loop = _loop;
+    }
+
+    Dictionary<string, List<AudioClip>> seList;
+
+
+    //Soundのリストを名前を付けて登録する
+    public void SetSeList(string _key, string _filename)
+    {
+        seList.Add(_key,
+            new List<AudioClip>(
+            Resources.LoadAll<AudioClip>(_filename))
+            );
+    }
+
+
+    public IEnumerator seListPlayCol() {
+
+        yield return null;
+        //seAudioClips.
+
+    }
+
 
     public void ShowSeNames()
     {
