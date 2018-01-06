@@ -20,6 +20,51 @@ public static class UtilityCollision
         //return Vec3Dot(pV1, &Vec3Cross(pV2, pV3));
     }
 
+    public static bool IntersectSegmentQuadrangle( Vector3 s1, Vector3 s2,  Quadangle q, ref Vector3 cross)
+    {
+        Vector3 pa = q.p[0] - s1;
+        Vector3 pb = q.p[1] - s1;
+        Vector3 pc = q.p[2] - s1;
+        Vector3 pd = q.p[3] - s1;
+        Vector3 pq = s2     - s1;
+
+        Vector3 crs = Vector3.Cross(pc, pq);
+
+        float u = Vector3.Dot(crs, pq);
+        if (u >= 0)
+        {
+            //ACB
+            float v = -Vector3.Dot(crs, pb);
+            if (v < 0) return false;
+            float w = ScalarTriple(pq, pb, pa);
+            if (w < 0)
+            {
+                return false;
+            }
+            cross = (u * pb + v * pa + w * pc) / (u + v + w) + s1;
+
+        }
+        else //(u>0)
+        {
+            //ADC
+            float v = Vector3.Dot(crs, pd);
+            if(v < 0) return false;
+            float w = ScalarTriple(pq, pa, pd);
+            if(w < 0) return false;
+            u = -u;
+            //衝突位置は体積比による重心位置になる		
+            cross = (u * pd + v * pa + w * pc) / (u + v + w) + s1;
+        }
+
+        if (!IntersectSegmentPlane(s1, s2, q.p[0], q.p[1], q.p[2]))
+        {
+            //cross = Vector3.zero;
+            return false;
+        }
+
+            return true;
+    }
+
     //bool Collision::IntersectSegmentQuadrangle( const Segment* pS, const Quadrangle* pQ, Vec3f* pC)
     //{
 
@@ -64,6 +109,22 @@ public static class UtilityCollision
     //	  return true;
     //}
 
+    public static bool IntersectSegmentPlane(Vector3 s1, Vector3 s2, Vector3 d, Vector3 e, Vector3 f )
+    {
+        Vector3 pn = Vector3.Cross( e - d, f - d  );
+        float pd = Vector3.Dot(pn , d);
+
+        Vector3 s = s2 - s1;
+        float t = (pd - Vector3.Dot(pn, s1)) / Vector3.Dot(pn, s);
+        if(t >= 0f && t <= 1f)
+        {
+            Vector3 q = s1 + t * s;
+            return true;
+        }
+
+        return false;
+    }
+
     //bool Collision::IntersectSegmentPlane( const Segment* pS, const Vec3f& d, const Vec3f& e, const Vec3f& f)
     //{
 	//    Vec3f pn = Vec3Cross(&(e - d), &(f - d));
@@ -90,4 +151,18 @@ public class CollionQuad
     public Vector3 u;
 
     public Vector3 v;
+}
+
+public class Quadangle
+{
+    public Vector3[] p;
+
+    public Quadangle()
+    {
+        p = new Vector3[4];
+        for(int i = 0; i < p.Length; i++)
+        {
+            p[i] = Vector3.zero;
+        }
+    }
 }

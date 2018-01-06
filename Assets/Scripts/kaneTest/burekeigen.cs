@@ -31,7 +31,7 @@ public class burekeigen : MonoBehaviour {
         prevQuat = transform.rotation;
     }
 
-    void ResetRotation()
+    public void ResetRotation()
     {
         transform.localRotation = Quaternion.identity;
     }

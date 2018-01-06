@@ -155,6 +155,7 @@ public class VRArcheryController3 : MonoBehaviour
 
         SteamVR_Controller.Device bowDevice = null;
         SteamVR_Controller.Device hundleDevice = null;
+        //デバイスの左右持ちで反転
         if (isReverse)
         {
             bowDevice = ViveController.Instance.GetRightDevice();
@@ -170,7 +171,7 @@ public class VRArcheryController3 : MonoBehaviour
 
         
 
-        //矢を引く
+        //弓を引く
         if ( hundleDevice.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger)
             && IsAreaDrawingString(hundleDevice.transform.pos, drawingDist)
             && isDrawing == false && hasArrow == true)
@@ -186,6 +187,7 @@ public class VRArcheryController3 : MonoBehaviour
             Debug.Log("Played SE: 弦引き");
 
         }
+        //弓を引いている
         else if ( hundleDevice.GetTouch(SteamVR_Controller.ButtonMask.Trigger)
             && isDrawing == true && hasArrow == true)
         {
@@ -239,6 +241,7 @@ public class VRArcheryController3 : MonoBehaviour
             //Debug.Log("dist: " + dist);
 
         }
+        //そげきっ！？
         else if ( hundleDevice.GetTouchUp(SteamVR_Controller.ButtonMask.Trigger)
             && isDrawing == true)
         {
@@ -261,6 +264,7 @@ public class VRArcheryController3 : MonoBehaviour
             isMaxDrawing = false;
             isMaxDrawingFirst = false;
             shakeMitig.enabled = false;
+            shakeMitig.ResetRotation();
 
             //コールバック
             shotedCall();
@@ -307,6 +311,7 @@ public class VRArcheryController3 : MonoBehaviour
         preLine.CalcLine(data);
     }
 
+    //フィールド上の矢の破棄
     public void ClearArrows()
     {
         foreach( var obj in arrows)
