@@ -99,7 +99,8 @@ public class VRArcheryController3 : MonoBehaviour
     float minPlayDrawingSE;
 
     //動作ごとのコールバック
-    private System.Action shotedCall;
+    public System.Action setArrowCall = null;
+    private System.Action shotedCall = null;
     public System.Action ShotedCall { set { shotedCall = value; } }
 
     private List<Arrow3> arrows;
@@ -296,6 +297,9 @@ public class VRArcheryController3 : MonoBehaviour
             col.a = 1.0f;
 
             arrows.Add(ar);
+
+            //setArrowCall();
+
         }
 
     }

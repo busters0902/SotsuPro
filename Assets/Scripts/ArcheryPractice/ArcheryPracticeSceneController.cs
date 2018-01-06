@@ -67,6 +67,11 @@ public class ArcheryPracticeSceneController : MonoBehaviour
     [SerializeField]
     GameObject head;
 
+    [SerializeField]
+    ResultController resulting;
+
+    [SerializeField]
+    RankingController ranking;
 
 
     void Start ()
@@ -132,8 +137,10 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         Debug.Log("ゲームを開始します。トリガーを引いてください");
 
-        flashText.text.text = "ゲームを開始します。トリガーを引いてください";
+        flashText.text.text = "ゲームを開始します。\n\nトリガーを引いてください";
         flashText.flash.useFrash = true;
+        flashText.flash.setSize(Vector3.one * 3.0f);
+        flashText.flash.setPos(new Vector3( 0f, 100f, 1f));
 
         yield return new WaitUntil( () => ViveController.Instance.ViveRightDown || ViveController.Instance.ViveLeftDown);
         Debug.Log("トリガーを引いた");
@@ -141,7 +148,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         flashText.text.text = 1 + "回目";
         flashText.flash.useFrash = false;
         flashText.flash.setAlpha(1.0f);
-        flashText.flash.setSize(Vector3.one * 2.0f);
+        flashText.flash.setSize(Vector3.one * 4.0f);
         flashText.flash.setPos(new Vector3( -200f, 150f, 1f));
 
     }
