@@ -5,13 +5,52 @@ using UnityEngine;
 public class RankingController : MonoBehaviour
 {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    public RankingPanel rankingPanel;
+
+    const int RANKING_NUM = 10;
+    List<ScoreRankingData> ranking;
+
+    //データマネージャーから受け取る
+    public void LoadRankingData()
+    {
+        //ranking = DataManager.Instance.scoreRanking.ToList();
+    }
+
+    //※途中
+    //ニュースコアをランキングの追加 
+    public void AddRanking(ScoreRankingData nScore)
+    {
+
+    }
+
+    //※途中
+    //ランキングの表示
+    public void ShowRanking()
+    {
+        for(int i = 0; i < rankingPanel.rankScores.Length; i++)
+        {
+            rankingPanel.rankNumber[i].gameObject.SetActive(true);
+            rankingPanel.rankScores[i].gameObject.SetActive(true);
+        }
+    }
+
+    //※途中
+    //ランキングの非表示
+    public void HideRanking()
+    {
+        for (int i = 0; i < rankingPanel.rankScores.Length; i++)
+        {
+            rankingPanel.rankNumber[i].gameObject.SetActive(false);
+            rankingPanel.rankScores[i].gameObject.SetActive(false);
+        }
+    }
+
+    IEnumerator HideRinkingCrou()
+    {
+
+        
+
+        yield return null;
+    }
+
 }

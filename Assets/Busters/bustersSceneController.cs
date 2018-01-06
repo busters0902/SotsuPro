@@ -16,6 +16,9 @@ public class bustersSceneController : MonoBehaviour
     [SerializeField]
     ResultController result;
 
+    [SerializeField]
+    RankingController ranking;
+
     Vector3 currMousePos;
     Vector3 prevMousePos;
 
@@ -132,12 +135,14 @@ public class bustersSceneController : MonoBehaviour
         ///リザルトテスト/////////////////////////////////////////////////////////////////
         if (Input.GetKeyDown(KeyCode.Alpha8))
         {
-            result.HideAll();
+            //result.HideAll();
+            ranking.HideRanking();
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha9))
         {
-            result.ShowResult( () => Debug.Log("リザルト＼(^o^)／ｵﾜﾀ") );
+            //result.ShowResult( () => Debug.Log("リザルト＼(^o^)／ｵﾜﾀ") );
+            ranking.ShowRanking();
         }
 
 
