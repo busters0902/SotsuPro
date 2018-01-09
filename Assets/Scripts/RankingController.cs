@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class RankingController : MonoBehaviour
@@ -13,7 +14,13 @@ public class RankingController : MonoBehaviour
     //データマネージャーから受け取る
     public void LoadRankingData()
     {
-        //ranking = DataManager.Instance.scoreRanking.ToList();
+        ranking = DataManager.Instance.data.ranking.ToList();
+        var scoreViewers = rankingPanel.rankScores;
+        for (int i = 0; i < rankingPanel.rankScores.Length; i++)
+        {
+            scoreViewers[i].logoText.text.text = ranking[i].sumPoint.ToString();
+        }
+
     }
 
     //※途中

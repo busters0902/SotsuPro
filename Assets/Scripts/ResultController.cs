@@ -26,6 +26,13 @@ public class ResultController : MonoBehaviour
         Reset();
     }
 
+    public void LoadScores()
+    {
+        //scores = DataManager.Instance.roundScore.scores;
+        scores = ScoreManager.Instance.scores.ToArray();
+    }
+
+
     public void HideAll()
     {
         if (onShowResult) return;

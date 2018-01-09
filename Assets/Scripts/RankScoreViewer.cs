@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RankScoreViewer : MonoBehaviour {
+public class RankScoreViewer : MonoBehaviour
+{
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+    public LogoText logoText;
+
+	void Start ()
+    {
+        logoText = GetComponent<LogoText>();
+        if (logoText == null) Debug.Log("Errorrrrrrrrrrrrrrrrr");
 	}
 }

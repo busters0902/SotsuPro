@@ -99,8 +99,9 @@ public class VRArcheryController3 : MonoBehaviour
     float minPlayDrawingSE;
 
     //動作ごとのコールバック
-    public System.Action setArrowCall = null;
-    private System.Action shotedCall = null;
+    public System.Action setArrowCall = null;   //矢をセットした時
+    public System.Action fullDrawingCall = null;    //弦を引き切った時
+    private System.Action shotedCall = null;    //撃ったとき
     public System.Action ShotedCall { set { shotedCall = value; } }
 
     private List<Arrow3> arrows;
@@ -220,6 +221,8 @@ public class VRArcheryController3 : MonoBehaviour
                     isMaxDrawingFirst = true;
                     Debug.Log("Use 手ぶれ補正");
                     shakeMitig.enabled = true;
+                    //コールバック
+                    fullDrawingCall();
                 }
             }
 
@@ -298,7 +301,7 @@ public class VRArcheryController3 : MonoBehaviour
 
             arrows.Add(ar);
 
-            //setArrowCall();
+            setArrowCall();
 
         }
 

@@ -48,10 +48,15 @@ public class DataManager : MonoBehaviour
             scoreRanking[i].sumPoint = -1;
         }
 
+        roundScore = RoundScore.Create(6);
+
     }
 
     //ゲーム設定
     public GameSettings settings;
+
+    //スコアデータ
+    public RoundScore roundScore;
 
     //ランキングデータ
     public ScoreRankingData[] scoreRanking;

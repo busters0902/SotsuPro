@@ -166,9 +166,9 @@ public class Arrow3 : MonoBehaviour
     }
 
     //的に当たったときの処理
-    public void HitStopCall() {
+    public void HitStopCall()
+    {
         windParticle.Stop();
-
     } 
 
     public void SetPosFromTail(Vector3 tailPos)

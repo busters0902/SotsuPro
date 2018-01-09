@@ -1,51 +1,23 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
-
-/// <summary>
-/// FlashTextを使いやすくするためのデータ
-/// </summary>
-[System.Serializable]
-public class FlashTextObject
-{
-    public Text text;
-    public TextFrash flash;
-    public FlashTextObject(Text t, TextFrash f){ text = t;  flash = f; }
-    public void Set(FlashTextSettings s)
-    {
-        if (s.name != null) text.gameObject.name = s.name;
-        if (s.comment != null) text.text = s.comment;
-        if (s.pos != null) text.rectTransform.position = s.pos;
-        if (s.pos != null) text.rectTransform.localScale = s.size;
-        flash.useFrash = s.useFlash;
-    }
-}
-
-/// <summary>
-/// FlashTextObjectを初期化するデータ
-/// </summary>
-[System.Serializable]
-public class FlashTextSettings
-{
-    public string name;
-    public string comment;
-    public Vector3 pos;
-    public Vector3 size;
-    public bool useFlash;
-}
 
 //コルーチンでゲーム進行を管理
 public class ArcheryPracticeSceneController : MonoBehaviour
 {
+
+    public bool useTitle;
+
+    public bool useTutorial;
+
+    public bool IsGameEnd;
 
     [SerializeField]
     VRArcheryController3 archeryController;
 
     [SerializeField]
     int shotTimesLimit;
-
-    public bool IsGameEnd;
 
     //ゲーム進行用のテロップ
     FlashTextObject flashText;
@@ -68,10 +40,27 @@ public class ArcheryPracticeSceneController : MonoBehaviour
     GameObject head;
 
     [SerializeField]
-    ResultController resulting;
+    ResultController result;
 
     [SerializeField]
     RankingController ranking;
+
+    [SerializeField]
+    TitleController title;
+
+    [SerializeField]
+    TutorialController tutorial;
+
+    [SerializeField]
+    GameObject eyeCamera;
+
+    bool isFullDrawing = false;
+
+    [SerializeField]
+    TutorialMovie tutorialMovie;
+
+    [SerializeField]
+    GameObject gameEndPanel;
 
 
     void Start ()
@@ -95,12 +84,22 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         flashText.Set(flashTextSettings);
         flashText.text.text = "初期化";
 
+        title.HideTitle();
+
+        isFullDrawing = false;
+        gameEndPanel.SetActive(false);
+
+        ScoreManager.Instance.scores = new System.Collections.Generic.List<Score>();
+
         //フェードアウト
         FadeControl.Instance.FadeIn(3, 1);
 
-        yield return StartCoroutine(GameMain());
+        Debug.Log("SceneController.SetupEnd");
+        if (useTitle) yield return StartCoroutine(ShowTitle());
+        else yield return StartCoroutine(GameMain());
     }
 
+    //ゲームの一連の動作
     IEnumerator GameMain()
     {
 
@@ -110,13 +109,14 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         while(true)
         {
+            if (useTutorial)
+            {
+                yield return StartCoroutine(PlayTutorial());
+            }
+
             yield return StartCoroutine(StartGame());
 
-            if (IsGameEnd) break;
-
             yield return StartCoroutine(PlayGame());
-
-            if (IsGameEnd) break;
 
             yield return StartCoroutine(ShotResult());
 
@@ -129,6 +129,24 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
     }
 
+    IEnumerator ShowTitle()
+    {
+        Debug.Log("ShowTitle Start");
+        //初期化
+        AudioManager.Instance.PlayBGM("bgm_title");
+        title.ShowTitle();
+
+        yield return new WaitUntil(() =>  ViveController.Instance.ViveRightDown || ViveController.Instance.ViveLeftDown || Input.GetKeyDown(KeyCode.M));
+
+        AudioManager.Instance.PlaySE("se_decision");
+        //AudioManager.Instance.StopBGM("bgm_title");
+        title.HideTitle();
+
+        Debug.Log("ShowTitle End");
+        yield return StartCoroutine(GameMain());
+    }
+
+
     IEnumerator StartGame()
     {
         Debug.Log("SceneController.StartGame");
@@ -140,16 +158,42 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         flashText.text.text = "ゲームを開始します。\n\nトリガーを引いてください";
         flashText.flash.useFrash = true;
         flashText.flash.setSize(Vector3.one * 3.0f);
-        flashText.flash.setPos(new Vector3( 0f, 100f, 1f));
+        flashText.flash.setPos(new Vector3( 0f, 100f, 0.5f));
 
         yield return new WaitUntil( () => ViveController.Instance.ViveRightDown || ViveController.Instance.ViveLeftDown);
         Debug.Log("トリガーを引いた");
 
-        flashText.text.text = 1 + "回目";
+        flashText.text.text = 1 + "射目";
         flashText.flash.useFrash = false;
         flashText.flash.setAlpha(1.0f);
         flashText.flash.setSize(Vector3.one * 4.0f);
-        flashText.flash.setPos(new Vector3( -200f, 150f, 1f));
+        flashText.flash.transform.rotation = Quaternion.AngleAxis(15f, Vector3.up);
+        flashText.flash.setPos(new Vector3( -100f, 150f, 0.5f));
+
+    }
+
+    IEnumerator PlayTutorial()
+    {
+        yield return null;
+
+        //カメラの向き
+        //右を向く (スクリーン)
+        tutorial.ShowArrowAnime();
+
+        yield return new WaitUntil(() => eyeCamera.transform.rotation.eulerAngles.y > 80);
+        tutorial.HideArrowAnime();
+        //説明をする
+
+
+        yield return null;
+
+        //左を向く (的へ)
+        tutorial.Invert();
+        tutorial.ShowArrowAnime();
+
+        yield return new WaitUntil(() => eyeCamera.transform.rotation.eulerAngles.y < 10);
+        tutorial.HideArrowAnime();
+
 
     }
 
@@ -159,24 +203,44 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         int shotTimes = 1;
         timesText.text = "Times : " + (shotTimes) +  "/6";
-        
+
         //BGM(環境音)
         //AudioManager.Instance.PlayBGM("がやがや");
 
-        //打った後のアクションをセット
+        //矢をセットしたときのコールを設定
+        archeryController.setArrowCall = () =>
+        {
+            //環境音[ガヤガヤ]を止める
+            //AudioManager.Instance.StopBGM;
+        };
+
+        //弓の弦を弾ききった時のコールを設定
+        archeryController.fullDrawingCall = () =>
+        {
+            isFullDrawing = true;
+        };
+
+        //打った後のコールを設定
         archeryController.ShotedCall = () =>
         {
-            shotTimes++;
-            Debug.Log("shotTimes : " + shotTimes + "回目");
-            flashText.text.text = shotTimes + "回目";
-            timesText.text = "Times : " + (shotTimes) + "/6";
-            archeryController.GetArrow().HitCall = (s) =>
+            if (isFullDrawing)
             {
-                Debug.Log("Arrow.HitCall");
-                //StartCoroutine(　Utility.TimerCrou(3.0f, () => AudioManager.Instance.PlayBGM("がやがや")) );
-            };
-
-            if (shotTimes >= shotTimesLimit) Debug.Log("last shoted call");
+                isFullDrawing = false;
+                shotTimes++;
+                Debug.Log("shotTimes : " + shotTimes + "回目");
+                flashText.text.text = shotTimes + "射目";
+                timesText.text = "Times : " + (shotTimes) + "/6";
+                archeryController.GetArrow().HitCall = (s) =>
+                {
+                    Debug.Log("Arrow.HitCall");
+                    //StartCoroutine(　Utility.TimerCrou(3.0f, () => AudioManager.Instance.PlayBGM("がやがや")) );
+                };
+                if (shotTimes >= shotTimesLimit) Debug.Log("last shoted call");
+            }
+            else
+            {
+                Debug.Log("やり直し");
+            }
         };
 
         while (shotTimes < shotTimesLimit + 1 )
@@ -198,11 +262,55 @@ public class ArcheryPracticeSceneController : MonoBehaviour
     {
         Debug.Log("リザルト");
 
+        bool rankIn = false;
+
         //1ゲーム終了、歓声
-        flashText.text.text = "ゲーム終了: " + scoreTortal.TotalScore;
-        flashText.flash.useFrash = true;
+        //flashText.text.text = "ゲーム終了: " + scoreTortal.TotalScore;
+        //flashText.flash.useFrash = true;
+        gameEndPanel.SetActive(true);
+
+        result.LoadScores();
+
+        //ランキングの更新
+        //if(ScoreManager.Instance.GetTotalScore() 
+        var rData = DataManager.Instance.data.ranking;
+        if ( rData.Any(a => a.sumPoint < ScoreManager.Instance.GetTotalScore()))
+        {
+            //rankingの入れ替え
+            var obj = ScoreRankingData.Create();
+            obj.sumPoint = ScoreManager.Instance.GetTotalScore();
+            rData[rData.Length - 1] = obj;
+
+            //rankingのソート
+            rData.OrderBy(o => o.sumPoint);
+
+            //rankingのセーブ
+            DataManager.Instance.SaveData();
+
+        }
+
+
+        //ランキングデータの読み込み
+        ranking.LoadRankingData();
+
         yield return new WaitUntil(() => ViveController.Instance.ViveRightDown);
-        
+
+        gameEndPanel.SetActive(false);
+
+        result.ShowResult();
+
+        yield return new WaitForSeconds(5.0f);
+
+        result.HideAll();
+
+        //ランクインしてるとき
+        if (rankIn)
+        {
+            ranking.ShowRanking();
+            yield return new WaitForSeconds(3.0f);
+            ranking.HideRanking();
+        }
+
         yield return new WaitForSeconds(1.0f);
 
     }
@@ -216,7 +324,8 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         scoreTortal.ResetScore();
 
         //点数
-        
+        //DataManager.Instance.roundScore = RoundScore.Create(6);
+        ScoreManager.Instance.scores = new System.Collections.Generic.List<Score>();
 
     }
 
