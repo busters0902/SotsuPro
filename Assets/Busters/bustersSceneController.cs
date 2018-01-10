@@ -29,10 +29,17 @@ public class bustersSceneController : MonoBehaviour
     //現在の距離
     float soundLength;
 
+    [SerializeField]
+    QuadCollider target;
+
     void Start()
     {
         preLine.CreateLine();
         UpdateLine();
+
+        //target
+        
+
     }
 
     void Update()
@@ -40,13 +47,16 @@ public class bustersSceneController : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Return))
         {
-            bow.CreateArrow();
+            var arw = bow.CreateArrow();
             isSettingArrow = true;
             UpdateLine();
 
             currMousePos = Input.mousePosition;
             prevMousePos = currMousePos;
             //Debug.Log(currMousePos);
+
+            arw.useCalcIntersect = true;
+            arw.targets.Add(target);
 
         }
         else if (Input.GetMouseButton(0) || Input.GetKey(KeyCode.Return))

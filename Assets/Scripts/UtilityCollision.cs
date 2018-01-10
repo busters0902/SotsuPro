@@ -6,7 +6,7 @@ public static class UtilityCollision
 {
 
     //intersect segment vs quad
-    public static bool IntersectSegmentQuad(Vector3 p1, Vector3 p2, CollionQuad q)
+    public static bool IntersectSegmentQuad(Vector3 p1, Vector3 p2, CollisionQuad q)
     {
         return false;
     }
@@ -28,42 +28,70 @@ public static class UtilityCollision
         Vector3 pd = q.p[3] - s1;
         Vector3 pq = s2     - s1;
 
-        Vector3 crs = Vector3.Cross(pc, pq);
-
-        float u = Vector3.Dot(crs, pq);
-        if (u >= 0)
+        if (!IntersectSegmentPlane(s1, s2, q.p[0], q.p[1], q.p[2], ref cross))
         {
-            //ACB
-            float v = -Vector3.Dot(crs, pb);
-            if (v < 0) return false;
-            float w = ScalarTriple(pq, pb, pa);
-            if (w < 0)
-            {
-                return false;
-            }
-            cross = (u * pb + v * pa + w * pc) / (u + v + w) + s1;
-
-        }
-        else //(u>0)
-        {
-            //ADC
-            float v = Vector3.Dot(crs, pd);
-            if(v < 0) return false;
-            float w = ScalarTriple(pq, pa, pd);
-            if(w < 0) return false;
-            u = -u;
-            //衝突位置は体積比による重心位置になる		
-            cross = (u * pd + v * pa + w * pc) / (u + v + w) + s1;
-        }
-
-        if (!IntersectSegmentPlane(s1, s2, q.p[0], q.p[1], q.p[2]))
-        {
-            //cross = Vector3.zero;
+            cross = Vector3.zero;
             return false;
         }
 
-            return true;
+        //Vector3 crs = Vector3.Cross(pc, pq);
+
+        //float u = Vector3.Dot(crs, pq);
+        //if (u >= 0)
+        //{
+        //    //ACB
+        //    float v = -Vector3.Dot(crs, pb);
+        //    if (v < 0) return false;
+        //    float w = ScalarTriple(pq, pb, pa);
+        //    if (w < 0)
+        //    {
+        //        return false;
+        //    }
+        //    cross = (u * pa + v * pc + w * pb) / (u + v + w) + s1;
+
+        //}
+        //else
+        //{
+        //    cross = Vector3.zero;
+        //    return false;
+        //    ////ADC
+        //    //float v = Vector3.Dot(crs, pd);
+        //    //if (v < 0) return false;
+        //    //float w = ScalarTriple(pq, pa, pd);
+        //    //if (w < 0) return false;
+        //    //u = -u;
+        //    ////衝突位置は体積比による重心位置になる		
+        //    //cross = (u * pd + v * pa + w * pc) / (u + v + w) + s1;
+        //}
+
+
+
+        return true;
     }
+
+    public static bool IntersectSegmentCircle(Vector3 s1, Vector3 s2, Quadangle q, float r, ref Vector3 cross)
+    {
+        Vector3 pa = q.p[0] - s1;
+        Vector3 pb = q.p[1] - s1;
+        Vector3 pc = q.p[2] - s1;
+        Vector3 pd = q.p[3] - s1;
+        Vector3 pq = s2 - s1;
+
+        if (!IntersectSegmentPlane(s1, s2, q.p[0], q.p[1], q.p[2], ref cross))
+        {
+            cross = Vector3.zero;
+            return false;
+        }
+
+        var pos = (q.p[0] + q.p[2]) / 2;
+        if (!CollidePointSphere(cross, pos, r))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
 
     //bool Collision::IntersectSegmentQuadrangle( const Segment* pS, const Quadrangle* pQ, Vec3f* pC)
     //{
@@ -109,7 +137,7 @@ public static class UtilityCollision
     //	  return true;
     //}
 
-    public static bool IntersectSegmentPlane(Vector3 s1, Vector3 s2, Vector3 d, Vector3 e, Vector3 f )
+    public static bool IntersectSegmentPlane(Vector3 s1, Vector3 s2, Vector3 d, Vector3 e, Vector3 f , ref Vector3 q)
     {
         Vector3 pn = Vector3.Cross( e - d, f - d  );
         float pd = Vector3.Dot(pn , d);
@@ -118,7 +146,7 @@ public static class UtilityCollision
         float t = (pd - Vector3.Dot(pn, s1)) / Vector3.Dot(pn, s);
         if(t >= 0f && t <= 1f)
         {
-            Vector3 q = s1 + t * s;
+            q = s1 + t * s;
             return true;
         }
 
@@ -141,10 +169,20 @@ public static class UtilityCollision
 	//    return false;
     //}
 
+    //点と球の判定、(点、球の中心、球の半径)
+    public static bool CollidePointSphere( Vector3 p, Vector3 c, float r )
+    {
+        Vector3 d = c - p;
+        float dist = Vector3.Dot(d, d);
+
+        return dist <= r*r;
+    }
+
+
 }
 
 [System.Serializable]
-public class CollionQuad
+public class CollisionQuad
 {
     public Vector3 center;
 

@@ -83,6 +83,10 @@ public class Arrow3 : MonoBehaviour
     [SerializeField]
     ParticleSystem windParticle;
 
+    public bool useCalcIntersect;
+    public List<QuadCollider> targets = new List<QuadCollider>();
+
+
     public void Awake()
     {
         rig.isKinematic = true;
@@ -100,23 +104,50 @@ public class Arrow3 : MonoBehaviour
     {
         elapsedTime = Time.time - startTime;
 
+        //移動計算
         if (useCalc)
         {
             var pos = MoveCalcedPosition(elapsedTime);
             prevPos = curPos;
             curPos = pos;
-            //transform.position = pos;
-            rig.MovePosition(pos);
         }
+
+        //衝突判定計算
+        if (useCalcIntersect)
+        {
+            //ターゲットの判定
+            //head座標
+            Vector3 cross = new Vector3();
+            //var hit = UtilityCollision.IntersectSegmentQuadrangle(prevPos, curPos, targets[0].col, ref cross);
+            var hit = UtilityCollision.IntersectSegmentCircle(prevPos, curPos, targets[0].col, targets[0].rad, ref cross);
+
+            if (hit)
+            {
+                Debug.Log("Hit IntersectSegment :" + cross);
+                Stop();
+                useCalcIntersect = false;
+                SetPosFromHead(cross);
+                useCalc = false;
+                windParticle.Stop();
+            }
+                
+        }
+
+
+        if (useCalc)
+        {
+            rig.MovePosition(CalcPosFromHead(curPos));
+        }
+
 
         if (useLockVel) LookVelocity();
 
         //衝突したオブジェが同フレームでぶつかった場合
         if (isFarstHit) hitFlameCount++;
-        if(hitFlameCount == 1 )
+        if (hitFlameCount == 1)
         {
             Debug.Log("Play SE from Arrow3");
-            if(isHitTarget)
+            if (isHitTarget)
             {
                 //範囲内であれば
                 var score = hitTargetObject.GetComponent<ScoreCalculation>();
@@ -169,14 +200,28 @@ public class Arrow3 : MonoBehaviour
     public void HitStopCall()
     {
         windParticle.Stop();
-    } 
+    }
 
     public void SetPosFromTail(Vector3 tailPos)
     {
         //弓のサイズの半分前に
         //Debug.Log("tail scale: " + tail.transform.lossyScale);
         var scl = tail.transform.lossyScale;
-        transform.position = tailPos + transform.forward * scl.y * 0.4f ;
+        transform.position = tailPos + transform.forward * scl.y * 0.4f;
+    }
+
+    public void SetPosFromHead(Vector3 headPos)
+    {
+        //弓のサイズの半分前に
+        //Debug.Log("tail scale: " + tail.transform.lossyScale);
+        var scl = head.transform.lossyScale;
+        transform.position = headPos - transform.forward * 0.4f;
+    }
+
+    public Vector3 CalcPosFromHead(Vector3 headPos)
+    {
+        var scl = head.transform.lossyScale;
+        return 　headPos - transform.forward * scl.y * 0.4f;
     }
 
     //移動方向を向く
@@ -206,7 +251,7 @@ public class Arrow3 : MonoBehaviour
 
     public void OnCollisionEnter(Collision col)
     {
-        
+
         if (hitFlameCount == 0)
         {
             if (col.gameObject.tag == "Target")
@@ -253,7 +298,13 @@ public class Arrow3 : MonoBehaviour
 
     public void InitHitCall()
     {
-        HitCall = (s) => Debug.Log(s) ;
+        HitCall = (s) => Debug.Log(s);
     }
 
+    public void Stop()
+    {
+        rig.mass = 0.002f;
+        useLockVel = false;
+        useCalc = false;
+    }
 }
