@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+
 
 public class AudioManager : MonoBehaviour
 {
@@ -21,7 +23,7 @@ public class AudioManager : MonoBehaviour
     }
     void Awake()
     {
-       //instance = this;
+        //instance = this;
     }
 
     [SerializeField]
@@ -56,13 +58,25 @@ public class AudioManager : MonoBehaviour
         }
 
     }
-
+    //PlaySEのAudioClip版
+    public void PlaySE(AudioClip _clip, Action _callback)
+    {
+        var audsou = gameObject.AddComponent<AudioSource>();
+        audsou.clip = _clip;
+        audsou.Play();
+        StartCoroutine(AudioSourceIns(audsou, _callback));
+    }
     //BGMを鳴らす
     public void PlayBGM(string se_name)
     {
         bgmAudioSource.clip = Resources.Load<AudioClip>("Audio/BGM" + se_name);
         bgmAudioSource.Play();
     }
+    public void StopBGM(string se_name)
+    {
+        bgmAudioSource.Stop();
+    }
+
 
     //なり終わったら消す
     IEnumerator AudioSourceIns(AudioSource au)
@@ -73,7 +87,20 @@ public class AudioManager : MonoBehaviour
         }
         Destroy(au);
     }
+    IEnumerator AudioSourceIns(AudioSource au, Action callback)
+    {
+        while (au.isPlaying)
+        {
+            yield return null;
+        }
+        if (callback != null)
+        {
+            callback();
+        }
+        Destroy(au);
+    }
 
+    //ファイルを読み込みます
     public void Load(string filename)
     {
         var audios = Resources.LoadAll<AudioClip>(filename);
@@ -100,7 +127,7 @@ public class AudioManager : MonoBehaviour
 
     public void StopSELoop(string source_name)
     {
-        if(loopSources.ContainsKey(source_name))
+        if (loopSources.ContainsKey(source_name))
         {
             var sou = loopSources[source_name];
             sou.Stop();
@@ -109,9 +136,20 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+
     void Start()
     {
         Load("Audio/SE");
+        SeListLoad("Test","Audio/SE/Test");
+
+
+    }
+    void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            StartCoroutine(seListPlayCol("Test"));
+        }
     }
 
     public void setBGMLoop(bool _loop)
@@ -119,11 +157,11 @@ public class AudioManager : MonoBehaviour
         bgmAudioSource.loop = _loop;
     }
 
-    Dictionary<string, List<AudioClip>> seList;
 
-
+    //seをランダムに連続して鳴らすための
+    Dictionary<string, List<AudioClip>> seList = new Dictionary<string, List<AudioClip>>();
     //Soundのリストを名前を付けて登録する
-    public void SetSeList(string _key, string _filename)
+    public void SeListLoad(string _key, string _filename)
     {
         seList.Add(_key,
             new List<AudioClip>(
@@ -131,15 +169,43 @@ public class AudioManager : MonoBehaviour
             );
     }
 
+    public void PlaySeList(string _key)
+    {
+        StartCoroutine(seListPlayCol(_key));
+    }
+    bool isSeLoop = true;
+    public void StopSeList()
+    {
+        isSeLoop = false;
+    }
+    //selistをループで鳴らす
+    IEnumerator seListPlayCol(string _key)
+    {
+        var _seList = seList[_key];
+        if (_seList.Count == 0)
+            yield break;
 
-    public IEnumerator seListPlayCol() {
+        while (true)
+        {
+            var audsou = gameObject.AddComponent<AudioSource>();
+            audsou.clip = _seList[UnityEngine.Random.Range(0, _seList.Count-1)];
+            audsou.Play();
+            while (audsou.isPlaying)
+            {
+                if (!isSeLoop)
+                {
+                    isSeLoop = true;
+                    yield break;
+                }
 
-        yield return null;
-        //seAudioClips.
+                yield return null;
+
+            }
+        }
 
     }
 
-
+    //でバック用の出力
     public void ShowSeNames()
     {
         foreach (var a in seAudioClips)
