@@ -13,7 +13,11 @@ public class Test : MonoBehaviour {
 	void Update () {
         if (Input.GetMouseButtonDown(0))
         {
-            AudioManager.Instance.PlaySE("引き絞り");
+            //AudioManager.Instance.PlaySE("引き絞り");
+            AudioManager.Instance.PlaySeList("Test");
+            
         }
-	}
+
+
+    }
 }
