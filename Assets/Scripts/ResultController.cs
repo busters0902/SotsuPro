@@ -7,7 +7,7 @@ public class ResultController : MonoBehaviour
 {
 
     [SerializeField]
-    ResultPanel panel;
+    public ResultPanel panel;
 
     public Score[] scores;
 

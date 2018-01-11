@@ -156,25 +156,34 @@ public class Arrow3 : MonoBehaviour
                 Debug.Log("点P  :" + gameObject.transform.position);
                 Debug.Log("点数 :" + point);
 
+
                 if (point > 0)
                 {
 
                     AudioManager.Instance.PlaySE("的に当たる");
                     Debug.Log("Played SE: 的に当たる");
                     rig.velocity = Vector3.one;
+
                 }
                 else
                 {
-                    //AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
+                    AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
                 }
+
+                ScoreManager.Instance.AddScore(0, point);
 
             }
             else //if (isHitWall)
             {
-                //AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
+                AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
+
+                ScoreManager.Instance.AddScore(0, 0);
             }
+
+
         }
 
+        
     }
 
     //打ったときのメソッド

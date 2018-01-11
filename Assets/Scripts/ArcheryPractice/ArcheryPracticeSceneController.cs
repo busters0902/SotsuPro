@@ -82,17 +82,16 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         flashText = CreateGameTelop();
         flashText.Set(flashTextSettings);
-        flashText.text.text = "初期化";
+        flashText.text.text = "";
 
         title.HideTitle();
 
         isFullDrawing = false;
         gameEndPanel.SetActive(false);
 
-        ranking.rankingPanel.gameObject.SetActive(false);
+        ranking.panel.gameObject.SetActive(false);
 
         ScoreManager.Instance.scores = new System.Collections.Generic.List<Score>();
-        ScoreManager.Instance.CreateScore(6);
 
         //フェードアウト
         FadeControl.Instance.FadeIn(3, 1);
@@ -125,7 +124,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
             if (IsGameEnd) break;
 
-            Reset();
+            Reset_();
         }
 
         Debug.Log("SceneController.GameMain End");
@@ -293,6 +292,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
             //rankingのセーブ
             DataManager.Instance.SaveData();
 
+            rankIn = true;
         }
 
 
@@ -303,25 +303,30 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         gameEndPanel.SetActive(false);
 
+        result.panel.gameObject.SetActive(true);
         result.ShowResult();
 
         yield return new WaitForSeconds(5.0f);
 
+        result.panel.gameObject.SetActive(false);
         result.HideAll();
 
         //ランクインしてるとき
         if (rankIn)
         {
+            ranking.panel.gameObject.SetActive(true);
             ranking.ShowRanking();
             yield return new WaitForSeconds(3.0f);
             ranking.HideRanking();
+            ranking.panel.gameObject.SetActive(false);
         }
 
         yield return new WaitForSeconds(1.0f);
+        
 
     }
 
-    void Reset()
+    void Reset_()
     {
         //矢の破棄
         archeryController.ClearArrows();
