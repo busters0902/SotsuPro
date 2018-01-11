@@ -38,16 +38,18 @@ public class GarraryManager : MonoBehaviour {
     IEnumerator jump()
     {
 
-        while (!isEnd)
-        {
+       
+            while (isEnd)
+            {
+            if (isJump) {
+                rand = Random.Range(0, 27);
 
-           rand = Random.Range(0, 27);
+                iTween.PunchPosition(garrays[rand], iTween.Hash("y", 0.1, "time", puchTime));
 
-            iTween.PunchPosition(garrays[rand], iTween.Hash("y", 0.1,"time", puchTime));
-
-            yield return new WaitForSeconds(0.1f);          
-
-        }
+                yield return new WaitForSeconds(0.1f);
+            }
+            }
+        
 
     }
 
