@@ -144,7 +144,7 @@ public class AudioManager : MonoBehaviour
         {
             stockSeIndex.Add(_key, new List<int>());
         }
-        stockSeIndex[_key].Add();
+        //stockSeIndex[_key].Add();
     }
     //Soundのリストを名前を付けて登録する
     public void LoadSeList(string _key, string _filename)
