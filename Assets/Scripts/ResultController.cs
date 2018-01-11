@@ -23,7 +23,7 @@ public class ResultController : MonoBehaviour
     //初期化
     public void Initialize()
     {
-        Reset();
+        Reset_();
     }
 
     public void LoadScores()
@@ -50,7 +50,7 @@ public class ResultController : MonoBehaviour
         panel.parse.gameObject.SetActive(false);
         panel.sumText.gameObject.SetActive(false);
         panel.sumPointText.gameObject.SetActive(false);
-        //Array.ForEach(array, c => Debug.Log(c));
+
     }
 
     public void ShowResult()
@@ -103,7 +103,7 @@ public class ResultController : MonoBehaviour
         callback();
     }
 
-    public void Reset()
+    public void Reset_()
     {
         scores = new Score[10];
     }

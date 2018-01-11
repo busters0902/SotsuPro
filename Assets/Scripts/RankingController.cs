@@ -55,8 +55,6 @@ public class RankingController : MonoBehaviour
     IEnumerator HideRinkingCrou()
     {
 
-        
-
         yield return null;
     }
 

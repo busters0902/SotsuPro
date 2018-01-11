@@ -16,7 +16,7 @@ public class ScoreTotal : MonoBehaviour {
         totalScore += num;
         text.text = "Total : " + totalScore.ToString();
     }
-    // Use this for initialization
+    
     void Start () {
         //text = GetComponent<Text>();
 	}

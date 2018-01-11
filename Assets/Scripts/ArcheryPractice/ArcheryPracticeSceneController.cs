@@ -89,7 +89,10 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         isFullDrawing = false;
         gameEndPanel.SetActive(false);
 
+        ranking.rankingPanel.gameObject.SetActive(false);
+
         ScoreManager.Instance.scores = new System.Collections.Generic.List<Score>();
+        ScoreManager.Instance.CreateScore(6);
 
         //フェードアウト
         FadeControl.Instance.FadeIn(3, 1);
@@ -133,7 +136,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
     {
         Debug.Log("ShowTitle Start");
         //初期化
-        AudioManager.Instance.PlayBGM("bgm_title");
+        //AudioManager.Instance.PlayBGM("bgm_title");
         title.ShowTitle();
 
         yield return new WaitUntil(() =>  ViveController.Instance.ViveRightDown || ViveController.Instance.ViveLeftDown || Input.GetKeyDown(KeyCode.M));
@@ -182,6 +185,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         yield return new WaitUntil(() => eyeCamera.transform.rotation.eulerAngles.y > 80);
         tutorial.HideArrowAnime();
+        
         //説明をする
 
 
@@ -210,6 +214,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         //矢をセットしたときのコールを設定
         archeryController.setArrowCall = () =>
         {
+            Debug.Log("SetArrowCall");
             //環境音[ガヤガヤ]を止める
             //AudioManager.Instance.StopBGM;
         };
@@ -217,12 +222,14 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         //弓の弦を弾ききった時のコールを設定
         archeryController.fullDrawingCall = () =>
         {
+            Debug.Log("FullDrawingCall");
             isFullDrawing = true;
         };
 
         //打った後のコールを設定
         archeryController.ShotedCall = () =>
         {
+            Debug.Log("ShotedCall");
             if (isFullDrawing)
             {
                 isFullDrawing = false;
@@ -272,7 +279,6 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         result.LoadScores();
 
         //ランキングの更新
-        //if(ScoreManager.Instance.GetTotalScore() 
         var rData = DataManager.Instance.data.ranking;
         if ( rData.Any(a => a.sumPoint < ScoreManager.Instance.GetTotalScore()))
         {

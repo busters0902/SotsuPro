@@ -51,6 +51,26 @@ public class ScoreManager : MonoBehaviour
         scores.Add(score);
     }
 
+    public void CreateScore(int num)
+    {
+        scores = new List<Score>();
+        for(int i = 0; i < num; i++)
+        {
+            var score = new Score();
+            score.name = i+1 + "回目";
+            score.point = 0;
+            scores.Add(score);
+        }
+    }
+
+    public void Overwrite( int n, int times, int point )
+    {
+        var score = new Score();
+        score.name = times + "回目";
+        score.point = point;
+        scores[n] = score;
+    }
+
     public void ClearScore()
     {
         scores = new List<Score>();
