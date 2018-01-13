@@ -123,7 +123,7 @@ public class AudioManager : MonoBehaviour
     void Start()
     {
         //Load("Audio/SE");
-        //LoadSeList("Test","Audio/SE/Test");
+        LoadSeList("Test","Audio/SE/Test");
     }
     void Update()
     {
@@ -139,7 +139,7 @@ public class AudioManager : MonoBehaviour
     Dictionary<string, List<int>> stockSeIndex = new Dictionary<string, List<int>>();
 
     //seのインデックスを追加する
-    void addSeIndex(string _key)
+    public void addSeIndex(string _key)
     {
         //stockSeIndex[_key].Add();
         if (!stockSeIndex.ContainsKey(_key))
@@ -167,7 +167,7 @@ public class AudioManager : MonoBehaviour
     bool isSeLoop = true;
     public void PlaySeList(string _key)
     {
-        StartCoroutine(PlaySeListCol(_key));
+        StartCoroutine(PlaySeListCol2(_key));
 
     }
     public void PlaySeList2(string _key)
@@ -209,14 +209,24 @@ public class AudioManager : MonoBehaviour
 
         var audsou = gameObject.AddComponent<AudioSource>();
         var stockSeIndexs = stockSeIndex[_key];
-        //audsou.clip
-        for (int i = 0; i < stockSeIndex.Count; i++)
+        for (int i = 0; i < stockSeIndexs.Count; i++)
         {
-
-            //PlaySE(_seList[stockSeIndex[]]);
+            audsou.clip = _seList[stockSeIndexs[i]];
+            audsou.Play();
+            while (audsou.isPlaying)
+            {
+                if (!isSeLoop)
+                {
+                    isSeLoop = true;
+                    yield break;
+                }
+                yield return null;
+            }
         }
+        StartCoroutine(AudioSourceIns(audsou));
         yield break;
-        //    while (true)
+
+        //while (true)
         //{
         //    var audsou = gameObject.AddComponent<AudioSource>();
         //    audsou.clip = _seList[UnityEngine.Random.Range(0, _seList.Count - 1)];

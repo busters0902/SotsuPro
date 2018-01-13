@@ -16,7 +16,15 @@ public class Test : MonoBehaviour {
             //AudioManager.Instance.PlaySE("引き絞り");
             //AudioManager.Instance.PlaySeList("Test");
 
-            AudioManager.Instance.PlayBGM("bgm_title");
+            //AudioManager.Instance.PlayBGM("bgm_title");
+            AudioManager.Instance.addSeIndex("Test");
+            AudioManager.Instance.addSeIndex("Test");
+            AudioManager.Instance.addSeIndex("Test");
+            AudioManager.Instance.addSeIndex("Test");
+
+            AudioManager.Instance.PlaySeList("Test");
+
+
         }
 
 
