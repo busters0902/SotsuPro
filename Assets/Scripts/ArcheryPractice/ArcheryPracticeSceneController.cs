@@ -168,9 +168,9 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         flashText.text.text = 1 + "射目";
         flashText.flash.useFrash = false;
         flashText.flash.setAlpha(1.0f);
-        flashText.flash.setSize(Vector3.one * 4.0f);
+        flashText.flash.setSize(Vector3.one * 1.0f);
         flashText.flash.transform.rotation = Quaternion.AngleAxis(15f, Vector3.up);
-        flashText.flash.setPos(new Vector3( -100f, 150f, 0.5f));
+        flashText.flash.setPos(new Vector3( 2.0f, -125.1f, -197.2f));
 
     }
 
