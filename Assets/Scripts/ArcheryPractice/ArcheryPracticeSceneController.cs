@@ -135,13 +135,13 @@ public class ArcheryPracticeSceneController : MonoBehaviour
     {
         Debug.Log("ShowTitle Start");
         //初期化
-        //AudioManager.Instance.PlayBGM("bgm_title");
+        AudioManager.Instance.PlayBGM("bgm_title");
         title.ShowTitle();
 
         yield return new WaitUntil(() =>  ViveController.Instance.ViveRightDown || ViveController.Instance.ViveLeftDown || Input.GetKeyDown(KeyCode.M));
 
         AudioManager.Instance.PlaySE("se_decision");
-        //AudioManager.Instance.StopBGM("bgm_title");
+        AudioManager.Instance.StopBGM("bgm_title");
         title.HideTitle();
 
         Debug.Log("ShowTitle End");
@@ -209,13 +209,16 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         //BGM(環境音)
         AudioManager.Instance.PlayBGM("がやがや");
+        Debug.Log("PlayBGM がやがや");
 
         //矢をセットしたときのコールを設定
         archeryController.setArrowCall = () =>
         {
             Debug.Log("SetArrowCall");
+            
             //環境音[ガヤガヤ]を止める
             AudioManager.Instance.StopBGM("がやがや");
+            Debug.Log("StopBGM がやがや");
         };
 
         //弓の弦を弾ききった時のコールを設定
