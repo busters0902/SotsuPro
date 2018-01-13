@@ -23,7 +23,8 @@ public class TutorialMovie : MonoBehaviour {
 
     string btName = "Button0";
 
-    // Use this for initialization
+    public bool useMouseRay = false;
+
     void Start () {
         //vPlayer.clip = Resources.Load<VideoClip>("");
         //vPlayers.url = "Assets//Resources//TutorialMovie//01.mp4";
@@ -46,12 +47,12 @@ public class TutorialMovie : MonoBehaviour {
     }
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+   {
 
+        if(useMouseRay) rayCastMouse();
 
-        rayCastMouse();
-        
-	}
+    }
 
     public float distance = 100f;//レイが届く距離
 
@@ -132,8 +133,5 @@ public class TutorialMovie : MonoBehaviour {
         vScreen[nowIndex].time = time;
         vScreen[nowIndex].Play();
     }
-
-    //
-  
 
 }

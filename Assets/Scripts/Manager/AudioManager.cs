@@ -135,9 +135,6 @@ public class AudioManager : MonoBehaviour
 
     }
 
-
-
-
     //seをランダムに連続して鳴らすための
     Dictionary<string, List<AudioClip>> seList = new Dictionary<string, List<AudioClip>>();
 

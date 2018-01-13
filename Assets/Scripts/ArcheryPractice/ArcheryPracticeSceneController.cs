@@ -208,14 +208,14 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         timesText.text = "Times : " + (shotTimes) +  "/6";
 
         //BGM(環境音)
-        //AudioManager.Instance.PlayBGM("がやがや");
+        AudioManager.Instance.PlayBGM("がやがや");
 
         //矢をセットしたときのコールを設定
         archeryController.setArrowCall = () =>
         {
             Debug.Log("SetArrowCall");
             //環境音[ガヤガヤ]を止める
-            //AudioManager.Instance.StopBGM;
+            AudioManager.Instance.StopBGM("がやがや");
         };
 
         //弓の弦を弾ききった時のコールを設定
