@@ -70,6 +70,22 @@ public class TutorialMovie : MonoBehaviour {
                 // rayが当たったオブジェクトの名前を取得
                 var objectName = hit.collider.gameObject.name;
                 loadMovie(objectName);
+                if (objectName == "ButtonPause")
+                {
+                    pauseMovie();
+                }
+                if (objectName == "ButtonStop")
+                {
+                    stopMovie();
+                }
+                if (objectName == "ButtonCustum")
+                {
+                    playMovieCustumTime(7.0f);
+                }
+                if (objectName == "ButtonPlay")
+                {
+                    playMovie();
+                }
             }
         }
     }
@@ -93,10 +109,31 @@ public class TutorialMovie : MonoBehaviour {
             vScreen[num].Play();
         }
        
-       
-        
-
     }
 
+    public void pauseMovie()//一時停止
+    {
+        vScreen[nowIndex].Pause();
+    }
+
+    public void stopMovie()//巻き戻しも兼ね
+    {
+        vScreen[nowIndex].Pause();
+        vScreen[nowIndex].time = 0;
+    }
+
+    public void playMovie()//再生
+    {
+        vScreen[nowIndex].Play();
+    }
+
+    public void playMovieCustumTime(float time)//指定した時間から再生
+    {
+        vScreen[nowIndex].time = time;
+        vScreen[nowIndex].Play();
+    }
+
+    //
+  
 
 }
