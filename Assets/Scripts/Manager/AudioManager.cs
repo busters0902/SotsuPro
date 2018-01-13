@@ -122,8 +122,8 @@ public class AudioManager : MonoBehaviour
 
     void Start()
     {
-        //Load("Audio/SE");
-        //LoadSeList("Test","Audio/SE/Test");
+        Load("Audio/SE");
+        LoadSeList("Test","Audio/SE/Test");
         //addSeIndex("Test");
         //addSeIndex("Test");
         //addSeIndex("Test");
