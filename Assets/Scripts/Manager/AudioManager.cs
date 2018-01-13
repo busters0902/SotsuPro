@@ -33,7 +33,6 @@ public class AudioManager : MonoBehaviour
     private Dictionary<string, AudioClip> seAudioClips = new Dictionary<string, AudioClip>();
 
 
-
     //SEを鳴らす
     public void PlaySE(string se_name, Vector3? playPos = null)
     {
@@ -60,20 +59,21 @@ public class AudioManager : MonoBehaviour
 
     }
     //PlaySEのAudioClip版
-    public void PlaySE(AudioClip _clip, Action _callback)
+    public void PlaySE(AudioClip _clip, Action _callback = null)
     {
         var audsou = gameObject.AddComponent<AudioSource>();
         audsou.clip = _clip;
         audsou.Play();
         StartCoroutine(AudioSourceIns(audsou, _callback));
     }
-    
+
     //BGMを鳴らす
     public void PlayBGM(string se_name)
     {
         bgmAudioSource.clip = Resources.Load<AudioClip>("Audio/BGM/" + se_name);
         bgmAudioSource.Play();
     }
+
     //BGMを止める
     public void StopBGM(string se_name)
     {
@@ -106,7 +106,7 @@ public class AudioManager : MonoBehaviour
         }
         Destroy(au);
     }
-    
+
     //ファイルを読み込みます
     public void Load(string filename)
     {
@@ -118,7 +118,7 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-   
+
 
     void Start()
     {
@@ -127,24 +127,28 @@ public class AudioManager : MonoBehaviour
     }
     void Update()
     {
-        
+
     }
 
 
 
-    
+
     //seをランダムに連続して鳴らすための
     Dictionary<string, List<AudioClip>> seList = new Dictionary<string, List<AudioClip>>();
 
     Dictionary<string, List<int>> stockSeIndex = new Dictionary<string, List<int>>();
-    
+
+    //seのインデックスを追加する
     void addSeIndex(string _key)
     {
+        //stockSeIndex[_key].Add();
         if (!stockSeIndex.ContainsKey(_key))
         {
             stockSeIndex.Add(_key, new List<int>());
         }
-        //stockSeIndex[_key].Add();
+        var _seList = seList[_key];
+        stockSeIndex[_key].Add(UnityEngine.Random.Range(0, _seList.Count - 1));
+
     }
     //Soundのリストを名前を付けて登録する
     public void LoadSeList(string _key, string _filename)
@@ -155,16 +159,21 @@ public class AudioManager : MonoBehaviour
             );
     }
     //SEListを鳴らす
-    public void PlaySeList(string _key)
-    {
-        StartCoroutine(PlaySeListCol(_key));
-    }
-
     public void StopSeList()
     {
         isSeLoop = false;
     }
+
     bool isSeLoop = true;
+    public void PlaySeList(string _key)
+    {
+        StartCoroutine(PlaySeListCol(_key));
+
+    }
+    public void PlaySeList2(string _key)
+    {
+        StartCoroutine(PlaySeListCol2(_key));
+    }
 
     //selistをループで鳴らすコルーチン
     IEnumerator PlaySeListCol(string _key)
@@ -176,7 +185,7 @@ public class AudioManager : MonoBehaviour
         while (true)
         {
             var audsou = gameObject.AddComponent<AudioSource>();
-            audsou.clip = _seList[UnityEngine.Random.Range(0, _seList.Count-1)];
+            audsou.clip = _seList[UnityEngine.Random.Range(0, _seList.Count - 1)];
             audsou.Play();
             while (audsou.isPlaying)
             {
@@ -192,6 +201,41 @@ public class AudioManager : MonoBehaviour
         }
 
     }
+    IEnumerator PlaySeListCol2(string _key)
+    {
+        var _seList = seList[_key];
+        if (_seList.Count == 0)
+            yield break;
+
+        var audsou = gameObject.AddComponent<AudioSource>();
+        var stockSeIndexs = stockSeIndex[_key];
+        //audsou.clip
+        for (int i = 0; i < stockSeIndex.Count; i++)
+        {
+
+            //PlaySE(_seList[stockSeIndex[]]);
+        }
+        yield break;
+        //    while (true)
+        //{
+        //    var audsou = gameObject.AddComponent<AudioSource>();
+        //    audsou.clip = _seList[UnityEngine.Random.Range(0, _seList.Count - 1)];
+        //    audsou.Play();
+        //    while (audsou.isPlaying)
+        //    {
+        //        if (!isSeLoop)
+        //        {
+        //            isSeLoop = true;
+        //            yield break;
+        //        }
+
+        //        yield return null;
+
+        //    }
+        //}
+
+    }
+
 
     //でバック用の出力
     public void ShowSeNames()
@@ -226,5 +270,5 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-   
+
 }
