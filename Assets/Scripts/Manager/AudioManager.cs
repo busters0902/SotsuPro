@@ -17,7 +17,6 @@ public class AudioManager : MonoBehaviour
                 var obj = new GameObject("AudioManager");
                 var _instans = obj.AddComponent<AudioManager>();
                 instance = _instans;
-                instance.bgmAudioSource = obj.AddComponent<AudioSource>();
             }
             return instance;
         }
@@ -67,23 +66,17 @@ public class AudioManager : MonoBehaviour
         audsou.Play();
         StartCoroutine(AudioSourceIns(audsou, _callback));
     }
-    
     //BGMを鳴らす
     public void PlayBGM(string se_name)
     {
-        bgmAudioSource.clip = Resources.Load<AudioClip>("Audio/BGM/" + se_name);
+        bgmAudioSource.clip = Resources.Load<AudioClip>("Audio/BGM" + se_name);
         bgmAudioSource.Play();
     }
-    //BGMを止める
     public void StopBGM(string se_name)
     {
         bgmAudioSource.Stop();
     }
 
-    public void setBGMLoop(bool _loop)
-    {
-        bgmAudioSource.loop = _loop;
-    }
 
     //なり終わったら消す
     IEnumerator AudioSourceIns(AudioSource au)
@@ -106,7 +99,7 @@ public class AudioManager : MonoBehaviour
         }
         Destroy(au);
     }
-    
+
     //ファイルを読み込みます
     public void Load(string filename)
     {
@@ -118,56 +111,75 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-   
+    public Dictionary<string, AudioSource> loopSources = new Dictionary<string, AudioSource>();
+    public void PlaySELoop(string source_name, string se_name, float vol = 1.0f)
+    {
+        var audsou = gameObject.AddComponent<AudioSource>();
+        //ディクショナリーに登録しておく
+        loopSources.Add(source_name, audsou);
+
+        audsou.clip = seAudioClips[se_name];
+        audsou.loop = true;
+        vol = Mathf.Clamp(vol, 0.0f, 1.0f);
+        audsou.volume = vol;
+        audsou.Play();
+    }
+
+    public void StopSELoop(string source_name)
+    {
+        if (loopSources.ContainsKey(source_name))
+        {
+            var sou = loopSources[source_name];
+            sou.Stop();
+            loopSources.Remove(source_name);
+            Destroy(sou);
+        }
+    }
+
 
     void Start()
     {
-        //Load("Audio/SE");
-        //LoadSeList("Test","Audio/SE/Test");
+        Load("Audio/SE");
+        SeListLoad("Test","Audio/SE/Test");
+
+
     }
     void Update()
     {
-        
+        if (Input.GetMouseButtonDown(0))
+        {
+            StartCoroutine(seListPlayCol("Test"));
+        }
+    }
+
+    public void setBGMLoop(bool _loop)
+    {
+        bgmAudioSource.loop = _loop;
     }
 
 
-
-    
     //seをランダムに連続して鳴らすための
     Dictionary<string, List<AudioClip>> seList = new Dictionary<string, List<AudioClip>>();
-
-    Dictionary<string, List<int>> stockSeIndex = new Dictionary<string, List<int>>();
-    
-    void addSeIndex(string _key)
-    {
-        if (!stockSeIndex.ContainsKey(_key))
-        {
-            stockSeIndex.Add(_key, new List<int>());
-        }
-        //stockSeIndex[_key].Add();
-    }
     //Soundのリストを名前を付けて登録する
-    public void LoadSeList(string _key, string _filename)
+    public void SeListLoad(string _key, string _filename)
     {
         seList.Add(_key,
             new List<AudioClip>(
             Resources.LoadAll<AudioClip>(_filename))
             );
     }
-    //SEListを鳴らす
+
     public void PlaySeList(string _key)
     {
-        StartCoroutine(PlaySeListCol(_key));
+        StartCoroutine(seListPlayCol(_key));
     }
-
+    bool isSeLoop = true;
     public void StopSeList()
     {
         isSeLoop = false;
     }
-    bool isSeLoop = true;
-
-    //selistをループで鳴らすコルーチン
-    IEnumerator PlaySeListCol(string _key)
+    //selistをループで鳴らす
+    IEnumerator seListPlayCol(string _key)
     {
         var _seList = seList[_key];
         if (_seList.Count == 0)
@@ -202,29 +214,4 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    public Dictionary<string, AudioSource> loopSources = new Dictionary<string, AudioSource>();
-    public void PlaySELoop(string source_name, string se_name, float vol = 1.0f)
-    {
-        var audsou = gameObject.AddComponent<AudioSource>();
-        //ディクショナリーに登録しておく
-        loopSources.Add(source_name, audsou);
-
-        audsou.clip = seAudioClips[se_name];
-        audsou.loop = true;
-        vol = Mathf.Clamp(vol, 0.0f, 1.0f);
-        audsou.volume = vol;
-        audsou.Play();
-    }
-    public void StopSELoop(string source_name)
-    {
-        if (loopSources.ContainsKey(source_name))
-        {
-            var sou = loopSources[source_name];
-            sou.Stop();
-            loopSources.Remove(source_name);
-            Destroy(sou);
-        }
-    }
-
-   
 }

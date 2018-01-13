@@ -6,7 +6,7 @@ using UnityEngine;
 public class RankingController : MonoBehaviour
 {
 
-    public RankingPanel rankingPanel;
+    public RankingPanel panel;
 
     const int RANKING_NUM = 10;
     List<ScoreRankingData> ranking;
@@ -15,8 +15,8 @@ public class RankingController : MonoBehaviour
     public void LoadRankingData()
     {
         ranking = DataManager.Instance.data.ranking.ToList();
-        var scoreViewers = rankingPanel.rankScores;
-        for (int i = 0; i < rankingPanel.rankScores.Length; i++)
+        var scoreViewers = panel.rankScores;
+        for (int i = 0; i < panel.rankScores.Length; i++)
         {
             scoreViewers[i].logoText.text.text = ranking[i].sumPoint.ToString();
         }
@@ -34,10 +34,10 @@ public class RankingController : MonoBehaviour
     //ランキングの表示
     public void ShowRanking()
     {
-        for(int i = 0; i < rankingPanel.rankScores.Length; i++)
+        for(int i = 0; i < panel.rankScores.Length; i++)
         {
-            rankingPanel.rankNumber[i].gameObject.SetActive(true);
-            rankingPanel.rankScores[i].gameObject.SetActive(true);
+            panel.rankNumber[i].gameObject.SetActive(true);
+            panel.rankScores[i].gameObject.SetActive(true);
         }
     }
 
@@ -45,17 +45,15 @@ public class RankingController : MonoBehaviour
     //ランキングの非表示
     public void HideRanking()
     {
-        for (int i = 0; i < rankingPanel.rankScores.Length; i++)
+        for (int i = 0; i < panel.rankScores.Length; i++)
         {
-            rankingPanel.rankNumber[i].gameObject.SetActive(false);
-            rankingPanel.rankScores[i].gameObject.SetActive(false);
+            panel.rankNumber[i].gameObject.SetActive(false);
+            panel.rankScores[i].gameObject.SetActive(false);
         }
     }
 
     IEnumerator HideRinkingCrou()
     {
-
-        
 
         yield return null;
     }

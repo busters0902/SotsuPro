@@ -39,9 +39,9 @@ public class GarraryManager : MonoBehaviour {
     {
 
        
-            while (isEnd)
+            while (isEnd == false)
             {
-            if (isJump) {
+            if (isJump == true) {
                 rand = Random.Range(0, 27);
 
                 iTween.PunchPosition(garrays[rand], iTween.Hash("y", 0.1, "time", puchTime));

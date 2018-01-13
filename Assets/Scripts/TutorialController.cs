@@ -94,7 +94,8 @@ public class TutorialController : MonoBehaviour
     public void Invert()
     {
         arrowPanel.transform.Rotate(Vector3.up, 180f);
-        isInvert = true;
+        //  isInvert = true;
+        isInvert = !isInvert;
     }
 
 }

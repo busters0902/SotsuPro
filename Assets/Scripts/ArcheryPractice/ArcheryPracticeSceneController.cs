@@ -82,12 +82,14 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         flashText = CreateGameTelop();
         flashText.Set(flashTextSettings);
-        flashText.text.text = "初期化";
+        flashText.text.text = "";
 
         title.HideTitle();
 
         isFullDrawing = false;
         gameEndPanel.SetActive(false);
+
+        ranking.panel.gameObject.SetActive(false);
 
         ScoreManager.Instance.scores = new System.Collections.Generic.List<Score>();
 
@@ -122,7 +124,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
             if (IsGameEnd) break;
 
-            Reset();
+            Reset_();
         }
 
         Debug.Log("SceneController.GameMain End");
@@ -133,7 +135,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
     {
         Debug.Log("ShowTitle Start");
         //初期化
-        AudioManager.Instance.PlayBGM("bgm_title");
+        //AudioManager.Instance.PlayBGM("bgm_title");
         title.ShowTitle();
 
         yield return new WaitUntil(() =>  ViveController.Instance.ViveRightDown || ViveController.Instance.ViveLeftDown || Input.GetKeyDown(KeyCode.M));
@@ -182,6 +184,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         yield return new WaitUntil(() => eyeCamera.transform.rotation.eulerAngles.y > 80);
         tutorial.HideArrowAnime();
+        
         //説明をする
 
 
@@ -210,6 +213,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         //矢をセットしたときのコールを設定
         archeryController.setArrowCall = () =>
         {
+            Debug.Log("SetArrowCall");
             //環境音[ガヤガヤ]を止める
             //AudioManager.Instance.StopBGM;
         };
@@ -217,12 +221,14 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         //弓の弦を弾ききった時のコールを設定
         archeryController.fullDrawingCall = () =>
         {
+            Debug.Log("FullDrawingCall");
             isFullDrawing = true;
         };
 
         //打った後のコールを設定
         archeryController.ShotedCall = () =>
         {
+            Debug.Log("ShotedCall");
             if (isFullDrawing)
             {
                 isFullDrawing = false;
@@ -272,7 +278,6 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         result.LoadScores();
 
         //ランキングの更新
-        //if(ScoreManager.Instance.GetTotalScore() 
         var rData = DataManager.Instance.data.ranking;
         if ( rData.Any(a => a.sumPoint < ScoreManager.Instance.GetTotalScore()))
         {
@@ -287,6 +292,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
             //rankingのセーブ
             DataManager.Instance.SaveData();
 
+            rankIn = true;
         }
 
 
@@ -297,25 +303,30 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         gameEndPanel.SetActive(false);
 
+        result.panel.gameObject.SetActive(true);
         result.ShowResult();
 
         yield return new WaitForSeconds(5.0f);
 
+        result.panel.gameObject.SetActive(false);
         result.HideAll();
 
         //ランクインしてるとき
         if (rankIn)
         {
+            ranking.panel.gameObject.SetActive(true);
             ranking.ShowRanking();
             yield return new WaitForSeconds(3.0f);
             ranking.HideRanking();
+            ranking.panel.gameObject.SetActive(false);
         }
 
         yield return new WaitForSeconds(1.0f);
+        
 
     }
 
-    void Reset()
+    void Reset_()
     {
         //矢の破棄
         archeryController.ClearArrows();

@@ -45,9 +45,6 @@ public class HitStopObject : MonoBehaviour
             bul.Stop();
             bul.rig.isKinematic = true;
 
-
-
-
             //AudioManager.Instance.PlaySE("弓矢・矢が刺さる01");
             collision.gameObject.GetComponent<Arrow3>().HitStopCall();
 
