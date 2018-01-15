@@ -78,7 +78,7 @@ public class TutorialController : MonoBehaviour
 
         if (trans.position.x > basePos.x - movDist)
         {
-            trans.position -= trans.right * movSpd;
+            trans.position += trans.right * movSpd;
         }
         else
         {
@@ -94,8 +94,8 @@ public class TutorialController : MonoBehaviour
     public void Invert()
     {
         arrowPanel.transform.Rotate(Vector3.up, 180f);
-        //  isInvert = true;
         isInvert = !isInvert;
+        Debug.Log("Invert :" + isInvert);
     }
 
 }

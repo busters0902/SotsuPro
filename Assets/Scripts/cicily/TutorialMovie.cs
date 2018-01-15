@@ -134,4 +134,13 @@ public class TutorialMovie : MonoBehaviour {
         vScreen[nowIndex].Play();
     }
 
+    public bool IsEndMovie()
+    {
+        return vScreen[nowIndex].time >= vScreen[nowIndex].clip.length;
+    }
+
+    public void SetLoop(bool f)
+    {
+        vScreen[nowIndex].isLooping = f;
+    }
 }

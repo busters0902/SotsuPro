@@ -54,6 +54,9 @@ public class ArcheryPracticeSceneController : MonoBehaviour
     [SerializeField]
     GameObject eyeCamera;
 
+    [SerializeField]
+    GameObject tutorialTarget;
+
     bool isFullDrawing = false;
 
     [SerializeField]
@@ -92,6 +95,8 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         ranking.panel.gameObject.SetActive(false);
 
         ScoreManager.Instance.scores = new System.Collections.Generic.List<Score>();
+
+        tutorialMovie.pauseMovie();
 
         //フェードアウト
         FadeControl.Instance.FadeIn(3, 1);
@@ -182,19 +187,36 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         //右を向く (スクリーン)
         tutorial.ShowArrowAnime();
 
-        yield return new WaitUntil(() => eyeCamera.transform.rotation.eulerAngles.y > 80);
+        yield return new WaitUntil(() => 
+        {
+            var tgtDir = tutorialTarget.transform.position - eyeCamera.transform.position;
+            var cross = Vector3.Cross(eyeCamera.transform.forward, tgtDir);
+            Debug.Log("cross :" + cross.y);
+            if (cross.y <= 0) return true;
+            return false;
+        });
         tutorial.HideArrowAnime();
-        
+
         //説明をする
+        tutorialMovie.playMovie();
+        tutorialMovie.SetLoop(false);
 
-
-        yield return null;
+        yield return new WaitUntil(() =>
+        {
+            return tutorialMovie.IsEndMovie();
+        });
 
         //左を向く (的へ)
         tutorial.Invert();
         tutorial.ShowArrowAnime();
 
-        yield return new WaitUntil(() => eyeCamera.transform.rotation.eulerAngles.y < 10);
+        yield return new WaitUntil(() =>
+        {
+            var tgtDir = Vector3.forward;
+            var cross = Vector3.Cross(eyeCamera.transform.forward, tgtDir);
+            if (cross.y >= 0) return true;
+            return false;
+        });
         tutorial.HideArrowAnime();
 
 
@@ -297,7 +319,6 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
             rankIn = true;
         }
-
 
         //ランキングデータの読み込み
         ranking.LoadRankingData();
