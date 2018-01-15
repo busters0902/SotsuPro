@@ -5,17 +5,13 @@ using UnityEngine;
 public static class UtilityCollision
 {
 
-    //intersect segment vs quad
-    public static bool IntersectSegmentQuad(Vector3 p1, Vector3 p2, CollisionQuad q)
-    {
-        return false;
-    }
-
+    //スカラー三重積
     public static float ScalarTriple(Vector3 a, Vector3 b, Vector3 c)
     {
         return Vector3.Dot(a, Vector3.Cross(b,c)) ;
     }
 
+    //線分と四辺形の交差判定
     public static bool IntersectSegmentQuadrangle( Vector3 s1, Vector3 s2,  Quadangle q, ref Vector3 cross)
     {
         Vector3 pa = q.p[0] - s1;
@@ -30,41 +26,39 @@ public static class UtilityCollision
             return false;
         }
 
-        ////Vector3 crs = Vector3.Cross(pc, pq);
+        Vector3 crs = Vector3.Cross(pc, pq);
 
-        //float u = Vector3.Dot(cross, pq);
-        //if (u >= 0)
-        //{
-        //    //ACB
-        //    float v = -Vector3.Dot(crs, pb);
-        //    if (v < 0) return false;
-        //    float w = ScalarTriple(pq, pb, pa);
-        //    if (w < 0)
-        //    {
-        //        return false;
-        //    }
-        //    cross = (u * pa + v * pc + w * pb) / (u + v + w) + s1;
+        float u = Vector3.Dot(pa, crs);
+        if (u >= 0f)
+        {
+            //ACB
+            float v = -Vector3.Dot(pb, crs);
+            if (v < 0f) return false;
+            float w = ScalarTriple(pq, pb, pa);
+            if (w < 0f)
+            {
+                return false;
+            }
+            //cross = (u * pa + v * pc + w * pb) / (u + v + w) + s1;
+            //cross = (u * pa + v * pc + w * pb) / (u + v + w);
+        }
+        else
+        {
+            //ADC
+            float v = Vector3.Dot(pd, crs);
+            if (v < 0) return false;
+            float w = ScalarTriple(pq, pa, pd);
+            if (w < 0) return false;
+            u = -u;
 
-        //}
-        //else
-        //{
-        //    cross = Vector3.zero;
-        //    return false;
-        //    ////ADC
-        //    //float v = Vector3.Dot(crs, pd);
-        //    //if (v < 0) return false;
-        //    //float w = ScalarTriple(pq, pa, pd);
-        //    //if (w < 0) return false;
-        //    //u = -u;
-        //    ////衝突位置は体積比による重心位置になる		
-        //    //cross = (u * pd + v * pa + w * pc) / (u + v + w) + s1;
-        //}
-
-
+            //cross = (u * pd + v * pa + w * pc) / (u + v + w);
+            //cross = (u * pd + v * pa + w * pc) / (u + v + w) + s1;
+        }
 
         return true;
     }
 
+    //線分と円形(3D)の交差判定
     public static bool IntersectSegmentCircle(Vector3 s1, Vector3 s2, Quadangle q, float r, ref Vector3 cross)
     {
         Vector3 pa = q.p[0] - s1;
@@ -88,51 +82,7 @@ public static class UtilityCollision
         return true;
     }
 
-
-    //bool Collision::IntersectSegmentQuadrangle( const Segment* pS, const Quadrangle* pQ, Vec3f* pC)
-    //{
-
-    //	  Vec3f pa = pQ->p[0] - pS->ip;
-    //    Vec3f pb = pQ->p[1] - pS->ip;
-    //    Vec3f pc = pQ->p[2] - pS->ip;
-    //    Vec3f pd = pQ->p[3] - pS->ip;
-    //    Vec3f pq = pS->tp - pS->ip;
-
-    //    //スカラー三重積の交換法則よりQP×P1使いまわす
-    //    Vec3f crs = Vec3Cross(&pc, &pq);
-
-    //    float u = Vec3Dot(&crs, &pa);
-    //	  if(u >= 0)
-    //	  {
-    //	  	//ACB
-    //	  	float v = -Vec3Dot(&crs, &pb);
-    //	  	if(v< 0) return false;
-    //	  	float w = Vec3ScalarTriple(&pq, &pb, &pa);
-    //	  	if(w< 0)
-    //	  	{
-    //	  		return false;
-    //	  	}
-    //	  	//衝突位置は体積比による重心位置になる
-    //	  	//*pC = (u*pb + v*pa + w*pc) / (u+v+w)+pS->ip;
-    //	  }
-    //	  else //(u>0)
-    //	  {
-    //	  	//ADC
-    //	  	float v = Vec3Dot(&crs, &pd);
-    //	  	if(v< 0) return false;
-    //	  	float w = Vec3ScalarTriple(&pq, &pa, &pd);
-    //	  	if(w< 0) return false;
-    //	  	u = -u;
-    //	  	//衝突位置は体積比による重心位置になる		
-    //	  	//*pC = (u*pd + v*pa + w*pc) / (u+v+w)+pS->ip;
-    //	  }
-
-    //	  if( !IntersectSegmentPlane(pS, pQ->p[0], pQ->p[1], pQ->p[2] ))
-    //	  	return false;
-
-    //	  return true;
-    //}
-
+    //線分と平面の交差判定
     public static bool IntersectSegmentPlane(Vector3 s1, Vector3 s2, Vector3 d, Vector3 e, Vector3 f , ref Vector3 q)
     {
         Vector3 pn = Vector3.Cross( e - d, f - d  );
@@ -148,22 +98,6 @@ public static class UtilityCollision
 
         return false;
     }
-
-    //bool Collision::IntersectSegmentPlane( const Segment* pS, const Vec3f& d, const Vec3f& e, const Vec3f& f)
-    //{
-	//    Vec3f pn = Vec3Cross(&(e - d), &(f - d));
-    //    float pd = Vec3Dot(&pn, &d);
-    //
-    //    Vec3f s = pS->tp - pS->ip;
-    //    float t = (pd - Vec3Dot(&pn, &pS->ip)) / Vec3Dot(&pn, &s);
-	//    if(t >= 0.0f && t <= 1.0f )
-	//    {
-	//	    Vec3f q = pS->ip + t * s;
-	//	    return true;
-	//    }
-    //
-	//    return false;
-    //}
 
     //点と球の判定、(点、球の中心、球の半径)
     public static bool CollidePointSphere( Vector3 p, Vector3 c, float r )
@@ -187,6 +121,10 @@ public class CollisionQuad
     public Vector3 v;
 }
 
+/// <summary>
+/// 衝突判定用の四辺形データ
+/// </summary>
+[System.Serializable]
 public class Quadangle
 {
     public Vector3[] p;

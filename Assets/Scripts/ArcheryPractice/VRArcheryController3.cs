@@ -267,7 +267,6 @@ public class VRArcheryController3 : MonoBehaviour
             shakeMitig.enabled = false;
             shakeMitig.ResetRotation();
 
-            //
             bow.arrow.useCalcIntersect = true;
 
             //コールバック

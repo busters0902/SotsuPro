@@ -86,8 +86,9 @@ public class Arrow3 : MonoBehaviour
     ParticleSystem windParticle;
 
     public bool useCalcIntersect;
+    public bool useCalcIntersectWall;
     public List<QuadCollider> targets = new List<QuadCollider>();
-
+    public QuadCollider frontWall;
 
     public void Awake()
     {
@@ -98,6 +99,9 @@ public class Arrow3 : MonoBehaviour
 
         isHitTarget = false;
         isHitWall = false;
+
+        useCalcIntersect = false;
+        useCalcIntersectWall = false;
 
         InitHitCall();
     }
@@ -119,13 +123,16 @@ public class Arrow3 : MonoBehaviour
         {
             //ターゲットの判定
             Vector3 cross = new Vector3();
-            //var hit = UtilityCollision.IntersectSegmentQuadrangle(prevPos, curPos, targets[0].col, ref cross);
             var hit = UtilityCollision.IntersectSegmentCircle(prevPos, curPos, targets[0].col, targets[0].rad, ref cross);
 
             //ターゲットに衝突
             if (hit)
             {
                 Debug.Log("Hit IntersectSegment :" + cross);
+                var mato  = targets[0].GetComponent<Mato>();
+                if (mato == null) Debug.Log("Mato NUll");
+                //mato.hitStop.
+                
                 Stop();
                 rig.isKinematic = true;
                 useCalcIntersect = false;
@@ -133,7 +140,40 @@ public class Arrow3 : MonoBehaviour
                 SetPosFromHead(cross);
                 useCalc = false;
                 windParticle.Stop();
+                isFarstHit = true;
 
+                //点数計算
+
+            }
+            else if (useCalcIntersectWall)
+            {
+                var wallHit = UtilityCollision.IntersectSegmentQuadrangle(prevPos, curPos, frontWall.col, ref cross);
+                if (wallHit)
+                {
+                    Debug.Log("Intersect Hit : Wall");
+                    //rig.isKinematic = false;
+                    
+                    isHitWall = true;
+                    SetPosFromHead(cross);
+                    
+                    windParticle.Stop();
+                    isFarstHit = true;
+
+                    //衝突したら物理挙動
+                    rig.useGravity = true;
+                    rig.mass = 0.002f;
+                    useLockVel = false;
+                    useCalc = false;
+                    useCalcIntersect = false;
+                    useCalcIntersectWall = false;
+
+                    // v = v0 + gt
+                    var accel = calcData.dir * calcData.speed + new Vector3(0, -calcData.grav, 0) * elapsedTime;
+                    accel.y = -accel.y;
+
+                    //反発させたい
+
+                }
             }
 
         }

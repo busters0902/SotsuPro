@@ -68,6 +68,9 @@ public class ArcheryPracticeSceneController : MonoBehaviour
     [SerializeField]
     Mato mato;
 
+    [SerializeField]
+    QuadCollider frontWall;
+
     void Start ()
     {
         StartCoroutine(Setup());
@@ -170,6 +173,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         flashText.flash.setPos(new Vector3( 0f, 100f, 0.5f));
         flashText.text.fontSize = 20;
 
+        //スタート表示、トリガー待ち
         yield return new WaitUntil( () => ViveController.Instance.ViveRightDown || ViveController.Instance.ViveLeftDown);
         Debug.Log("トリガーを引いた");
 
@@ -180,6 +184,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         flashText.flash.transform.rotation = Quaternion.AngleAxis(30f, Vector3.right);
         flashText.flash.setPos(new Vector3( 2.0f, -125.1f, 86.0f));
         flashText.text.fontSize = 90;
+
     }
 
     IEnumerator PlayTutorial()
@@ -190,6 +195,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         //右を向く (スクリーン)
         tutorial.ShowArrowAnime();
 
+        //チュートリアル版を見るまで待つ
         yield return new WaitUntil(() => 
         {
             var tgtDir = tutorialTarget.transform.position - eyeCamera.transform.position;
@@ -216,6 +222,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         tutorial.Invert();
         tutorial.ShowArrowAnime();
 
+        //正面を見るまで待つ
         yield return new WaitUntil(() =>
         {
             var tgtDir = Vector3.forward;
@@ -223,8 +230,8 @@ public class ArcheryPracticeSceneController : MonoBehaviour
             if (cross.y >= 0) return true;
             return false;
         });
-        tutorial.HideArrowAnime();
 
+        tutorial.HideArrowAnime();
 
     }
 
@@ -249,7 +256,9 @@ public class ArcheryPracticeSceneController : MonoBehaviour
             Debug.Log("StopBGM がやがや");
 
             archeryController.bow.arrow.targets.Add(mato.quadCollider);
+            archeryController.bow.arrow.frontWall = frontWall;
 
+            archeryController.bow.arrow.useCalcIntersectWall = true;
         };
 
         //弓の弦を弾ききった時のコールを設定
@@ -305,8 +314,6 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         bool rankIn = false;
 
         //1ゲーム終了、歓声
-        //flashText.text.text = "ゲーム終了: " + scoreTortal.TotalScore;
-        //flashText.flash.useFrash = true;
         gameEndPanel.SetActive(true);
 
         result.LoadScores();
@@ -366,6 +373,8 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         //UIの初期化
         scoreTortal.ResetScore();
+        tutorial.Reset_();
+        tutorialMovie.stopMovie();
 
         //点数
         //DataManager.Instance.roundScore = RoundScore.Create(6);

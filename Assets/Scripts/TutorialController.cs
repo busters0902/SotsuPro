@@ -37,6 +37,15 @@ public class TutorialController : MonoBehaviour
         arrowPanel.SetActive(false);
         basePos = arrowPanel.transform.position;
         baseRot = arrowPanel.transform.rotation;
+
+        isInvert = false;
+    }
+
+    public void Reset_()
+    {
+        arrowPanel.transform.position = basePos;
+        arrowPanel.transform.rotation = baseRot;
+        isInvert = false;
     }
 
     public void ShowArrowAnime()
