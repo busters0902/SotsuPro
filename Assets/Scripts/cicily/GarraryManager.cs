@@ -26,7 +26,7 @@ public class GarraryManager : MonoBehaviour {
 
         isEnd = false;
 
-        isJump = false;
+        highJump = false;
 
         puchTime = 1.0f;
 
@@ -69,7 +69,7 @@ public class GarraryManager : MonoBehaviour {
 
     void checkJumpState()
     {
-        if (isJump == true)
+        if (highJump == true)
         {
             jumpPower = 0.8f;
 
