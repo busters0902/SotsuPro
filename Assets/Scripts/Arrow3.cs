@@ -67,6 +67,7 @@ public class Arrow3 : MonoBehaviour
 
     public Vector3 curPos;
     public Vector3 prevPos;
+    public Vector3 nextPos;
 
     public float angleLerp;
 
@@ -78,6 +79,7 @@ public class Arrow3 : MonoBehaviour
     public GameObject hitTargetObject;
     public GameObject hitWallObject;
 
+    public System.Action<string> ShotCall;
     public System.Action<string> HitCall;
 
     [SerializeField]
@@ -116,29 +118,30 @@ public class Arrow3 : MonoBehaviour
         if (useCalcIntersect)
         {
             //ターゲットの判定
-            //head座標
             Vector3 cross = new Vector3();
             //var hit = UtilityCollision.IntersectSegmentQuadrangle(prevPos, curPos, targets[0].col, ref cross);
             var hit = UtilityCollision.IntersectSegmentCircle(prevPos, curPos, targets[0].col, targets[0].rad, ref cross);
 
+            //ターゲットに衝突
             if (hit)
             {
                 Debug.Log("Hit IntersectSegment :" + cross);
                 Stop();
+                rig.isKinematic = true;
                 useCalcIntersect = false;
+                isHitTarget = true;
                 SetPosFromHead(cross);
                 useCalc = false;
                 windParticle.Stop();
-            }
-                
-        }
 
+            }
+
+        }
 
         if (useCalc)
         {
             rig.MovePosition(CalcPosFromHead(curPos));
         }
-
 
         if (useLockVel) LookVelocity();
 
@@ -156,7 +159,6 @@ public class Arrow3 : MonoBehaviour
                 Debug.Log("点P  :" + gameObject.transform.position);
                 Debug.Log("点数 :" + point);
 
-
                 if (point > 0)
                 {
 
@@ -173,17 +175,15 @@ public class Arrow3 : MonoBehaviour
                 ScoreManager.Instance.AddScore(0, point);
 
             }
-            else //if (isHitWall)
+            else
             {
                 AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
 
                 ScoreManager.Instance.AddScore(0, 0);
             }
 
-
         }
 
-        
     }
 
     //打ったときのメソッド
@@ -199,9 +199,6 @@ public class Arrow3 : MonoBehaviour
         useLockVel = true;
         curPos = prevPos = transform.position;
 
-        //※矢の風を切る音
-        //AudioManager.Instance.PlaySE("");
-        //Destroy(gameObject, 10f);
         windParticle.Play();
     }
 
@@ -277,10 +274,10 @@ public class Arrow3 : MonoBehaviour
 
         if (isFarstHit) return;
 
-        Debug.Log("Arrow hit Coll :" + col.transform.position);
         Debug.Log("Arraw hit : " + col.gameObject.name);
 
         //矢が風を切る音を止める
+        windParticle.Stop();
         //AudioManager.Instance.StopSE("");
 
         HitCall(col.gameObject.tag);
@@ -302,6 +299,8 @@ public class Arrow3 : MonoBehaviour
         //衝突SE
         //if (col.gameObject.tag == "Target") AudioManager.Instance.PlaySE("弓矢・矢が刺さる01");
         //else if (col.gameObject.tag == "Wall") AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
+
+
 
     }
 

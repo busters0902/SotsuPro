@@ -65,6 +65,8 @@ public class ArcheryPracticeSceneController : MonoBehaviour
     [SerializeField]
     GameObject gameEndPanel;
 
+    [SerializeField]
+    Mato mato;
 
     void Start ()
     {
@@ -166,6 +168,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         flashText.flash.useFrash = true;
         flashText.flash.setSize(Vector3.one * 3.0f);
         flashText.flash.setPos(new Vector3( 0f, 100f, 0.5f));
+        flashText.text.fontSize = 20;
 
         yield return new WaitUntil( () => ViveController.Instance.ViveRightDown || ViveController.Instance.ViveLeftDown);
         Debug.Log("トリガーを引いた");
@@ -174,9 +177,9 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         flashText.flash.useFrash = false;
         flashText.flash.setAlpha(1.0f);
         flashText.flash.setSize(Vector3.one * 1.0f);
-        flashText.flash.transform.rotation = Quaternion.AngleAxis(15f, Vector3.up);
-        flashText.flash.setPos(new Vector3( 2.0f, -125.1f, -197.2f));
-
+        flashText.flash.transform.rotation = Quaternion.AngleAxis(30f, Vector3.right);
+        flashText.flash.setPos(new Vector3( 2.0f, -125.1f, 86.0f));
+        flashText.text.fontSize = 90;
     }
 
     IEnumerator PlayTutorial()
@@ -201,8 +204,11 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         tutorialMovie.playMovie();
         tutorialMovie.SetLoop(false);
 
+        //動画終了
         yield return new WaitUntil(() =>
         {
+            if (ViveController.Instance.ViveLeftDown) return true;
+            if (Input.GetKeyDown(KeyCode.N)) return true;
             return tutorialMovie.IsEndMovie();
         });
 
@@ -241,6 +247,9 @@ public class ArcheryPracticeSceneController : MonoBehaviour
             //環境音[ガヤガヤ]を止める
             AudioManager.Instance.StopBGM("がやがや");
             Debug.Log("StopBGM がやがや");
+
+            archeryController.bow.arrow.targets.Add(mato.quadCollider);
+
         };
 
         //弓の弦を弾ききった時のコールを設定
@@ -367,7 +376,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
     //画面中央のテロップ
     FlashTextObject CreateGameTelop()
     {
-        var text_ = TextManager.Instance.addTextFrash(new Vector3(0,5,5), Vector3.one, "GameTelop", "ゲームスタート" );
+        var text_ = TextManager.Instance.addTextFrash(new Vector3(0,5,5), Vector3.one, 20,"GameTelop", "ゲームスタート" );
         var flash_ = text_.gameObject.GetComponent<TextFrash>();
         var obj = new FlashTextObject(text_, flash_);
         return obj;
