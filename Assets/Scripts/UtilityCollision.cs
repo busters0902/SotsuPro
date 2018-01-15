@@ -11,13 +11,9 @@ public static class UtilityCollision
         return false;
     }
 
-    //Vector3.Dot();
-    //Vector3.Cross();
-
     public static float ScalarTriple(Vector3 a, Vector3 b, Vector3 c)
     {
         return Vector3.Dot(a, Vector3.Cross(b,c)) ;
-        //return Vec3Dot(pV1, &Vec3Cross(pV2, pV3));
     }
 
     public static bool IntersectSegmentQuadrangle( Vector3 s1, Vector3 s2,  Quadangle q, ref Vector3 cross)
@@ -34,9 +30,9 @@ public static class UtilityCollision
             return false;
         }
 
-        //Vector3 crs = Vector3.Cross(pc, pq);
+        ////Vector3 crs = Vector3.Cross(pc, pq);
 
-        //float u = Vector3.Dot(crs, pq);
+        //float u = Vector3.Dot(cross, pq);
         //if (u >= 0)
         //{
         //    //ACB
@@ -178,7 +174,7 @@ public static class UtilityCollision
         return dist <= r*r;
     }
 
-
+    
 }
 
 [System.Serializable]

@@ -75,7 +75,7 @@ public class GarraryManager : MonoBehaviour {
 
             waitTime = 0.005f;
         }
-        else
+        if (highJump == false)
         {
             jumpPower = 0.3f;
 

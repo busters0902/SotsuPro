@@ -102,7 +102,7 @@ public class Arrow3 : MonoBehaviour
         InitHitCall();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         elapsedTime = Time.time - startTime;
 
@@ -142,6 +142,12 @@ public class Arrow3 : MonoBehaviour
         {
             rig.MovePosition(CalcPosFromHead(curPos));
         }
+    }
+
+
+    private void Update()
+    {
+        
 
         if (useLockVel) LookVelocity();
 
