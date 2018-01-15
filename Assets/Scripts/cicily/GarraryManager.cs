@@ -11,7 +11,13 @@ public class GarraryManager : MonoBehaviour {
 
     public bool isEnd;
 
+    public bool highJump;
+
     public float puchTime;
+
+    public float jumpPower;
+
+    public float waitTime;
 
     // Use this for initialization
     void Start () {
@@ -20,7 +26,13 @@ public class GarraryManager : MonoBehaviour {
 
         isEnd = false;
 
+        isJump = false;
+
         puchTime = 1.0f;
+
+        jumpPower = 0.3f;
+
+        waitTime = 0.1f;
 
         StartCoroutine(jump());
 
@@ -37,21 +49,39 @@ public class GarraryManager : MonoBehaviour {
 
     IEnumerator jump()
     {
-
-       
+ 
             while (isEnd == false)
             {
             if (isJump == true) {
+
+                checkJumpState();
+
                 rand = Random.Range(0, 27);
 
-                iTween.PunchPosition(garrays[rand], iTween.Hash("y", 0.1, "time", puchTime));
+                iTween.PunchPosition(garrays[rand], iTween.Hash("y", jumpPower, "time", puchTime));
 
-                yield return new WaitForSeconds(0.1f);
+                yield return new WaitForSeconds(waitTime);
             }
+
             }
         
-
     }
 
+    void checkJumpState()
+    {
+        if (isJump == true)
+        {
+            jumpPower = 0.8f;
+
+            waitTime = 0.005f;
+        }
+        else
+        {
+            jumpPower = 0.3f;
+
+            waitTime = 0.1f;
+        }
+       
+    }
    
 }
