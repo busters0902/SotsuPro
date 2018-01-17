@@ -47,7 +47,7 @@ public class HitStopObject : MonoBehaviour
                 bul.rig.useGravity = true;
             }
             text.text = "Score : " + get_score.ToString();
-            scoreTotal.addScore(get_score);
+            scoreTotal.AddScore(get_score);
 
             if (collision.gameObject.GetComponent<IsPushEffect>() != null)
             {
@@ -56,6 +56,12 @@ public class HitStopObject : MonoBehaviour
         }
 
     }
+
+    public void OnHitUpdateText( int score)
+    {
+        text.text = "Score : " + score.ToString();
+    }
+
 
     //エフェクトする
     public void EffectPlay(Vector3 pos, int get_score)

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class RankingScoreVeiwer : MonoBehaviour
+public class RankingVeiwer : MonoBehaviour
 {
 
     public Text Name;

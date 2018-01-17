@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ScoreTotal : MonoBehaviour {
+public class ScoreTotal : MonoBehaviour
+{
 
     int totalScore = 0;
     public int TotalScore{ get { return totalScore;} }
@@ -11,15 +12,11 @@ public class ScoreTotal : MonoBehaviour {
     [SerializeField]
     Text text;
     
-    public void addScore(int num)
+    public void AddScore(int num)
     {
         totalScore += num;
         text.text = "Total : " + totalScore.ToString();
     }
-    
-    void Start () {
-        //text = GetComponent<Text>();
-	}
 
     public void ResetScore()
     {

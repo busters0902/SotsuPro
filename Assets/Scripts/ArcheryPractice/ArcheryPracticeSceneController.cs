@@ -29,6 +29,9 @@ public class ArcheryPracticeSceneController : MonoBehaviour
     [SerializeField]
     Text timesText;
 
+    [SerializeField]
+    Text scoreText;
+
     //テキストマネージャー用
     [SerializeField]
     Canvas canvas;
@@ -253,7 +256,6 @@ public class ArcheryPracticeSceneController : MonoBehaviour
             
             //環境音[ガヤガヤ]を止める
             AudioManager.Instance.StopBGM("がやがや");
-            Debug.Log("StopBGM がやがや");
 
             archeryController.bow.arrow.targets.Add(mato.quadCollider);
             archeryController.bow.arrow.frontWall = frontWall;
@@ -279,12 +281,54 @@ public class ArcheryPracticeSceneController : MonoBehaviour
                 Debug.Log("shotTimes : " + shotTimes + "回目");
                 flashText.text.text = shotTimes + "射目";
                 timesText.text = "Times : " + (shotTimes) + "/6";
-                archeryController.GetArrow().HitCall = (s) =>
+
+                //矢が衝突したときの細かい処理　点数計算、エフェクト、有効、SE、スコアの追加
+                archeryController.GetArrow().HitCall = (s,p) =>
                 {
-                    Debug.Log("Arrow.HitCall");
+                    Debug.Log("ArrowHitCall "+ s+ ": "+ p);
                     //StartCoroutine(　Utility.TimerCrou(3.0f, () => AudioManager.Instance.PlayBGM("がやがや")) );
+
+                    if(s.name == "Mato")
+                    {
+                        Debug.Log("！！　やったぜ");
+                        var mato = GetComponent<Mato>();
+
+                        //スコア
+                        int score = mato.calc.getScore(p);
+                        mato.hitStop.EffectPlay(p, score);
+                        ScoreManager.Instance.AddScore(shotTimes, score);
+
+                        //SE
+                        AudioManager.Instance.PlaySE("的に当たる");
+                        StartCoroutine(Utility.TimerCrou(0.5f,
+                            () =>
+                            {
+                                AudioManager.Instance.PlaySE("kansei_1");
+                                Debug.Log("SE kansei_1 ");
+                            }
+                        ));
+
+                        //UIの更新
+                        scoreTortal.AddScore(score);
+                        mato.hitStop.OnHitUpdateText(score);
+                    }
+                    else if(s.name == "BackWallQuad")
+                    {
+                        Debug.Log("！！　惜しい");
+                        ScoreManager.Instance.AddScore(shotTimes, 0);
+                        AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
+                    }
+                    else
+                    {
+                        Debug.Log("！！　はずれ");
+                        ScoreManager.Instance.AddScore(shotTimes, 0);
+                        //mato.hitStop.OnHitUpdateText(0);
+
+                        AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
+                    }
+
                 };
-                if (shotTimes >= shotTimesLimit) Debug.Log("last shoted call");
+                if (shotTimes >= shotTimesLimit) Debug.Log("Last shoted call");
             }
             else
             {
@@ -316,7 +360,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         //1ゲーム終了、歓声
         gameEndPanel.SetActive(true);
 
-        result.LoadScores();
+        result.Load();
 
         //ランキングの更新
         var rData = DataManager.Instance.data.ranking;
@@ -333,7 +377,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
             //rankingのセーブ
             DataManager.Instance.SaveData();
 
-            rankIn = true;
+            rankIn = true;　
         }
 
         //ランキングデータの読み込み

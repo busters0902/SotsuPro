@@ -124,8 +124,6 @@ public class VRArcheryController3 : MonoBehaviour
 
     }
 
-
-
     private void Start()
     {
         drawingStandard = new GameObject("ArrowStandard");
@@ -246,10 +244,14 @@ public class VRArcheryController3 : MonoBehaviour
         else if ( hundleDevice.GetTouchUp(SteamVR_Controller.ButtonMask.Trigger)
             && isDrawing == true)
         {
-            bow.Shoot();
-            hasArrow = false;
+            //ある程度引かないと打てない
+            if(DrawingDist(hundleDevice) >= 0.1f )
+            {
+                bow.Shoot();
+                hasArrow = false;
+            }
             isDrawing = false;
-            arrowCamera.target = bow.arrow.transform;
+            //arrowCamera.target = bow.arrow.transform;
 
             bow.StringCenter.position = bow.StringBasePos.position;
 
@@ -342,6 +344,11 @@ public class VRArcheryController3 : MonoBehaviour
         //Debug.Log("弦を引く距離が遠すぎます: " + v.magnitude );
         return false;
         
+    }
+
+    public float DrawingDist(SteamVR_Controller.Device device)
+    {
+        return (bow.StringBasePos.position - device.transform.pos).magnitude;
     }
 
     public Arrow3 GetArrow()

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ScoreCalculation : MonoBehaviour {
+public class ScoreCalculation : MonoBehaviour{
 
 	public int getScore(GameObject arrow)
     {
@@ -10,6 +10,19 @@ public class ScoreCalculation : MonoBehaviour {
         for(int i = 10; i >= 0; i--)
         {
             if(dis > i * di * transform.localScale.x)
+            {
+                return 10 - i;
+            }
+        }
+        return 0;
+    }
+
+    public int getScore(Vector3 pos)
+    {
+        var dis = Vector2.Distance(pos, transform.position);
+        for (int i = 10; i >= 0; i--)
+        {
+            if (dis > i * di * transform.localScale.x)
             {
                 return 10 - i;
             }
