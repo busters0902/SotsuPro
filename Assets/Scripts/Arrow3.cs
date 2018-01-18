@@ -63,7 +63,7 @@ public class Arrow3 : MonoBehaviour
     float elapsedTime;
 
     [SerializeField]
-    bool useCalc;
+    bool useCalcMove;
 
     public Vector3 curPos;
     public Vector3 prevPos;
@@ -78,14 +78,20 @@ public class Arrow3 : MonoBehaviour
     public GameObject hitTargetObject;
     public GameObject hitWallObject;
 
+<<<<<<< HEAD
     public System.Action<string> HitCall;
+=======
+    public System.Action<string> ShotCall;
+    public System.Action<GameObject, Vector3> HitCall;
+>>>>>>> 1da83a052ba90017de125b0780a21140c80810e7
 
     [SerializeField]
     ParticleSystem windParticle;
 
     public bool useCalcIntersect;
+    public bool useCalcIntersectWall;
     public List<QuadCollider> targets = new List<QuadCollider>();
-
+    public QuadCollider frontWall;
 
     public void Awake()
     {
@@ -97,15 +103,18 @@ public class Arrow3 : MonoBehaviour
         isHitTarget = false;
         isHitWall = false;
 
+        useCalcIntersect = false;
+        useCalcIntersectWall = false;
+
         InitHitCall();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         elapsedTime = Time.time - startTime;
 
         //移動計算
-        if (useCalc)
+        if (useCalcMove)
         {
             var pos = MoveCalcedPosition(elapsedTime);
             prevPos = curPos;
@@ -118,26 +127,101 @@ public class Arrow3 : MonoBehaviour
             //ターゲットの判定
             //head座標
             Vector3 cross = new Vector3();
-            //var hit = UtilityCollision.IntersectSegmentQuadrangle(prevPos, curPos, targets[0].col, ref cross);
             var hit = UtilityCollision.IntersectSegmentCircle(prevPos, curPos, targets[0].col, targets[0].rad, ref cross);
 
             if (hit)
             {
+
                 Debug.Log("Hit IntersectSegment :" + cross);
+                var mato  = targets[0].GetComponent<Mato>();
+                if (mato == null) Debug.Log("Mato NUll");
+                //mato.hitStop.
+                
                 Stop();
+<<<<<<< HEAD
                 useCalcIntersect = false;
+=======
+>>>>>>> 1da83a052ba90017de125b0780a21140c80810e7
                 SetPosFromHead(cross);
-                useCalc = false;
+
+                isFarstHit = true;
+                isHitTarget = true;
+
+                rig.isKinematic = true;
+
+                useCalcIntersect = false;   
+                useCalcMove = false;
+
                 windParticle.Stop();
+<<<<<<< HEAD
+=======
+
+                //
+                HitCall(targets[0].gameObject, cross);
+
+                //点数計算
+                //int score = mato.calc.getScore(cross);
+
+                //エフェクト
+                //mato.hitStop.EffectPlay(cross, score);
+
+
+            }
+            else if (useCalcIntersectWall)
+            {
+                var wallHit = UtilityCollision.IntersectSegmentQuadrangle(prevPos, curPos, frontWall.col, ref cross);
+
+                //壁に衝突
+                if (wallHit)
+                {   
+
+                    Debug.Log("Intersect Hit : Wall");
+                    //rig.isKinematic = false;
+                    
+                    isHitWall = true;
+                    SetPosFromHead(cross);
+                    
+                    windParticle.Stop();
+                    isFarstHit = true;
+
+                    //衝突したら物理挙動
+                    rig.useGravity = true;
+                    rig.mass = 0.002f;
+                    useLockVel = false;
+                    useCalcMove = false;
+                    useCalcIntersect = false;
+                    useCalcIntersectWall = false;
+
+                    // v = v0 + gt
+                    var accel = calcData.dir * calcData.speed + new Vector3(0, -calcData.grav, 0) * elapsedTime;
+                    accel.y = -accel.y;
+
+                    HitCall(frontWall.gameObject, cross);
+
+                    //反発させたい
+
+                }
+>>>>>>> 1da83a052ba90017de125b0780a21140c80810e7
             }
                 
         }
 
+<<<<<<< HEAD
 
         if (useCalc)
+=======
+        if (useCalcMove)　
+>>>>>>> 1da83a052ba90017de125b0780a21140c80810e7
         {
+            //計算した場所に移動
             rig.MovePosition(CalcPosFromHead(curPos));
         }
+    }
+
+
+    private void Update()
+    {
+        
 
 
         if (useLockVel) LookVelocity();
@@ -146,6 +230,7 @@ public class Arrow3 : MonoBehaviour
         if (isFarstHit) hitFlameCount++;
         if (hitFlameCount == 1)
         {
+<<<<<<< HEAD
             Debug.Log("Play SE from Arrow3");
             if (isHitTarget)
             {
@@ -179,6 +264,36 @@ public class Arrow3 : MonoBehaviour
 
                 ScoreManager.Instance.AddScore(0, 0);
             }
+=======
+            //Debug.Log("Play SE from Arrow3");
+            //if (isHitTarget)
+            //{
+            //    //範囲内であれば
+            //    var score = hitTargetObject.GetComponent<ScoreCalculation>();
+            //    int point = score.getScore(this.gameObject);
+
+            //    Debug.Log("点P  :" + gameObject.transform.position);
+            //    Debug.Log("点数 :" + point);
+
+            //    if (point > 0)
+            //    {
+
+            //        AudioManager.Instance.PlaySE("的に当たる");
+            //        Debug.Log("Played SE: 的に当たる");
+            //        rig.velocity = Vector3.one;
+
+            //    }
+            //    else
+            //    {
+            //        AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
+            //    }
+
+            //}
+            //else
+            //{
+            //    AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
+            //}
+>>>>>>> 1da83a052ba90017de125b0780a21140c80810e7
 
 
         }
@@ -195,7 +310,7 @@ public class Arrow3 : MonoBehaviour
         calcData = data;
 
         rig.isKinematic = false;
-        useCalc = true;
+        useCalcMove = true;
         useLockVel = true;
         curPos = prevPos = transform.position;
 
@@ -221,8 +336,7 @@ public class Arrow3 : MonoBehaviour
 
     public void SetPosFromHead(Vector3 headPos)
     {
-        //弓のサイズの半分前に
-        //Debug.Log("tail scale: " + tail.transform.lossyScale);
+        //弓のサイズの半分後ろに
         var scl = head.transform.lossyScale;
         transform.position = headPos - transform.forward * 0.4f;
     }
@@ -283,13 +397,13 @@ public class Arrow3 : MonoBehaviour
         //矢が風を切る音を止める
         //AudioManager.Instance.StopSE("");
 
-        HitCall(col.gameObject.tag);
+        HitCall(col.gameObject, this.head.gameObject.transform.position);
 
         //衝突したら物理挙動
         rig.useGravity = true;
         rig.mass = 0.002f;
         useLockVel = false;
-        useCalc = false;
+        useCalcMove = false;
 
         // v = v0 + gt
         var accel = calcData.dir * calcData.speed + new Vector3(0, -calcData.grav, 0) * elapsedTime;
@@ -307,13 +421,21 @@ public class Arrow3 : MonoBehaviour
 
     public void InitHitCall()
     {
-        HitCall = (s) => Debug.Log(s);
+        HitCall = (s, p ) => Debug.Log(s +" : "+ p);
     }
 
     public void Stop()
     {
         rig.mass = 0.002f;
         useLockVel = false;
-        useCalc = false;
+        useCalcMove = false;
     }
+
+    public void Physic()
+    {
+        rig.mass = 0.002f;
+        useLockVel = false;
+        useCalcMove = false;
+    }
+
 }

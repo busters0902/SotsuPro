@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+//データ管理
 public class DataManager : MonoBehaviour
 {
     static private DataManager instance = null;
@@ -63,7 +64,6 @@ public class DataManager : MonoBehaviour
 
     public GameSaveData data;
 
-
     public void LoadData2()
     {
         Debug.Log("ロード実行");
@@ -73,6 +73,7 @@ public class DataManager : MonoBehaviour
 
     }
 
+    //外部セーブデータがないとき
     public void CreateSaveData()
     {
         Debug.Log("PlayerPrefs データ生成");

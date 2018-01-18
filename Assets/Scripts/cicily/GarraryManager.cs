@@ -51,6 +51,24 @@ public class GarraryManager : MonoBehaviour {
             }
         
 
+<<<<<<< HEAD
+=======
+    void checkJumpState()
+    {
+        if (highJump == true)
+        {
+            jumpPower = 0.8f;
+
+            waitTime = 0.005f;
+        }
+        if (highJump == false)
+        {
+            jumpPower = 0.3f;
+
+            waitTime = 0.1f;
+        }
+       
+>>>>>>> 1da83a052ba90017de125b0780a21140c80810e7
     }
 
    
