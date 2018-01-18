@@ -57,9 +57,6 @@ public class ArcheryPracticeSceneController : MonoBehaviour
     [SerializeField]
     GameObject eyeCamera;
 
-    [SerializeField]
-    GameObject tutorialTarget;
-
     bool isFullDrawing = false;
 
     [SerializeField]
@@ -68,8 +65,6 @@ public class ArcheryPracticeSceneController : MonoBehaviour
     [SerializeField]
     GameObject gameEndPanel;
 
-    [SerializeField]
-    Mato mato;
 
     [SerializeField]
     QuadCollider frontWall;
@@ -103,8 +98,6 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         ranking.panel.gameObject.SetActive(false);
 
         ScoreManager.Instance.scores = new System.Collections.Generic.List<Score>();
-
-        tutorialMovie.pauseMovie();
 
         //フェードアウト
         FadeControl.Instance.FadeIn(3, 1);
@@ -148,13 +141,13 @@ public class ArcheryPracticeSceneController : MonoBehaviour
     {
         Debug.Log("ShowTitle Start");
         //初期化
-        AudioManager.Instance.PlayBGM("bgm_title");
+        //AudioManager.Instance.PlayBGM("bgm_title");
         title.ShowTitle();
 
         yield return new WaitUntil(() =>  ViveController.Instance.ViveRightDown || ViveController.Instance.ViveLeftDown || Input.GetKeyDown(KeyCode.M));
 
         AudioManager.Instance.PlaySE("se_decision");
-        AudioManager.Instance.StopBGM("bgm_title");
+        //AudioManager.Instance.StopBGM("bgm_title");
         title.HideTitle();
 
         Debug.Log("ShowTitle End");
@@ -174,7 +167,6 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         flashText.flash.useFrash = true;
         flashText.flash.setSize(Vector3.one * 3.0f);
         flashText.flash.setPos(new Vector3( 0f, 100f, 0.5f));
-        flashText.text.fontSize = 20;
 
         //スタート表示、トリガー待ち
         yield return new WaitUntil( () => ViveController.Instance.ViveRightDown || ViveController.Instance.ViveLeftDown);
@@ -184,9 +176,14 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         flashText.flash.useFrash = false;
         flashText.flash.setAlpha(1.0f);
         flashText.flash.setSize(Vector3.one * 1.0f);
+<<<<<<< HEAD
+        flashText.flash.transform.rotation = Quaternion.AngleAxis(15f, Vector3.up);
+        flashText.flash.setPos(new Vector3( 2.0f, -125.1f, -197.2f));
+=======
         flashText.flash.transform.rotation = Quaternion.AngleAxis(30f, Vector3.right);
         flashText.flash.setPos(new Vector3( 2.0f, -125.1f, 86.0f));
         flashText.text.fontSize = 90;
+>>>>>>> 1da83a052ba90017de125b0780a21140c80810e7
 
     }
 
@@ -198,6 +195,9 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         //右を向く (スクリーン)
         tutorial.ShowArrowAnime();
 
+<<<<<<< HEAD
+        yield return new WaitUntil(() => eyeCamera.transform.rotation.eulerAngles.y > 80);
+=======
         //チュートリアル版を見るまで待つ
         yield return new WaitUntil(() => 
         {
@@ -207,24 +207,22 @@ public class ArcheryPracticeSceneController : MonoBehaviour
             if (cross.y <= 0) return true;
             return false;
         });
+>>>>>>> 1da83a052ba90017de125b0780a21140c80810e7
         tutorial.HideArrowAnime();
-
+        
         //説明をする
-        tutorialMovie.playMovie();
-        tutorialMovie.SetLoop(false);
 
-        //動画終了
-        yield return new WaitUntil(() =>
-        {
-            if (ViveController.Instance.ViveLeftDown) return true;
-            if (Input.GetKeyDown(KeyCode.N)) return true;
-            return tutorialMovie.IsEndMovie();
-        });
+
+        yield return null;
 
         //左を向く (的へ)
         tutorial.Invert();
         tutorial.ShowArrowAnime();
 
+<<<<<<< HEAD
+        yield return new WaitUntil(() => eyeCamera.transform.rotation.eulerAngles.y < 10);
+        tutorial.HideArrowAnime();
+=======
         //正面を見るまで待つ
         yield return new WaitUntil(() =>
         {
@@ -233,6 +231,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
             if (cross.y >= 0) return true;
             return false;
         });
+>>>>>>> 1da83a052ba90017de125b0780a21140c80810e7
 
         tutorial.HideArrowAnime();
 
@@ -246,21 +245,23 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         timesText.text = "Times : " + (shotTimes) +  "/6";
 
         //BGM(環境音)
-        AudioManager.Instance.PlayBGM("がやがや");
-        Debug.Log("PlayBGM がやがや");
+        //AudioManager.Instance.PlayBGM("がやがや");
 
         //矢をセットしたときのコールを設定
         archeryController.setArrowCall = () =>
         {
             Debug.Log("SetArrowCall");
-            
             //環境音[ガヤガヤ]を止める
+<<<<<<< HEAD
+            //AudioManager.Instance.StopBGM;
+=======
             AudioManager.Instance.StopBGM("がやがや");
 
             archeryController.bow.arrow.targets.Add(mato.quadCollider);
             archeryController.bow.arrow.frontWall = frontWall;
 
             archeryController.bow.arrow.useCalcIntersectWall = true;
+>>>>>>> 1da83a052ba90017de125b0780a21140c80810e7
         };
 
         //弓の弦を弾ききった時のコールを設定
@@ -380,6 +381,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
             rankIn = true;　
         }
 
+
         //ランキングデータの読み込み
         ranking.LoadRankingData();
 
@@ -429,7 +431,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
     //画面中央のテロップ
     FlashTextObject CreateGameTelop()
     {
-        var text_ = TextManager.Instance.addTextFrash(new Vector3(0,5,5), Vector3.one, 20,"GameTelop", "ゲームスタート" );
+        var text_ = TextManager.Instance.addTextFrash(new Vector3(0,5,5), Vector3.one, "GameTelop", "ゲームスタート" );
         var flash_ = text_.gameObject.GetComponent<TextFrash>();
         var obj = new FlashTextObject(text_, flash_);
         return obj;

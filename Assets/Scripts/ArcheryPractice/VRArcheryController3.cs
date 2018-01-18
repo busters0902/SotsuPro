@@ -34,7 +34,8 @@ public class VRArcheryController3 : MonoBehaviour
 
     public ArcheryState archeryState;
 
-    public Bow2 bow;
+    [SerializeField]
+    Bow2 bow;
 
     [SerializeField]
     float shotPower;
@@ -135,6 +136,8 @@ public class VRArcheryController3 : MonoBehaviour
         shakeMitig.enabled = false ;
 
         bow.StringCenter.position = bow.StringBasePos.position;
+
+        //var am = AudioManager.Instance;
 
         arrows = new List<Arrow3>();
 
@@ -269,8 +272,11 @@ public class VRArcheryController3 : MonoBehaviour
             shakeMitig.enabled = false;
             shakeMitig.ResetRotation();
 
+<<<<<<< HEAD
+=======
             bow.arrow.useCalcIntersect = true;
 
+>>>>>>> 1da83a052ba90017de125b0780a21140c80810e7
             //コールバック
             shotedCall();
 

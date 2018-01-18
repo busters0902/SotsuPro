@@ -16,7 +16,7 @@ public class TextData : MonoBehaviour {
 
         TextManager.Instance.SetCanvas(canv);
         TextManager.Instance.SetPrefab(prehub);
-        TextManager.Instance.addTextFrash(new Vector3(14.0f, 5.0f, 10.0f), new Vector3(0.1f, 0.1f, 0.0f),15, "加藤純二", "うんこちゃん", false);
+        TextManager.Instance.addTextFrash(new Vector3(14.0f, 5.0f, 10.0f), new Vector3(0.1f, 0.1f, 0.0f), "加藤純二", "うんこちゃん", false);
 
     }
 	
@@ -25,7 +25,7 @@ public class TextData : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.A))
         {
             //TextManager.Instance.addText("加藤純一","うんこちゃん");
-            TextManager.Instance.addTextFrash(new Vector3(14.0f,5.0f,10.0f), new Vector3(0.1f, 0.1f, 0.0f),15,"加藤純二", "ちんこちゃん",true);
+            TextManager.Instance.addTextFrash(new Vector3(14.0f,5.0f,10.0f), new Vector3(0.1f, 0.1f, 0.0f),"加藤純二", "ちんこちゃん",true);
         }
         if (Input.GetKeyDown(KeyCode.T))
         {

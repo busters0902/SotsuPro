@@ -37,7 +37,7 @@ public class TextManager : MonoBehaviour
     GameObject textPrefab;
 
 
-    public Text addTextFrash(Vector3 pos, Vector3 size, int _fontSize,string _name, string _text, bool _isFrash = false)
+    public Text addTextFrash(Vector3 pos, Vector3 size, string _name, string _text, bool _isFrash = false)
     {
 
         var text = createNewTextFrash(_name);
@@ -45,7 +45,6 @@ public class TextManager : MonoBehaviour
         text.transform.position = pos;
         text.transform.localScale = size;
         text.transform.SetParent(canv.transform, false);
-        text.fontSize = _fontSize;
         var textFrash = text.gameObject.GetComponent<TextFrash>();
         textFrash.useFrash = _isFrash;
         texts.Add(_name, text.gameObject);

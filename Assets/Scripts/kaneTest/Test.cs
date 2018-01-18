@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Test : MonoBehaviour {
 
+    [SerializeField]
+    AnimationCurve _cuve;
 	// Use this for initialization
 	void Start () {
         //FadeControl.Instance.FadeStart();
@@ -13,9 +15,14 @@ public class Test : MonoBehaviour {
 	void Update () {
         if (Input.GetMouseButtonDown(0))
         {
+
+            //AudioManager.Instance.FadeInPlaySE("gaya",1);
+            //AudioManager.Instance.FadeOut("gaya", 1);
+
             //AudioManager.Instance.PlaySE("引き絞り");
-            AudioManager.Instance.PlaySeList("Test");
-            
+            //AudioManager.Instance.PlaySeList("Test");
+            //AudioManager.Instance.PlayBGM("bgm_result");
+
         }
 
 
