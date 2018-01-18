@@ -30,7 +30,7 @@ public class QuadCollider : MonoBehaviour
         col.p[3] = transform.position - u - v;
 
 
-        DebugLogPositions();
+        //DebugLogPositions();
     }
 
     public void UpdateCollider()

@@ -26,7 +26,7 @@ public class ResultController : MonoBehaviour
         Reset_();
     }
 
-    public void LoadScores()
+    public void Load()
     {
         //scores = DataManager.Instance.roundScore.scores;
         scores = ScoreManager.Instance.scores.ToArray();

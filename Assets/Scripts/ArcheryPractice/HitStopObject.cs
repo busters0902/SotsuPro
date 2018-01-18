@@ -19,17 +19,13 @@ public class HitStopObject : MonoBehaviour
 
     void Start()
     {
-
-        Debug.Log("hoge");
         scoreCalculation = GetComponent<ScoreCalculation>();
-
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         Debug.Log("hogehoge");
         Debug.Log("HSO hit coll : " + collision.transform.position);
-
 
         if (collision.gameObject.tag == "Bullet")
         {
@@ -39,14 +35,10 @@ public class HitStopObject : MonoBehaviour
 
             var size = transform.localScale;
             var pos = bul.rig.transform.position;
-            //bul.rig.transform.position = new Vector3(pos.x, pos.y, transform.position.z - size.z / 2);
             bul.rig.transform.position = new Vector3(pos.x, pos.y, transform.position.z - size.z / 2);
             bul.rig.transform.rotation = Quaternion.identity;
             bul.Stop();
             bul.rig.isKinematic = true;
-
-            //AudioManager.Instance.PlaySE("弓矢・矢が刺さる01");
-            collision.gameObject.GetComponent<Arrow3>().HitStopCall();
 
             var get_score = scoreCalculation.getScore(collision.gameObject);
             if (get_score == 0)
@@ -55,7 +47,7 @@ public class HitStopObject : MonoBehaviour
                 bul.rig.useGravity = true;
             }
             text.text = "Score : " + get_score.ToString();
-            scoreTotal.addScore(get_score);
+            scoreTotal.AddScore(get_score);
 
             if (collision.gameObject.GetComponent<IsPushEffect>() != null)
             {
@@ -65,7 +57,14 @@ public class HitStopObject : MonoBehaviour
 
     }
 
-    private void EffectPlay(Vector3 pos, int get_score)
+    public void OnHitUpdateText( int score)
+    {
+        text.text = "Score : " + score.ToString();
+    }
+
+
+    //エフェクトする
+    public void EffectPlay(Vector3 pos, int get_score)
     {
         if (get_score <= 4)
         {

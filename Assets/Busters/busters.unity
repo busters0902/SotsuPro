@@ -405,7 +405,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4d8bd248436e9a47a05dbc6b73a64d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rankingPanel: {fileID: 727234157}
+  panel: {fileID: 0}
 --- !u!1001 &202356060
 Prefab:
   m_ObjectHideFlags: 0
@@ -1034,12 +1034,6 @@ RectTransform:
   m_PrefabParentObject: {fileID: 224998580587207894, guid: f23055e13434ddf43b90fb621a8b6db8,
     type: 2}
   m_PrefabInternal: {fileID: 1927924745}
---- !u!114 &727234157 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 114576907510955324, guid: f23055e13434ddf43b90fb621a8b6db8,
-    type: 2}
-  m_PrefabInternal: {fileID: 1927924745}
-  m_Script: {fileID: 11500000, guid: e486122b256449f4cba05a597dbb6ae9, type: 3}
 --- !u!224 &896763479 stripped
 RectTransform:
   m_PrefabParentObject: {fileID: 224116323494307508, guid: 5f1c4b6bc5bae94439c0d2d0e70c3d12,

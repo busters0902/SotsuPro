@@ -29,6 +29,9 @@ public class ArcheryPracticeSceneController : MonoBehaviour
     [SerializeField]
     Text timesText;
 
+    [SerializeField]
+    Text scoreText;
+
     //テキストマネージャー用
     [SerializeField]
     Canvas canvas;
@@ -62,6 +65,9 @@ public class ArcheryPracticeSceneController : MonoBehaviour
     [SerializeField]
     GameObject gameEndPanel;
 
+
+    [SerializeField]
+    QuadCollider frontWall;
 
     void Start ()
     {
@@ -162,6 +168,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         flashText.flash.setSize(Vector3.one * 3.0f);
         flashText.flash.setPos(new Vector3( 0f, 100f, 0.5f));
 
+        //スタート表示、トリガー待ち
         yield return new WaitUntil( () => ViveController.Instance.ViveRightDown || ViveController.Instance.ViveLeftDown);
         Debug.Log("トリガーを引いた");
 
@@ -169,8 +176,14 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         flashText.flash.useFrash = false;
         flashText.flash.setAlpha(1.0f);
         flashText.flash.setSize(Vector3.one * 1.0f);
+<<<<<<< HEAD
         flashText.flash.transform.rotation = Quaternion.AngleAxis(15f, Vector3.up);
         flashText.flash.setPos(new Vector3( 2.0f, -125.1f, -197.2f));
+=======
+        flashText.flash.transform.rotation = Quaternion.AngleAxis(30f, Vector3.right);
+        flashText.flash.setPos(new Vector3( 2.0f, -125.1f, 86.0f));
+        flashText.text.fontSize = 90;
+>>>>>>> 1da83a052ba90017de125b0780a21140c80810e7
 
     }
 
@@ -182,7 +195,19 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         //右を向く (スクリーン)
         tutorial.ShowArrowAnime();
 
+<<<<<<< HEAD
         yield return new WaitUntil(() => eyeCamera.transform.rotation.eulerAngles.y > 80);
+=======
+        //チュートリアル版を見るまで待つ
+        yield return new WaitUntil(() => 
+        {
+            var tgtDir = tutorialTarget.transform.position - eyeCamera.transform.position;
+            var cross = Vector3.Cross(eyeCamera.transform.forward, tgtDir);
+            Debug.Log("cross :" + cross.y);
+            if (cross.y <= 0) return true;
+            return false;
+        });
+>>>>>>> 1da83a052ba90017de125b0780a21140c80810e7
         tutorial.HideArrowAnime();
         
         //説明をする
@@ -194,9 +219,21 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         tutorial.Invert();
         tutorial.ShowArrowAnime();
 
+<<<<<<< HEAD
         yield return new WaitUntil(() => eyeCamera.transform.rotation.eulerAngles.y < 10);
         tutorial.HideArrowAnime();
+=======
+        //正面を見るまで待つ
+        yield return new WaitUntil(() =>
+        {
+            var tgtDir = Vector3.forward;
+            var cross = Vector3.Cross(eyeCamera.transform.forward, tgtDir);
+            if (cross.y >= 0) return true;
+            return false;
+        });
+>>>>>>> 1da83a052ba90017de125b0780a21140c80810e7
 
+        tutorial.HideArrowAnime();
 
     }
 
@@ -215,7 +252,16 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         {
             Debug.Log("SetArrowCall");
             //環境音[ガヤガヤ]を止める
+<<<<<<< HEAD
             //AudioManager.Instance.StopBGM;
+=======
+            AudioManager.Instance.StopBGM("がやがや");
+
+            archeryController.bow.arrow.targets.Add(mato.quadCollider);
+            archeryController.bow.arrow.frontWall = frontWall;
+
+            archeryController.bow.arrow.useCalcIntersectWall = true;
+>>>>>>> 1da83a052ba90017de125b0780a21140c80810e7
         };
 
         //弓の弦を弾ききった時のコールを設定
@@ -236,12 +282,54 @@ public class ArcheryPracticeSceneController : MonoBehaviour
                 Debug.Log("shotTimes : " + shotTimes + "回目");
                 flashText.text.text = shotTimes + "射目";
                 timesText.text = "Times : " + (shotTimes) + "/6";
-                archeryController.GetArrow().HitCall = (s) =>
+
+                //矢が衝突したときの細かい処理　点数計算、エフェクト、有効、SE、スコアの追加
+                archeryController.GetArrow().HitCall = (s,p) =>
                 {
-                    Debug.Log("Arrow.HitCall");
+                    Debug.Log("ArrowHitCall "+ s+ ": "+ p);
                     //StartCoroutine(　Utility.TimerCrou(3.0f, () => AudioManager.Instance.PlayBGM("がやがや")) );
+
+                    if(s.name == "Mato")
+                    {
+                        Debug.Log("！！　やったぜ");
+                        var mato = GetComponent<Mato>();
+
+                        //スコア
+                        int score = mato.calc.getScore(p);
+                        mato.hitStop.EffectPlay(p, score);
+                        ScoreManager.Instance.AddScore(shotTimes, score);
+
+                        //SE
+                        AudioManager.Instance.PlaySE("的に当たる");
+                        StartCoroutine(Utility.TimerCrou(0.5f,
+                            () =>
+                            {
+                                AudioManager.Instance.PlaySE("kansei_1");
+                                Debug.Log("SE kansei_1 ");
+                            }
+                        ));
+
+                        //UIの更新
+                        scoreTortal.AddScore(score);
+                        mato.hitStop.OnHitUpdateText(score);
+                    }
+                    else if(s.name == "BackWallQuad")
+                    {
+                        Debug.Log("！！　惜しい");
+                        ScoreManager.Instance.AddScore(shotTimes, 0);
+                        AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
+                    }
+                    else
+                    {
+                        Debug.Log("！！　はずれ");
+                        ScoreManager.Instance.AddScore(shotTimes, 0);
+                        //mato.hitStop.OnHitUpdateText(0);
+
+                        AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
+                    }
+
                 };
-                if (shotTimes >= shotTimesLimit) Debug.Log("last shoted call");
+                if (shotTimes >= shotTimesLimit) Debug.Log("Last shoted call");
             }
             else
             {
@@ -271,11 +359,9 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         bool rankIn = false;
 
         //1ゲーム終了、歓声
-        //flashText.text.text = "ゲーム終了: " + scoreTortal.TotalScore;
-        //flashText.flash.useFrash = true;
         gameEndPanel.SetActive(true);
 
-        result.LoadScores();
+        result.Load();
 
         //ランキングの更新
         var rData = DataManager.Instance.data.ranking;
@@ -292,7 +378,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
             //rankingのセーブ
             DataManager.Instance.SaveData();
 
-            rankIn = true;
+            rankIn = true;　
         }
 
 
@@ -333,6 +419,8 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         //UIの初期化
         scoreTortal.ResetScore();
+        tutorial.Reset_();
+        tutorialMovie.stopMovie();
 
         //点数
         //DataManager.Instance.roundScore = RoundScore.Create(6);
