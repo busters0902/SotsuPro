@@ -31,10 +31,11 @@ public class AudioManager : MonoBehaviour
     AudioSource bgmAudioSource = null;
 
     private Dictionary<string, AudioClip> seAudioClips = new Dictionary<string, AudioClip>();
+    private Dictionary<string, AudioSource> seAudioSources = new Dictionary<string, AudioSource>();
 
 
     //SEを鳴らす
-    public void PlaySE(string se_name, Vector3? playPos = null)
+    public AudioSource PlaySE(string se_name, Vector3? playPos = null)
     {
         if (playPos != null)
         {
@@ -55,17 +56,72 @@ public class AudioManager : MonoBehaviour
             audsou.clip = seAudioClips[se_name];
             audsou.Play();
             StartCoroutine(AudioSourceIns(audsou));
+            return audsou;
         }
-
+        return null;
     }
+
     //PlaySEのAudioClip版
-    public void PlaySE(AudioClip _clip, Action _callback = null)
+    public AudioSource PlaySE(AudioClip _clip, Action _callback = null)
     {
         var audsou = gameObject.AddComponent<AudioSource>();
         audsou.clip = _clip;
         audsou.Play();
         StartCoroutine(AudioSourceIns(audsou, _callback));
+        return audsou;
     }
+
+    //SEを鳴らす
+    public AudioSource FadePlaySE(string se_name, AnimationCurve _curve)
+    {
+        var audsou = gameObject.AddComponent<AudioSource>();
+        var clip = seAudioClips[se_name];
+        audsou.clip = clip;
+        audsou.Play();
+
+        StartCoroutine(
+        Utility.TimeCrou(clip.length, (t) =>
+        {
+            audsou.volume = _curve.Evaluate(t);
+        }));
+        StartCoroutine(AudioSourceIns(audsou));
+        return audsou;
+    }
+    //SEを鳴らす
+    public AudioSource FadeInPlaySE(string se_name, float _time)
+    {
+        var audsou = gameObject.AddComponent<AudioSource>();
+        var clip = seAudioClips[se_name];
+        audsou.clip = clip;
+        audsou.Play();
+
+        seAudioSources.Add(se_name, audsou);
+
+
+        StartCoroutine(
+        Utility.TimeCrou(_time, (t) =>
+        {
+            audsou.volume = t;
+        }));
+        StartCoroutine(AudioSourceIns(audsou, () => {
+            seAudioSources.Remove(se_name);
+        }));
+        return audsou;
+    }
+
+    public void FadeOut(string se_name, float _time)
+    {
+        var aus = seAudioSources[se_name];
+        StartCoroutine(
+       Utility.TimeCrou(_time, (t) =>
+        {
+            if (aus == null)
+                return;
+            aus.volume = 1-t;
+        }));
+    }
+
+
 
     //BGMを鳴らす
     public void PlayBGM(string se_name)
@@ -86,34 +142,26 @@ public class AudioManager : MonoBehaviour
     }
 
     //なり終わったら消す
-    IEnumerator AudioSourceIns(AudioSource au)
+    IEnumerator AudioSourceIns(AudioSource au,Action callback = null)
     {
         while (au.isPlaying)
         {
             yield return null;
         }
-        Destroy(au);
-    }
-    IEnumerator AudioSourceIns(AudioSource au, Action callback)
-    {
-        while (au.isPlaying)
-        {
-            yield return null;
-        }
-        if (callback != null)
+        if(callback != null)
         {
             callback();
         }
         Destroy(au);
     }
-
+    
     //ファイルを読み込みます
     public void Load(string filename)
     {
         var audios = Resources.LoadAll<AudioClip>(filename);
         foreach (var a in audios)
         {
-            //Debug.Log("効果音  " + a.name);
+            Debug.Log("効果音  " + a.name);
             seAudioClips.Add(a.name, a);
         }
     }
@@ -123,7 +171,7 @@ public class AudioManager : MonoBehaviour
     void Start()
     {
         Load("Audio/SE");
-        LoadSeList("Test","Audio/SE/Test");
+        //LoadSeList("Test","Audio/SE/Test");
         //addSeIndex("Test");
         //addSeIndex("Test");
         //addSeIndex("Test");
@@ -134,9 +182,6 @@ public class AudioManager : MonoBehaviour
     {
 
     }
-
-
-
 
     //seをランダムに連続して鳴らすための
     Dictionary<string, List<AudioClip>> seList = new Dictionary<string, List<AudioClip>>();
