@@ -90,6 +90,10 @@ public class VRArcheryController3 : MonoBehaviour
     [SerializeField]
     burekeigen shakeMitig;
 
+    [SerializeField]
+    float stringSeLimit;
+    public float stringSeDist;
+
     //リロード
     public bool canReload;
 
@@ -237,6 +241,7 @@ public class VRArcheryController3 : MonoBehaviour
 
             //※弓を引く音 クリップの延長??
             //AudioManager.Instance.PlaySE();
+
 
             UpdateLine();
             preLine.lineRend.material.color = new Color(1f, 0f, 0f, 1f);

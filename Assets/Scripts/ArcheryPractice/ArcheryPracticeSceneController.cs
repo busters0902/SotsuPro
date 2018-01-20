@@ -55,12 +55,16 @@ public class ArcheryPracticeSceneController : MonoBehaviour
     TutorialController tutorial;
 
     [SerializeField]
+    GarraryManager garraryManager;
+
+    [SerializeField]
     GameObject eyeCamera;
 
     [SerializeField]
     GameObject tutorialTarget;
 
     bool isFullDrawing = false;
+    bool isNextTimes = false;
 
     [SerializeField]
     TutorialMovie tutorialMovie;
@@ -110,8 +114,10 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         FadeControl.Instance.FadeIn(3, 1);
 
         Debug.Log("SceneController.SetupEnd");
-        if (useTitle) yield return StartCoroutine(ShowTitle());
-        else yield return StartCoroutine(GameMain());
+        //if (useTitle) yield return StartCoroutine(ShowTitle());
+        //else yield return StartCoroutine(GameMain());
+
+        yield return StartCoroutine(GameMain());
     }
 
     //ゲームの一連の動作
@@ -124,6 +130,12 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         while(true)
         {
+
+            if(useTitle)
+            {
+                yield return StartCoroutine(ShowTitle());
+            }
+
             if (useTutorial)
             {
                 yield return StartCoroutine(PlayTutorial());
@@ -147,6 +159,9 @@ public class ArcheryPracticeSceneController : MonoBehaviour
     IEnumerator ShowTitle()
     {
         Debug.Log("ShowTitle Start");
+
+        flashText.text.text = "";
+
         //初期化
         AudioManager.Instance.PlayBGM("bgm_title");
         title.ShowTitle();
@@ -158,7 +173,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         title.HideTitle();
 
         Debug.Log("ShowTitle End");
-        yield return StartCoroutine(GameMain());
+        
     }
 
 
@@ -221,6 +236,8 @@ public class ArcheryPracticeSceneController : MonoBehaviour
             return tutorialMovie.IsEndMovie();
         });
 
+        tutorialMovie.stopMovie();
+
         //左を向く (的へ)
         tutorial.Invert();
         tutorial.ShowArrowAnime();
@@ -249,15 +266,16 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         AudioManager.Instance.PlayBGM("がやがや");
         Debug.Log("PlayBGM がやがや");
 
-        //
         //矢が衝突したときの細かい処理　点数計算、エフェクト、有効、SE、スコアの追加
         archeryController.bow.arrowSetHitCall = (s, p) =>
         {
             Debug.Log("ArrowHitCall " + s + ": " + p);
-            //StartCoroutine(　Utility.TimerCrou(3.0f, () => AudioManager.Instance.PlayBGM("がやがや")) );
 
+            Debug.Log("shotTimes : " + shotTimes + "回目");
+            
             //archeryController.canReload = true;
 
+            //的に当たった場合
             if (s.name == "Mato")
             {
                 Debug.Log("！！　やったぜ");
@@ -274,8 +292,11 @@ public class ArcheryPracticeSceneController : MonoBehaviour
                 StartCoroutine(Utility.TimerCrou(0.5f,
                     () =>
                     {
+                        garraryManager.highJump = true;
                         AudioManager.Instance.PlaySE("kansei_1");
                         Debug.Log("SE kansei_1 ");
+
+                        StartCoroutine(Utility.TimerCrou(4.0f, () => garraryManager.highJump = false));
                     }
                 ));
 
@@ -295,10 +316,14 @@ public class ArcheryPracticeSceneController : MonoBehaviour
             {
                 Debug.Log("！！　はずれ");
                 ScoreManager.Instance.AddScore(shotTimes, 0);
-                //mato.hitStop.OnHitUpdateText(0);
 
                 AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
             }
+
+            shotTimes++;
+            flashText.text.text = shotTimes + "射目";
+            timesText.text = "Times : " + (shotTimes) + "/6";
+            isNextTimes = false;
 
         };
 
@@ -335,64 +360,10 @@ public class ArcheryPracticeSceneController : MonoBehaviour
             if (isFullDrawing)
             {
                 isFullDrawing = false;
-                shotTimes++;
-                Debug.Log("shotTimes : " + shotTimes + "回目");
-                flashText.text.text = shotTimes + "射目";
-                timesText.text = "Times : " + (shotTimes) + "/6";
+                isNextTimes = true;
 
-                
-                //archeryController.bow.arrow.HitCall = (s,p) =>
-                //{
-                //    Debug.Log("ArrowHitCall "+ s+ ": "+ p);
-                //    //StartCoroutine(　Utility.TimerCrou(3.0f, () => AudioManager.Instance.PlayBGM("がやがや")) );
-
-                //    //archeryController.canReload = true;
-
-                //    if (s.name == "Mato")
-                //    {
-                //        Debug.Log("！！　やったぜ");
-                //        var mato = s.GetComponent<Mato>();
-
-                //        //スコア
-                //        int score = mato.calc.getScore(p);
-                //        Debug.Log("スコア :" + score);
-                //        mato.hitStop.EffectPlay(p, score);
-                //        ScoreManager.Instance.AddScore(shotTimes, score);
-
-                //        //SE
-                //        AudioManager.Instance.PlaySE("的に当たる");
-                //        StartCoroutine(Utility.TimerCrou(0.5f,
-                //            () =>
-                //            {
-                //                AudioManager.Instance.PlaySE("kansei_1");
-                //                Debug.Log("SE kansei_1 ");
-                //            }
-                //        ));
-
-                //        //UIの更新
-                //        scoreTortal.AddScore(score);
-                //        mato.hitStop.OnHitUpdateText(score);
-
-
-                //    }
-                //    else if(s.name == "BackWallQuad")
-                //    {
-                //        Debug.Log("！！　惜しい");
-                //        ScoreManager.Instance.AddScore(shotTimes, 0);
-                //        AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
-                //    }
-                //    else
-                //    {
-                //        Debug.Log("！！　はずれ");
-                //        ScoreManager.Instance.AddScore(shotTimes, 0);
-                //        //mato.hitStop.OnHitUpdateText(0);
-
-                //        AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
-                //    }
-
-                //};
                 Debug.Log("Set ArrowHitCall");
-                if (shotTimes >= shotTimesLimit) Debug.Log("Last shoted call");
+                if (shotTimes > shotTimesLimit) Debug.Log("Last shoted call");
             }
             else
             {
@@ -409,7 +380,8 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         }
 
         flashText.text.text = "";
-        timesText.text = "Times : " + (shotTimes - 1 ) + "/6";
+        timesText.text = "Times : " + 6 + "/6";
+
         yield return new WaitForSeconds(2.0f);
 
         Debug.Log("SceneController.PlayGame End");
@@ -441,18 +413,21 @@ public class ArcheryPracticeSceneController : MonoBehaviour
             //rankingのセーブ
             DataManager.Instance.SaveData();
 
-            rankIn = true;　
+            rankIn = true;
+
         }
 
         //ランキングデータの読み込み
         ranking.LoadRankingData();
 
+        //リザルト表示する
         yield return new WaitUntil(() => ViveController.Instance.ViveRightDown);
 
         gameEndPanel.SetActive(false);
 
         result.panel.gameObject.SetActive(true);
-        result.ShowResult();
+        result.ShowResult( () => AudioManager.Instance.PlaySE("いえーい") );
+
 
         yield return new WaitForSeconds(5.0f);
 
@@ -462,6 +437,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         //ランクインしてるとき
         if (rankIn)
         {
+            Debug.Log("ランクインしました。");
             ranking.panel.gameObject.SetActive(true);
             ranking.ShowRanking();
             yield return new WaitForSeconds(3.0f);
@@ -485,7 +461,6 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         tutorialMovie.stopMovie();
 
         //点数
-        //DataManager.Instance.roundScore = RoundScore.Create(6);
         ScoreManager.Instance.scores = new System.Collections.Generic.List<Score>();
 
     }

@@ -16,10 +16,6 @@ public class _Initialize : MonoBehaviour
 
         ///マネージャーの生成/////////////////////////////////////////////////
 
-        //フェードマネージャーの作成
-        //var fadeObj = (GameObject)Instantiate(Resources.Load("Prefabs/FadeManager")); //(GameObject)Resources.Load("Prefabs/FadeManager");
-        //DontDestroyOnLoad(fadeObj);
-
         //オーディオマネージャー
         var audio = AudioManager.Instance.gameObject;
         DontDestroyOnLoad(audio);
