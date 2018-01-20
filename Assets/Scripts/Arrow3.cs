@@ -104,6 +104,8 @@ public class Arrow3 : MonoBehaviour
         useCalcIntersectWall = false;
 
         InitHitCall();
+
+        Debug.Log("arrow end awake");
     }
 
     private void FixedUpdate()
@@ -206,7 +208,6 @@ public class Arrow3 : MonoBehaviour
 
     private void Update()
     {
-        
 
         if (useLockVel) LookVelocity();
 
@@ -214,34 +215,6 @@ public class Arrow3 : MonoBehaviour
         if (isFarstHit) hitFlameCount++;
         if (hitFlameCount == 1)
         {
-            //Debug.Log("Play SE from Arrow3");
-            //if (isHitTarget)
-            //{
-            //    //範囲内であれば
-            //    var score = hitTargetObject.GetComponent<ScoreCalculation>();
-            //    int point = score.getScore(this.gameObject);
-
-            //    Debug.Log("点P  :" + gameObject.transform.position);
-            //    Debug.Log("点数 :" + point);
-
-            //    if (point > 0)
-            //    {
-
-            //        AudioManager.Instance.PlaySE("的に当たる");
-            //        Debug.Log("Played SE: 的に当たる");
-            //        rig.velocity = Vector3.one;
-
-            //    }
-            //    else
-            //    {
-            //        AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
-            //    }
-
-            //}
-            //else
-            //{
-            //    AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
-            //}
 
         }
 

@@ -249,6 +249,59 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         AudioManager.Instance.PlayBGM("がやがや");
         Debug.Log("PlayBGM がやがや");
 
+        //
+        //矢が衝突したときの細かい処理　点数計算、エフェクト、有効、SE、スコアの追加
+        archeryController.bow.arrowSetHitCall = (s, p) =>
+        {
+            Debug.Log("ArrowHitCall " + s + ": " + p);
+            //StartCoroutine(　Utility.TimerCrou(3.0f, () => AudioManager.Instance.PlayBGM("がやがや")) );
+
+            //archeryController.canReload = true;
+
+            if (s.name == "Mato")
+            {
+                Debug.Log("！！　やったぜ");
+                var mato = s.GetComponent<Mato>();
+
+                //スコア
+                int score = mato.calc.getScore(p);
+                Debug.Log("スコア :" + score);
+                mato.hitStop.EffectPlay(p, score);
+                ScoreManager.Instance.AddScore(shotTimes, score);
+
+                //SE
+                AudioManager.Instance.PlaySE("的に当たる");
+                StartCoroutine(Utility.TimerCrou(0.5f,
+                    () =>
+                    {
+                        AudioManager.Instance.PlaySE("kansei_1");
+                        Debug.Log("SE kansei_1 ");
+                    }
+                ));
+
+                //UIの更新
+                scoreTortal.AddScore(score);
+                mato.hitStop.OnHitUpdateText(score);
+
+
+            }
+            else if (s.name == "BackWallQuad")
+            {
+                Debug.Log("！！　惜しい");
+                ScoreManager.Instance.AddScore(shotTimes, 0);
+                AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
+            }
+            else
+            {
+                Debug.Log("！！　はずれ");
+                ScoreManager.Instance.AddScore(shotTimes, 0);
+                //mato.hitStop.OnHitUpdateText(0);
+
+                AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
+            }
+
+        };
+
         //矢をセットしたときのコールを設定
         archeryController.setArrowCall = () =>
         {
@@ -262,7 +315,10 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
             archeryController.bow.arrow.useCalcIntersectWall = true;
 
-            archeryController.canReload = false;
+            //archeryController.canReload = false;
+
+            archeryController.bow.SetShotCall();
+
         };
 
         //弓の弦を弾ききった時のコールを設定
@@ -275,7 +331,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         //打った後のコールを設定
         archeryController.ShotedCall = () =>
         {
-            Debug.Log("ShotedCall");
+            Debug.Log("Shoted Call");
             if (isFullDrawing)
             {
                 isFullDrawing = false;
@@ -284,57 +340,58 @@ public class ArcheryPracticeSceneController : MonoBehaviour
                 flashText.text.text = shotTimes + "射目";
                 timesText.text = "Times : " + (shotTimes) + "/6";
 
-                archeryController.canReload = true;
+                
+                //archeryController.bow.arrow.HitCall = (s,p) =>
+                //{
+                //    Debug.Log("ArrowHitCall "+ s+ ": "+ p);
+                //    //StartCoroutine(　Utility.TimerCrou(3.0f, () => AudioManager.Instance.PlayBGM("がやがや")) );
 
-                //矢が衝突したときの細かい処理　点数計算、エフェクト、有効、SE、スコアの追加
-                archeryController.GetArrow().HitCall = (s,p) =>
-                {
-                    Debug.Log("ArrowHitCall "+ s+ ": "+ p);
-                    //StartCoroutine(　Utility.TimerCrou(3.0f, () => AudioManager.Instance.PlayBGM("がやがや")) );
+                //    //archeryController.canReload = true;
 
-                    if(s.name == "Mato")
-                    {
-                        Debug.Log("！！　やったぜ");
-                        var mato = s.GetComponent<Mato>();
+                //    if (s.name == "Mato")
+                //    {
+                //        Debug.Log("！！　やったぜ");
+                //        var mato = s.GetComponent<Mato>();
 
-                        //スコア
-                        int score = mato.calc.getScore(p);
-                        Debug.Log("スコア :" + score);
-                        mato.hitStop.EffectPlay(p, score);
-                        ScoreManager.Instance.AddScore(shotTimes, score);
+                //        //スコア
+                //        int score = mato.calc.getScore(p);
+                //        Debug.Log("スコア :" + score);
+                //        mato.hitStop.EffectPlay(p, score);
+                //        ScoreManager.Instance.AddScore(shotTimes, score);
 
-                        //SE
-                        AudioManager.Instance.PlaySE("的に当たる");
-                        StartCoroutine(Utility.TimerCrou(0.5f,
-                            () =>
-                            {
-                                AudioManager.Instance.PlaySE("kansei_1");
-                                Debug.Log("SE kansei_1 ");
-                            }
-                        ));
+                //        //SE
+                //        AudioManager.Instance.PlaySE("的に当たる");
+                //        StartCoroutine(Utility.TimerCrou(0.5f,
+                //            () =>
+                //            {
+                //                AudioManager.Instance.PlaySE("kansei_1");
+                //                Debug.Log("SE kansei_1 ");
+                //            }
+                //        ));
 
-                        //UIの更新
-                        scoreTortal.AddScore(score);
-                        mato.hitStop.OnHitUpdateText(score);
+                //        //UIの更新
+                //        scoreTortal.AddScore(score);
+                //        mato.hitStop.OnHitUpdateText(score);
 
 
-                    }
-                    else if(s.name == "BackWallQuad")
-                    {
-                        Debug.Log("！！　惜しい");
-                        ScoreManager.Instance.AddScore(shotTimes, 0);
-                        AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
-                    }
-                    else
-                    {
-                        Debug.Log("！！　はずれ");
-                        ScoreManager.Instance.AddScore(shotTimes, 0);
-                        //mato.hitStop.OnHitUpdateText(0);
+                //    }
+                //    else if(s.name == "BackWallQuad")
+                //    {
+                //        Debug.Log("！！　惜しい");
+                //        ScoreManager.Instance.AddScore(shotTimes, 0);
+                //        AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
+                //    }
+                //    else
+                //    {
+                //        Debug.Log("！！　はずれ");
+                //        ScoreManager.Instance.AddScore(shotTimes, 0);
+                //        //mato.hitStop.OnHitUpdateText(0);
 
-                        AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
-                    }
+                //        AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
+                //    }
 
-                };
+                //};
+                Debug.Log("Set ArrowHitCall");
                 if (shotTimes >= shotTimesLimit) Debug.Log("Last shoted call");
             }
             else
