@@ -46,6 +46,8 @@ public class Bow2 : MonoBehaviour
 
     public bool hasArrow;
 
+    public System.Action<GameObject, Vector3> arrowSetHitCall;
+    
     public Arrow3 CreateArrow()
     {
         var obj = Instantiate<GameObject>(arrowPrefab);
@@ -96,4 +98,11 @@ public class Bow2 : MonoBehaviour
         curPower += 1f;
         if (curPower > maxPower) curPower = maxPower;
     }
+
+    public void SetShotCall()
+    {
+        arrow.HitCall = arrowSetHitCall;
+        Debug.Log("Bow2 : Set shot call");
+    }
+
 }

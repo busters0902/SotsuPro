@@ -48,6 +48,7 @@ public class ScoreManager : MonoBehaviour
         var score = new Score();
         score.name = times + "回目";
         score.point = point;
+        score.times = times;
         scores.Add(score);
     }
 
