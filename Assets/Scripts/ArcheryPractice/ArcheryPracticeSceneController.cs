@@ -261,6 +261,8 @@ public class ArcheryPracticeSceneController : MonoBehaviour
             archeryController.bow.arrow.frontWall = frontWall;
 
             archeryController.bow.arrow.useCalcIntersectWall = true;
+
+            archeryController.canReload = false;
         };
 
         //弓の弦を弾ききった時のコールを設定
@@ -282,6 +284,8 @@ public class ArcheryPracticeSceneController : MonoBehaviour
                 flashText.text.text = shotTimes + "射目";
                 timesText.text = "Times : " + (shotTimes) + "/6";
 
+                archeryController.canReload = true;
+
                 //矢が衝突したときの細かい処理　点数計算、エフェクト、有効、SE、スコアの追加
                 archeryController.GetArrow().HitCall = (s,p) =>
                 {
@@ -291,10 +295,11 @@ public class ArcheryPracticeSceneController : MonoBehaviour
                     if(s.name == "Mato")
                     {
                         Debug.Log("！！　やったぜ");
-                        var mato = GetComponent<Mato>();
+                        var mato = s.GetComponent<Mato>();
 
                         //スコア
                         int score = mato.calc.getScore(p);
+                        Debug.Log("スコア :" + score);
                         mato.hitStop.EffectPlay(p, score);
                         ScoreManager.Instance.AddScore(shotTimes, score);
 
@@ -311,6 +316,8 @@ public class ArcheryPracticeSceneController : MonoBehaviour
                         //UIの更新
                         scoreTortal.AddScore(score);
                         mato.hitStop.OnHitUpdateText(score);
+
+
                     }
                     else if(s.name == "BackWallQuad")
                     {

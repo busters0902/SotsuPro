@@ -90,6 +90,9 @@ public class VRArcheryController3 : MonoBehaviour
     [SerializeField]
     burekeigen shakeMitig;
 
+    //リロード
+    public bool canReload;
+
     //引き切ったかどうか
     bool isMaxDrawing;
     bool isMaxDrawingFirst;
@@ -130,6 +133,7 @@ public class VRArcheryController3 : MonoBehaviour
         drawingStandard.transform.SetParent(bow.transform);
         preLine.CreateLine();
 
+        canReload = true;
         isMaxDrawing       = false ;
         isMaxDrawingFirst  = false ;
         shakeMitig.enabled = false ;
@@ -166,10 +170,10 @@ public class VRArcheryController3 : MonoBehaviour
 
         var rTransform = ViveController.Instance.RightController.transform;
 
-        
+
 
         //弓を引く
-        if ( hundleDevice.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger)
+        if (hundleDevice.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger)
             && IsAreaDrawingString(hundleDevice.transform.pos, drawingDist)
             && isDrawing == false && hasArrow == true)
         {
@@ -282,7 +286,8 @@ public class VRArcheryController3 : MonoBehaviour
 
         //矢を生成して、弓にセットする(両デバイスでトリガーを押す) 
         //※処理フレームをずらすため 引く処理より後
-        if (hundleDevice.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger) &&
+        if (canReload == true &&
+            hundleDevice.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger) &&
             hasArrow == false)
         {
 
