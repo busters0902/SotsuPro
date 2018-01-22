@@ -25,12 +25,16 @@ public class LookTarget : MonoBehaviour
         if (angle < 5)
         {
             //Debug.Log("入ってる");
-            sprite.color = new Color(sprite.color.r, sprite.color.g, sprite.color.b, sprite.color.a - 0.05f);
+            sprite.color = new Color(sprite.color.r, sprite.color.g, sprite.color.b,
+                Mathf.Max(sprite.color.a - 0.1f,0)
+                );
         }
         else
         {
             //Debug.Log("入ってない");
-            sprite.color = new Color(sprite.color.r, sprite.color.g, sprite.color.b, sprite.color.a + 0.05f);
+            sprite.color = new Color(sprite.color.r, sprite.color.g, sprite.color.b,
+                Mathf.Min(sprite.color.a + 0.1f, 1)
+                );
         }
 
     }
