@@ -123,7 +123,6 @@ public class ArcheryPracticeSceneController : MonoBehaviour
     //ゲームの一連の動作
     IEnumerator GameMain()
     {
-
         Debug.Log("SceneController.GameMain");
         yield return null;
 
