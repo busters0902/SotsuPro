@@ -20,16 +20,16 @@ public class LookTarget : MonoBehaviour
         transform.localRotation = Quaternion.Euler(0, 0, angle2D + 90);
 
         var angle = Vector3.Angle(transform.forward, -targetVector.normalized);
-        Debug.Log("kakudo" + angle.ToString());
+        //Debug.Log("kakudo" + angle.ToString());
 
         if (angle < 5)
         {
-            Debug.Log("入ってる");
+            //Debug.Log("入ってる");
             sprite.color = new Color(sprite.color.r, sprite.color.g, sprite.color.b, sprite.color.a - 0.05f);
         }
         else
         {
-            Debug.Log("入ってない");
+            //Debug.Log("入ってない");
             sprite.color = new Color(sprite.color.r, sprite.color.g, sprite.color.b, sprite.color.a + 0.05f);
         }
 
