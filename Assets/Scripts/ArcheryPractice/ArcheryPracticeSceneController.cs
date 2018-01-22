@@ -433,7 +433,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         result.HideAll();
 
         //ランクインしてるとき
-        if (rankIn)
+        //if (rankIn)
         {
             Debug.Log("ランクインしました。");
             ranking.panel.gameObject.SetActive(true);

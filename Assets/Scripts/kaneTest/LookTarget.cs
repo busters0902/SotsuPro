@@ -22,7 +22,7 @@ public class LookTarget : MonoBehaviour
         var angle = Vector3.Angle(transform.forward, -targetVector.normalized);
         //Debug.Log("kakudo" + angle.ToString());
 
-        if (angle < 5)
+        if (angle < 3)
         {
             //Debug.Log("入ってる");
             sprite.color = new Color(sprite.color.r, sprite.color.g, sprite.color.b,
