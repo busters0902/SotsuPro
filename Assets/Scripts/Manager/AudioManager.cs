@@ -31,6 +31,7 @@ public class AudioManager : MonoBehaviour
     AudioSource bgmAudioSource = null;
 
     private Dictionary<string, AudioClip> seAudioClips = new Dictionary<string, AudioClip>();
+    //SE用のAudioSourceを削除用に保存する用
     private Dictionary<string, AudioSource> seAudioSources = new Dictionary<string, AudioSource>();
 
 
@@ -71,7 +72,7 @@ public class AudioManager : MonoBehaviour
         return audsou;
     }
 
-    //SEを鳴らす
+    //SEを鳴らす　　curveの曲線でSEを鳴らします
     public AudioSource FadePlaySE(string se_name, AnimationCurve _curve)
     {
         var audsou = gameObject.AddComponent<AudioSource>();
@@ -87,8 +88,9 @@ public class AudioManager : MonoBehaviour
         StartCoroutine(AudioSourceIns(audsou));
         return audsou;
     }
+
     //SEを鳴らす
-    public AudioSource FadeInPlaySE(string se_name, float _time)
+    public AudioSource FadeOutPlaySE(string se_name, float _time)
     {
         var audsou = gameObject.AddComponent<AudioSource>();
         var clip = seAudioClips[se_name];
@@ -109,17 +111,7 @@ public class AudioManager : MonoBehaviour
         return audsou;
     }
 
-    public void FadeOut(string se_name, float _time)
-    {
-        var aus = seAudioSources[se_name];
-        StartCoroutine(
-       Utility.TimeCrou(_time, (t) =>
-        {
-            if (aus == null)
-                return;
-            aus.volume = 1-t;
-        }));
-    }
+    
 
 
 
@@ -135,7 +127,7 @@ public class AudioManager : MonoBehaviour
     {
         bgmAudioSource.Stop();
     }
-
+    //BGMを止める
     public void setBGMLoop(bool _loop)
     {
         bgmAudioSource.loop = _loop;
@@ -198,8 +190,8 @@ public class AudioManager : MonoBehaviour
         }
         var _seList = seList[_key];
         stockSeIndex[_key].Add(UnityEngine.Random.Range(0, _seList.Count - 1));
-
     }
+
     //Soundのリストを名前を付けて登録する
     public void LoadSeList(string _key, string _filename)
     {
@@ -215,17 +207,29 @@ public class AudioManager : MonoBehaviour
     }
 
     bool isSeLoop = true;
+    //SElistを鳴らす
     public void PlaySeList(string _key)
     {
         StartCoroutine(PlaySeListCol2(_key));
-
     }
+
+    //ランダムでSEを鳴らす
+    public void PlayRandomSE(string _key)
+    {
+        //var audsou = gameObject.AddComponent<AudioSource>();
+        var _seList = seList[_key];
+        PlaySE(_seList[UnityEngine.Random.Range(0, _seList.Count - 1)]);
+    }
+
+
+
+    //意味がないので未使用
     public void PlaySeList2(string _key)
     {
         StartCoroutine(PlaySeListCol2(_key));
     }
 
-    //selistをループで鳴らすコルーチン
+    //selistをループで鳴らすコルーチン(未使用)
     IEnumerator PlaySeListCol(string _key)
     {
         var _seList = seList[_key];
@@ -251,6 +255,7 @@ public class AudioManager : MonoBehaviour
         }
 
     }
+
     IEnumerator PlaySeListCol2(string _key)
     {
         var _seList = seList[_key];
