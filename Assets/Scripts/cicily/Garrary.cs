@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GarraryManager : MonoBehaviour {
+public class Garrary : MonoBehaviour
+{
 
     //[SerializeField]
     public GameObject[] garrays;
@@ -20,13 +21,14 @@ public class GarraryManager : MonoBehaviour {
     public float waitTime;
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
 
-        isJump = true;
+        //isJump = true;
 
-        isEnd = false;
+        //isEnd = false;
 
-        highJump = false;
+        //highJump = false;
 
         puchTime = 1.0f;
 
@@ -36,23 +38,25 @@ public class GarraryManager : MonoBehaviour {
 
         StartCoroutine(jump());
 
-	}
-
-   
-	
-	// Update is called once per frame
-	void Update () {
-              
     }
 
-    int rand ;
+
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
+
+    int rand;
 
     IEnumerator jump()
     {
- 
-            while (isEnd == false)
+
+        while (isEnd == false)
+        {
+            if (isJump == true)
             {
-            if (isJump == true) {
 
                 checkJumpState();
 
@@ -62,9 +66,10 @@ public class GarraryManager : MonoBehaviour {
 
                 yield return new WaitForSeconds(waitTime);
             }
+            yield return null;
 
-            }
-        
+        }
+
     }
 
     void checkJumpState()
@@ -81,7 +86,7 @@ public class GarraryManager : MonoBehaviour {
 
             waitTime = 0.1f;
         }
-       
+
     }
-   
+
 }
