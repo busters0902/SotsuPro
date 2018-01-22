@@ -83,6 +83,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         StartCoroutine(Setup());
     }
 
+    //ゲームルーチン全体の立ち上げ
     IEnumerator Setup()
     {
 
@@ -114,9 +115,6 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         FadeControl.Instance.FadeIn(3, 1);
 
         Debug.Log("SceneController.SetupEnd");
-        //if (useTitle) yield return StartCoroutine(ShowTitle());
-        //else yield return StartCoroutine(GameMain());
-
         yield return StartCoroutine(GameMain());
     }
 
@@ -178,7 +176,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
     IEnumerator StartGame()
     {
-        Debug.Log("SceneController.StartGame");
+        Debug.Log("Start StartGame");
 
         yield return null;
 
@@ -202,11 +200,14 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         flashText.flash.setPos(new Vector3(2.0f, -125.1f, 86.0f));
         flashText.text.fontSize = 90;
         mato.hitStop.OnHitUpdateText(0);
+
+        Debug.Log("End StartGame");
     }
 
     IEnumerator PlayTutorial()
     {
         yield return null;
+        Debug.Log("SceneController.PlayTutorial Start");
 
         //カメラの向き
         //右を向く (スクリーン)
@@ -262,8 +263,12 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         timesText.text = "Times : " + (shotTimes) + "/6";
 
         //BGM(環境音)
+        //※
         AudioManager.Instance.PlayBGM("がやがや");
         Debug.Log("PlayBGM がやがや");
+
+        ///////////////////////////////////////////////////////////////////////
+        //ゲーム中のコールバックのセッティング
 
         //矢が衝突したときの細かい処理　点数計算、エフェクト、有効、SE、スコアの追加
         archeryController.bow.arrowSetHitCall = (s, p) =>
@@ -302,7 +307,6 @@ public class ArcheryPracticeSceneController : MonoBehaviour
                 scoreTortal.AddScore(score);
                 mato.hitStop.OnHitUpdateText(score);
 
-
             }
             else if (s.name == "BackWallQuad")
             {
@@ -314,7 +318,6 @@ public class ArcheryPracticeSceneController : MonoBehaviour
             {
                 Debug.Log("！！　はずれ");
                 ScoreManager.Instance.AddScore(shotTimes, 0);
-
                 AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
             }
 
@@ -331,6 +334,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
             Debug.Log("SetArrowCall");
 
             //環境音[ガヤガヤ]を止める
+            //※
             AudioManager.Instance.StopBGM("がやがや");
 
             archeryController.bow.arrow.targets.Add(mato.quadCollider);
@@ -369,6 +373,8 @@ public class ArcheryPracticeSceneController : MonoBehaviour
             }
         };
 
+        ///////////////////////////////////////////////////////////////////////
+        //射撃ができるループ
         while (shotTimes < shotTimesLimit + 1)
         {
             yield return null;
