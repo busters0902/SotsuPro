@@ -201,7 +201,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         flashText.flash.transform.rotation = Quaternion.AngleAxis(30f, Vector3.right);
         flashText.flash.setPos(new Vector3(2.0f, -125.1f, 86.0f));
         flashText.text.fontSize = 90;
-
+        mato.hitStop.OnHitUpdateText(0);
     }
 
     IEnumerator PlayTutorial()
@@ -294,7 +294,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
                         garrary.highJump();
                         AudioManager.Instance.PlaySE("kansei_1");
                         Debug.Log("SE kansei_1 ");
-                        StartCoroutine(Utility.TimerCrou(4.0f, () => garrary.startJump()));
+                        StartCoroutine(Utility.TimerCrou(4.0f, () => garrary.stopHighJump()));
                     }
                 ));
 
