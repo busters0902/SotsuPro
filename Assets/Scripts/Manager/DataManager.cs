@@ -37,18 +37,6 @@ public class DataManager : MonoBehaviour
         //ゲーム設定
         settings = new GameSettings();
 
-        //ランキング
-        int rankNum = 10;
-        scoreRanking = new ScoreRankingData[rankNum];
-
-        for(int i = 0; i < rankNum; i++)
-        {
-            scoreRanking[i] = new ScoreRankingData();
-            scoreRanking[i].id = -1;
-            scoreRanking[i].name = "名無し";
-            scoreRanking[i].sumPoint = -1;
-        }
-
         roundScore = RoundScore.Create(6);
 
     }
@@ -60,10 +48,11 @@ public class DataManager : MonoBehaviour
     public RoundScore roundScore;
 
     //ランキングデータ
-    public ScoreRankingData[] scoreRanking;
+    //public ScoreRankingData[] scoreRanking;
 
     public GameSaveData data;
 
+    //使わない
     public void LoadData2()
     {
         Debug.Log("ロード実行");
@@ -84,6 +73,12 @@ public class DataManager : MonoBehaviour
     {
         Debug.Log("PlayerPrefs ロード");
         data = Utility.GetObject<GameSaveData>("SaveData");
+
+        Debug.Log("ランキング ");
+        foreach(var i in data.ranking)
+        {
+            Debug.Log(i.name + " : " +  i.sumPoint );
+        }
     }
 
     public void SaveData()

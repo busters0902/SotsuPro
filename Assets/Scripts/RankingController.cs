@@ -18,8 +18,11 @@ public class RankingController : MonoBehaviour
         var scoreViewers = panel.rankScores;
         for (int i = 0; i < panel.rankScores.Length; i++)
         {
-            scoreViewers[i].logoText.text.text = ranking[i].sumPoint.ToString();
+            scoreViewers[i].logoText.text.text = ranking[i].id.ToString();
+            scoreViewers[i].point.text = ranking[i].sumPoint.ToString();
         }
+
+
 
     }
 

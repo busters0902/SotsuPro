@@ -1,11 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class RankScoreViewer : MonoBehaviour
 {
 
     public LogoText logoText;
+
+    public Text point;
 
 	void Start ()
     {

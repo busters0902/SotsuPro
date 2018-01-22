@@ -55,7 +55,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
     TutorialController tutorial;
 
     [SerializeField]
-    GarraryManager garraryManager;
+    GarraryController garrary;
 
     [SerializeField]
     GameObject eyeCamera;
@@ -125,7 +125,6 @@ public class ArcheryPracticeSceneController : MonoBehaviour
     {
 
         Debug.Log("SceneController.GameMain");
-
         yield return null;
 
         while(true)
@@ -292,11 +291,10 @@ public class ArcheryPracticeSceneController : MonoBehaviour
                 StartCoroutine(Utility.TimerCrou(0.5f,
                     () =>
                     {
-                        garraryManager.highJump = true;
+                        garrary.highJump();
                         AudioManager.Instance.PlaySE("kansei_1");
                         Debug.Log("SE kansei_1 ");
-
-                        StartCoroutine(Utility.TimerCrou(4.0f, () => garraryManager.highJump = false));
+                        StartCoroutine(Utility.TimerCrou(4.0f, () => garrary.startJump()));
                     }
                 ));
 

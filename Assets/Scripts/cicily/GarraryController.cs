@@ -43,5 +43,13 @@ public class GarraryController : MonoBehaviour {
         }
     }
 
-    
+    public void stopHighJump()
+    {
+        for (int i = 0; i < garrarys.Length; i++)
+        {
+            garrarys[i].highJump = false;
+        }
+    }
+
+
 }
