@@ -264,7 +264,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         //BGM(環境音)
         //※
-        AudioManager.Instance.PlayBGM("がやがや");
+        AudioManager.Instance.PlaySE("gaya").loop = true;
         Debug.Log("PlayBGM がやがや");
 
         ///////////////////////////////////////////////////////////////////////
@@ -307,16 +307,42 @@ public class ArcheryPracticeSceneController : MonoBehaviour
                 scoreTortal.AddScore(score);
                 mato.hitStop.OnHitUpdateText(score);
 
+                if(score < 2)
+                {
+                    AudioManager.Instance.StopSE("kansei_3");
+                }
+                else if (score < 5)
+                {
+                    AudioManager.Instance.StopSE("kansei_1");
+                    AudioManager.Instance.StopSE("hakushu_1");
+                }
+                else if (score < 8)
+                {
+                    AudioManager.Instance.StopSE("kansei_4");
+                    AudioManager.Instance.StopSE("hakushu_1");
+                    
+                }
+                else 
+                {
+                    AudioManager.Instance.StopSE("kansei_4");
+                    AudioManager.Instance.StopSE("hakushu_1");
+                }
+            
             }
             else if (s.name == "BackWallQuad")
             {
                 Debug.Log("！！　惜しい");
+                AudioManager.Instance.StopSE("kansei_6");
+                AudioManager.Instance.StopSE("hakushu_2");
+
                 ScoreManager.Instance.AddScore(shotTimes, 0);
                 AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
             }
             else
             {
                 Debug.Log("！！　はずれ");
+                AudioManager.Instance.StopSE("kansei_2");
+                AudioManager.Instance.StopSE("hakushu_2");
                 ScoreManager.Instance.AddScore(shotTimes, 0);
                 AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
             }
@@ -335,7 +361,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
             //環境音[ガヤガヤ]を止める
             //※
-            AudioManager.Instance.StopBGM("がやがや");
+            AudioManager.Instance.StopSE("gaya");
 
             archeryController.bow.arrow.targets.Add(mato.quadCollider);
             archeryController.bow.arrow.frontWall = frontWall;
