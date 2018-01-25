@@ -1,9 +1,0 @@
-diff a/Assets/Scripts/ArcheryPractice/ArcheryPracticeSceneController.cs b/Assets/Scripts/ArcheryPractice/ArcheryPracticeSceneController.cs	(rejected hunks)
-@@ -123,7 +123,6 @@
-     //ゲームの一連の動作
-     IEnumerator GameMain()
-     {
--
-         Debug.Log("SceneController.GameMain");
-         yield return null;
- 

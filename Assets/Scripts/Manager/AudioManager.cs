@@ -56,11 +56,17 @@ public class AudioManager : MonoBehaviour
             var audsou = gameObject.AddComponent<AudioSource>();
             audsou.clip = seAudioClips[se_name];
             audsou.Play();
+            seAudioSources.Add(se_name, audsou);
             StartCoroutine(AudioSourceIns(audsou));
             return audsou;
         }
         return null;
     }
+
+    public void StopSE(string _key)
+    {
+        seAudioSources[_key].Stop();
+    } 
 
     //PlaySEのAudioClip版
     public AudioSource PlaySE(AudioClip _clip, Action _callback = null)
@@ -134,19 +140,34 @@ public class AudioManager : MonoBehaviour
     }
 
     //なり終わったら消す
-    IEnumerator AudioSourceIns(AudioSource au,Action callback = null)
+    IEnumerator AudioSourceIns(AudioSource au, Action callback = null)
     {
         while (au.isPlaying)
         {
             yield return null;
         }
-        if(callback != null)
+        if (callback != null)
         {
             callback();
         }
         Destroy(au);
-    }
+    } 
     
+    //なり終わったら消す
+    IEnumerator AudioSourceIns(AudioSource au,string _key, Action callback = null)
+    {
+        while (au.isPlaying)
+        {
+            yield return null;
+        }
+        if (callback != null)
+        {
+            seAudioSources.Remove(_key);
+            callback();
+        }
+        Destroy(au);
+    }
+
     //ファイルを読み込みます
     public void Load(string filename)
     {
