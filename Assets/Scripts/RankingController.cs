@@ -14,6 +14,7 @@ public class RankingController : MonoBehaviour
     //データマネージャーから受け取る
     public void LoadRankingData()
     {
+
         ranking = DataManager.Instance.data.ranking.ToList();
         var scoreViewers = panel.rankScores;
         for (int i = 0; i < panel.rankScores.Length; i++)
@@ -21,8 +22,6 @@ public class RankingController : MonoBehaviour
             scoreViewers[i].logoText.text.text = ranking[i].id.ToString();
             scoreViewers[i].point.text = ranking[i].sumPoint.ToString();
         }
-
-
 
     }
 

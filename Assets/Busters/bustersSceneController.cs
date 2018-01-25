@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class bustersSceneController : MonoBehaviour
@@ -31,6 +32,9 @@ public class bustersSceneController : MonoBehaviour
 
     [SerializeField]
     QuadCollider target;
+
+    [SerializeField]
+    int rankCheck;
 
     void Start()
     {
@@ -174,6 +178,37 @@ public class bustersSceneController : MonoBehaviour
             //DataManager.Instance.SaveData();
             DataManager.Instance.SaveData();
         }
+
+        ///  /////////////////////////////////////////////////////////////////
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+
+            if (DataManager.Instance.IsRankIn(rankCheck))
+                Debug.Log(" Ranking True ");
+            else
+                Debug.Log(" Ranking False ");
+
+        }
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            //ScoreRankingData s = ScoreRankingData.Create();
+            DataManager.Instance.AddRanking(ScoreRankingData.Create( 10,"a", rankCheck));
+
+            foreach(var  i in DataManager.Instance.data.ranking )
+            {
+                Debug.Log( "ポイント : " + i.sumPoint);
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+
+            var p = DataManager.Instance.data.ranking.LastOrDefault(( s ) => s.sumPoint == rankCheck );
+            if (p != null)
+                p.DebugLog();
+            else
+                Debug.Log(" 無 ");
+        }
+
 
 
     }

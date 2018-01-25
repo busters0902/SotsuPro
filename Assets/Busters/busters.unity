@@ -238,7 +238,7 @@ Prefab:
     - target: {fileID: 224274910071841902, guid: fa353e4f79f888441a6a7df90b7be389,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: 1.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 224274910071841902, guid: fa353e4f79f888441a6a7df90b7be389,
         type: 2}
@@ -282,7 +282,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1217558818593190, guid: fa353e4f79f888441a6a7df90b7be389, type: 2}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: fa353e4f79f888441a6a7df90b7be389, type: 2}
@@ -300,6 +300,7 @@ GameObject:
   - component: {fileID: 135876517}
   - component: {fileID: 135876518}
   - component: {fileID: 135876519}
+  - component: {fileID: 135876520}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -406,6 +407,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   panel: {fileID: 0}
+--- !u!114 &135876520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 135876513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f26b5b92486db114481a4840e310494b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scoreData: []
 --- !u!1001 &202356060
 Prefab:
   m_ObjectHideFlags: 0
@@ -1135,6 +1148,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f24654c4d7035d24e91526ea796693d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  col:
+    p:
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
   rad: 0
 --- !u!1001 &916230555
 Prefab:

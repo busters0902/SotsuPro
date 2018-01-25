@@ -86,8 +86,25 @@ public class DataManager : MonoBehaviour
         
         Debug.Log("PlayerPrefs セーブ");
         Utility.SetObject("SaveData", data);
+
     }
 
+    public bool IsRankIn(int point)
+    {
+        return data.ranking.Any( (s) => s.sumPoint < point );
+    }
+
+    public void AddRanking(ScoreRankingData s)
+    {
+
+        if (data.ranking == null) Debug.Log("rankingデータがありません 1" );
+        var len = data.ranking.Length;
+        if (len <= 0) Debug.Log("rankingデータがありません 2");
+
+        data.ranking[len - 1] = s;
+        data.ranking.OrderBy( (sc) => sc.sumPoint );
+
+    }
 
 }
 
@@ -126,6 +143,15 @@ public class ScoreRankingData
         return obj;
     }
 
+    public static ScoreRankingData Create(int id_, string name_, int point_)
+    {
+        var obj = new ScoreRankingData();
+        obj.id = id_;
+        obj.name = name_;
+        obj.sumPoint = point_;
+        return obj;
+    }
+
     public static ScoreRankingData[] Create(int n)
     {
         var obj = new ScoreRankingData[n];
@@ -135,6 +161,12 @@ public class ScoreRankingData
         }
         return obj;
     }
+
+    public void DebugLog()
+    {
+        Debug.Log("ScoreRankingData \nid : "+ id + "\nname" + name + "\npoint" + sumPoint);
+    }
+
 }
 
 [System.Serializable]
