@@ -40,7 +40,9 @@ public class ScoreManager : MonoBehaviour
     public int GetTotalScore()
     {
         var sum = scores.Select((s) => s.point).Sum();
-        return 0;
+        Debug.Log("GetTotalScore : " + sum);
+
+        return sum;
     }
 
     public void AddScore(int times, int point)

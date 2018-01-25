@@ -11,6 +11,8 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
     public bool useTutorial;
 
+    public bool useResult;
+
     public bool IsGameEnd;
 
     [SerializeField]
@@ -142,7 +144,11 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
             yield return StartCoroutine(PlayGame());
 
-            yield return StartCoroutine(ShotResult());
+            if(useResult)
+            {
+                yield return StartCoroutine(ShowResult());
+            }
+            
 
             if (IsGameEnd) break;
 
@@ -417,11 +423,13 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         Debug.Log("SceneController.PlayGame End");
     }
 
-    IEnumerator ShotResult()
+    IEnumerator ShowResult()
     {
         Debug.Log("リザルト");
 
         bool rankIn = false;
+
+        int score = ScoreManager.Instance.GetTotalScore();
 
         //1ゲーム終了、歓声
         gameEndPanel.SetActive(true);
@@ -429,22 +437,21 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         result.Load();
 
         //ランキングの更新
-        var rData = DataManager.Instance.data.ranking;
-        if (rData.Any(a => a.sumPoint < ScoreManager.Instance.GetTotalScore()))
+        if (DataManager.Instance.IsRankIn(ScoreManager.Instance.GetTotalScore()))
         {
-            //rankingの入れ替え
-            var obj = ScoreRankingData.Create();
-            obj.sumPoint = ScoreManager.Instance.GetTotalScore();
-            rData[rData.Length - 1] = obj;
-
-            //rankingのソート
-            rData.OrderBy(o => o.sumPoint);
-
-            //rankingのセーブ
-            DataManager.Instance.SaveData();
+            var rankData = ScoreRankingData.Create( System.DateTime.Now.Minute , System.DateTime.Now.ToString() , score);
+            DataManager.Instance.AddRanking(rankData);
 
             rankIn = true;
+        }
 
+        if (rankIn == true)
+        {
+            var p = DataManager.Instance.data.ranking.LastOrDefault((s) => s.sumPoint == score);
+            if (p != null)
+                p.DebugLog();
+            else
+                Debug.Log(" 無 ");
         }
 
         //ランキングデータの読み込み

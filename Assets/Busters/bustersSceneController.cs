@@ -207,6 +207,7 @@ public class bustersSceneController : MonoBehaviour
                 p.DebugLog();
             else
                 Debug.Log(" 無 ");
+
         }
 
 
@@ -215,6 +216,7 @@ public class bustersSceneController : MonoBehaviour
 
     void UpdateLine()
     {
+
         var data = new CalculatedData();
         data.dir = bow.transform.forward;
         data.speed = bow.curPower;
@@ -222,6 +224,7 @@ public class bustersSceneController : MonoBehaviour
         else    data.startPos = bow.transform.position;
         data.grav = bow.arrowGrav;
         preLine.CalcLine(data);
+
     }
 
 
