@@ -91,8 +91,11 @@ public class VRArcheryController3 : MonoBehaviour
     burekeigen shakeMitig;
 
     [SerializeField]
-    float stringSeLimit;
-    public float stringSeDist;
+    float stringSeDistLimit;
+    public float stringSeDistSum;
+
+    float stringMovDistCurrent;
+    float stringMovDistPrev;
 
     //リロード
     public bool canReload;
@@ -239,8 +242,22 @@ public class VRArcheryController3 : MonoBehaviour
             //振動
             hundleDevice.TriggerHapticPulse((ushort)(dist * vibration));
 
-            //※弓を引く音 クリップの延長??
-            //AudioManager.Instance.PlaySE();
+            //弦の移動量
+            stringMovDistPrev = stringMovDistCurrent;
+            stringMovDistCurrent = dist;
+
+            //一定量動かしたらSEを鳴らす
+            stringSeDistSum += Mathf.Abs(stringMovDistCurrent);
+            if(stringMovDistCurrent >= stringSeDistLimit)
+            {
+                //※弓を引く音 クリップの延長??
+                //AudioManager.Instance.PlaySE();
+                Debug.Log("ギッ");
+
+                stringSeDistSum = 0.0f;
+            }
+
+
 
 
             UpdateLine();
@@ -282,6 +299,8 @@ public class VRArcheryController3 : MonoBehaviour
 
             //コールバック
             shotedCall();
+
+            //※弦を引くSEを止める
 
             //矢を射る音
             AudioManager.Instance.PlaySE("矢の飛来");
