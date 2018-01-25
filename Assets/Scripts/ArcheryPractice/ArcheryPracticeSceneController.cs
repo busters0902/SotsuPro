@@ -196,7 +196,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         //スタート表示、トリガー待ち
         yield return new WaitUntil(() => ViveController.Instance.ViveRightDown || ViveController.Instance.ViveLeftDown);
-        Debug.Log("トリガーを引いた");
+        AudioManager.Instance.PlaySE("se_decision");
 
         flashText.text.text = 1 + "射目";
         flashText.flash.useFrash = false;
@@ -315,40 +315,45 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
                 if(score <= 2)
                 {
-                    //AudioManager.Instance.StopSE("kansei_3");
+                    AudioManager.Instance.PlaySE("kansei_3");
+                    
+                    //ディレイをかける場合
+                    //StartCoroutine(Utility.TimerCrou(0.5f, () => AudioManager.Instance.PlaySE("kansei_1")));
                 }
                 else if (score <= 5)
                 {
-                    //AudioManager.Instance.StopSE("kansei_1");
-                    //AudioManager.Instance.StopSE("hakushu_1");
+                    AudioManager.Instance.PlaySE("kansei_1");
+                    AudioManager.Instance.PlaySE("hakushu_2");
                 }
                 else if (score <= 8)
                 {
-                    //AudioManager.Instance.StopSE("kansei_4");
-                    //AudioManager.Instance.StopSE("hakushu_1");
+                    AudioManager.Instance.PlaySE("kansei_4");
+                    AudioManager.Instance.PlaySE("hakushu_2");
                     
                 }
                 else //9,10点
                 {
-                    //AudioManager.Instance.PlaySE("kansei_4");
-                    //AudioManager.Instance.PlaySE("hakushu_1");
+                    AudioManager.Instance.PlaySE("kansei_5");
+                    AudioManager.Instance.PlaySE("hakushu_1");
                 }
             
             }
             else if (s.name == "BackWallQuad")
             {
+                //※
                 Debug.Log("！！　惜しい");
-                //AudioManager.Instance.StopSE("kansei_6");
-                //AudioManager.Instance.StopSE("hakushu_2");
+                AudioManager.Instance.PlaySE("kansei_6");
+                //AudioManager.Instance.PlaySE("hakushu_2");
 
                 ScoreManager.Instance.AddScore(shotTimes, 0);
                 AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
             }
             else
             {
+                //※
                 Debug.Log("！！　はずれ");
-                //AudioManager.Instance.SE("kansei_2");
-                //AudioManager.Instance.SE("hakushu_2");
+                AudioManager.Instance.PlaySE("kansei_2");
+                //AudioManager.Instance.PlaySE("hakushu_2");
                 ScoreManager.Instance.AddScore(shotTimes, 0);
                 AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
             }
@@ -459,6 +464,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         //リザルト表示する
         yield return new WaitUntil(() => ViveController.Instance.ViveRightDown);
+        AudioManager.Instance.PlaySE("se_decision");
 
         gameEndPanel.SetActive(false);
 
