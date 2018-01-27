@@ -21,7 +21,6 @@ public class VRArcheryController : MonoBehaviour
         var lDevice = ViveController.Instance.GetLeftDevice();
         var rDevice = ViveController.Instance.GetRightDevice();
 
-
         if ( lDevice.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger))
         {
             bow.CreateArrow();

@@ -107,6 +107,8 @@ public class VRArcheryController3 : MonoBehaviour
     bool isPlayDrawingSE;
     float minPlayDrawingSE;
 
+    public bool useSE = false;
+
     //動作ごとのコールバック
     public System.Action setArrowCall = null;   //矢をセットした時
     public System.Action fullDrawingCall = null;    //弦を引き切った時
@@ -139,6 +141,8 @@ public class VRArcheryController3 : MonoBehaviour
         drawingStandard = new GameObject("ArrowStandard");
         drawingStandard.transform.SetParent(bow.transform);
         preLine.CreateLine();
+
+        AudioManager.Instance.LoadSeList("st", "Drawing");
 
         canReload = true;
         isMaxDrawing       = false ;
@@ -177,8 +181,6 @@ public class VRArcheryController3 : MonoBehaviour
 
         var rTransform = ViveController.Instance.RightController.transform;
 
-
-
         //弓を引く
         if (hundleDevice.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger)
             && IsAreaDrawingString(hundleDevice.transform.pos, drawingDist)
@@ -191,7 +193,15 @@ public class VRArcheryController3 : MonoBehaviour
             UpdateLine();
 
             //※弓を引く音
-            AudioManager.Instance.PlaySE("弦引き");
+            if(useSE)
+            {
+                AudioManager.Instance.PlaySeList("st");
+            }
+            else
+            {
+                AudioManager.Instance.PlaySE("弦引き");
+            }
+            
             Debug.Log("Played SE: 弦引き");
 
         }
@@ -199,9 +209,6 @@ public class VRArcheryController3 : MonoBehaviour
         else if ( hundleDevice.GetTouch(SteamVR_Controller.ButtonMask.Trigger)
             && isDrawing == true && hasArrow == true)
         {
-            Debug.Log(bow);
-            Debug.Log(bow.arrow);
-            Debug.Log(bow.arrow.Tail);
 
             //弓の弦
             var cenPos = bow.arrow.Tail.transform.position;
@@ -248,17 +255,16 @@ public class VRArcheryController3 : MonoBehaviour
 
             //一定量動かしたらSEを鳴らす
             stringSeDistSum += Mathf.Abs(stringMovDistCurrent);
-            if(stringMovDistCurrent >= stringSeDistLimit)
+            if(stringSeDistSum >= stringSeDistLimit)
             {
                 //※弓を引く音 クリップの延長??
-                //AudioManager.Instance.PlaySE();
+                if(useSE)
+                    AudioManager.Instance.addSeIndex("st");
+
                 Debug.Log("ギッ");
 
                 stringSeDistSum = 0.0f;
             }
-
-
-
 
             UpdateLine();
             preLine.lineRend.material.color = new Color(1f, 0f, 0f, 1f);
@@ -301,6 +307,11 @@ public class VRArcheryController3 : MonoBehaviour
             shotedCall();
 
             //※弦を引くSEを止める
+            if(useSE)
+            {
+                AudioManager.Instance.StopSeList();
+            }
+
 
             //矢を射る音
             AudioManager.Instance.PlaySE("矢の飛来");
@@ -309,7 +320,7 @@ public class VRArcheryController3 : MonoBehaviour
         }
 
         //矢を生成して、弓にセットする(両デバイスでトリガーを押す) 
-        //※処理フレームをずらすため 引く処理より後
+        //処理フレームをずらすため 引く処理より後
         if (canReload == true &&
             hundleDevice.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger) &&
             hasArrow == false)
