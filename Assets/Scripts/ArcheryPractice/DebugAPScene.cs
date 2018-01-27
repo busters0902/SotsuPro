@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class DebugAPScene : MonoBehaviour
@@ -20,6 +21,15 @@ public class DebugAPScene : MonoBehaviour
             DataManager.Instance.SaveData();
         }
 
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            //DataManager.Instance.data.ranking.OrderByDescending((s) => s.sumPoint );
+            //DataManager.Instance.data.ranking.OrderBy((s) => s.sumPoint);
+            var r = DataManager.Instance.data.ranking;
+            DataManager.Instance.data.ranking = r.OrderByDescending((s) => s.sumPoint).ToArray();
+            //DataManager.Instance.data.ranking = DataManager.Instance.data.ranking.OrderByDescending((s) => s.sumPoint).ToArray();
+            Debug.Log(" ソートします "); 
+        }
 
     }
 

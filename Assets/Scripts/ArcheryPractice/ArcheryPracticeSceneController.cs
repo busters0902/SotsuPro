@@ -191,6 +191,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         flashText.text.text = "ゲームを開始します。\n\nトリガーを引いてください";
         flashText.flash.useFrash = true;
         flashText.flash.setSize(Vector3.one * 3.0f);
+        flashText.flash.transform.rotation = Quaternion.AngleAxis(0f, Vector3.right);
         flashText.flash.setPos(new Vector3(0f, 100f, 0.5f));
         flashText.text.fontSize = 20;
 
@@ -443,7 +444,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         result.Load();
 
         //ランキングの更新
-        if (DataManager.Instance.IsRankIn(ScoreManager.Instance.GetTotalScore()))
+        if (DataManager.Instance.IsRankIn(score))
         {
             var rankData = ScoreRankingData.Create( System.DateTime.Now.Minute , System.DateTime.Now.ToString() , score);
             DataManager.Instance.AddRanking(rankData);
@@ -453,12 +454,10 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         if (rankIn == true)
         {
-            
-            var p = DataManager.Instance.data.ranking.LastOrDefault((s) => s.sumPoint == score);
-            if (p != null)
-                p.DebugLog();
-            else
-                Debug.Log(" 無 ");
+           
+            DataManager.Instance.data.ranking = DataManager.Instance.data.ranking.OrderByDescending((s) => s.sumPoint).ToArray();
+            DataManager.Instance.SaveData();
+
         }
 
         //ランキングデータの読み込み
@@ -482,6 +481,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         //ランクインしてるとき
         //if (rankIn)
         {
+
             Debug.Log("ランクインしました。");
             ranking.panel.gameObject.SetActive(true);
             ranking.ShowRanking();
@@ -489,7 +489,6 @@ public class ArcheryPracticeSceneController : MonoBehaviour
             ranking.HideRanking();
             ranking.panel.gameObject.SetActive(false);
 
-            DataManager.Instance.SaveData();
         }
 
         yield return new WaitForSeconds(1.0f);
@@ -499,6 +498,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
     void Reset_()
     {
+
         //矢の破棄
         archeryController.ClearArrows();
 
