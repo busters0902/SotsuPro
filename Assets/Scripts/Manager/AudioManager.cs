@@ -56,7 +56,11 @@ public class AudioManager : MonoBehaviour
             var audsou = gameObject.AddComponent<AudioSource>();
             audsou.clip = seAudioClips[se_name];
             audsou.Play();
-            seAudioSources.Add(se_name, audsou);
+            if (!seAudioSources.ContainsKey(se_name))
+            {
+
+                seAudioSources.Add(se_name, audsou);
+            }
             StartCoroutine(AudioSourceIns(audsou));
             return audsou;
         }
@@ -65,8 +69,15 @@ public class AudioManager : MonoBehaviour
 
     public void StopSE(string _key)
     {
-        seAudioSources[_key].Stop();
-    } 
+        if (seAudioSources.ContainsKey(_key))
+        {
+            if (seAudioSources[_key] != null)
+            {
+
+                seAudioSources[_key].Stop();
+            }
+        }
+    }
 
     //PlaySEのAudioClip版
     public AudioSource PlaySE(AudioClip _clip, Action _callback = null)
@@ -111,13 +122,29 @@ public class AudioManager : MonoBehaviour
         {
             audsou.volume = t;
         }));
-        StartCoroutine(AudioSourceIns(audsou, () => {
+        StartCoroutine(AudioSourceIns(audsou, () =>
+        {
             seAudioSources.Remove(se_name);
         }));
         return audsou;
     }
 
-    
+    public AudioSource FadeOutSE(string se_name, float _time)
+    {
+        var audioSou = seAudioSources[se_name];
+        StartCoroutine(
+        Utility.TimeCrou(_time, (t) =>
+        {
+            audioSou.volume = 1-t;
+        },()=>
+        {
+            audioSou.Stop();
+        }));
+
+
+        return audioSou;
+
+    }
 
 
 
@@ -151,10 +178,10 @@ public class AudioManager : MonoBehaviour
             callback();
         }
         Destroy(au);
-    } 
-    
+    }
+
     //なり終わったら消す
-    IEnumerator AudioSourceIns(AudioSource au,string _key, Action callback = null)
+    IEnumerator AudioSourceIns(AudioSource au, string _key, Action callback = null)
     {
         while (au.isPlaying)
         {

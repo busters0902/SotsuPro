@@ -270,7 +270,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         //BGM(環境音)
         //※
-        //AudioManager.Instance.PlaySE("gaya").loop = true;
+        AudioManager.Instance.PlaySE("gaya").loop = true;
         Debug.Log("PlayBGM がやがや");
 
         ///////////////////////////////////////////////////////////////////////
@@ -299,11 +299,34 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
                 //SE
                 AudioManager.Instance.PlaySE("的に当たる");
-                StartCoroutine(Utility.TimerCrou(0.5f,
+                StartCoroutine(Utility.TimerCrou(1f,
                     () =>
                     {
                         garrary.highJump();
-                        AudioManager.Instance.PlaySE("kansei_1");
+                        //AudioManager.Instance.PlaySE("kansei_1");
+                        if (score <= 2)
+                        {
+                            AudioManager.Instance.PlaySE("kansei_3");
+
+                            //ディレイをかける場合
+                            //StartCoroutine(Utility.TimerCrou(0.5f, () => AudioManager.Instance.PlaySE("kansei_1")));
+                        }
+                        else if (score <= 5)
+                        {
+                            AudioManager.Instance.PlaySE("kansei_1");
+                            AudioManager.Instance.PlaySE("hakushu_2");
+                        }
+                        else if (score <= 8)
+                        {
+                            AudioManager.Instance.PlaySE("kansei_4");
+                            AudioManager.Instance.PlaySE("hakushu_2");
+
+                        }
+                        else //9,10点
+                        {
+                            AudioManager.Instance.PlaySE("kansei_5");
+                            AudioManager.Instance.PlaySE("hakushu_1");
+                        }
                         Debug.Log("SE kansei_1 ");
                         StartCoroutine(Utility.TimerCrou(4.0f, () => garrary.stopHighJump()));
                     }
@@ -313,29 +336,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
                 scoreTortal.AddScore(score);
                 mato.hitStop.OnHitUpdateText(score);
 
-                if(score <= 2)
-                {
-                    AudioManager.Instance.PlaySE("kansei_3");
-                    
-                    //ディレイをかける場合
-                    //StartCoroutine(Utility.TimerCrou(0.5f, () => AudioManager.Instance.PlaySE("kansei_1")));
-                }
-                else if (score <= 5)
-                {
-                    AudioManager.Instance.PlaySE("kansei_1");
-                    AudioManager.Instance.PlaySE("hakushu_2");
-                }
-                else if (score <= 8)
-                {
-                    AudioManager.Instance.PlaySE("kansei_4");
-                    AudioManager.Instance.PlaySE("hakushu_2");
-                    
-                }
-                else //9,10点
-                {
-                    AudioManager.Instance.PlaySE("kansei_5");
-                    AudioManager.Instance.PlaySE("hakushu_1");
-                }
+                
             
             }
             else if (s.name == "BackWallQuad")
@@ -372,7 +373,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
             //環境音[ガヤガヤ]を止める
             //※
-            //AudioManager.Instance.StopSE("gaya");
+            AudioManager.Instance.FadeOutSE("gaya",0.5f);
 
             archeryController.bow.arrow.targets.Add(mato.quadCollider);
             archeryController.bow.arrow.frontWall = frontWall;
@@ -452,6 +453,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         if (rankIn == true)
         {
+            
             var p = DataManager.Instance.data.ranking.LastOrDefault((s) => s.sumPoint == score);
             if (p != null)
                 p.DebugLog();
@@ -486,6 +488,8 @@ public class ArcheryPracticeSceneController : MonoBehaviour
             yield return new WaitForSeconds(3.0f);
             ranking.HideRanking();
             ranking.panel.gameObject.SetActive(false);
+
+            DataManager.Instance.SaveData();
         }
 
         yield return new WaitForSeconds(1.0f);

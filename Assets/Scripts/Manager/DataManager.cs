@@ -102,7 +102,7 @@ public class DataManager : MonoBehaviour
         if (len <= 0) Debug.Log("rankingデータがありません 2");
 
         data.ranking[len - 1] = s;
-        data.ranking.OrderBy( (sc) => sc.sumPoint );
+        data.ranking.OrderByDescending( (sc) => sc.sumPoint );
 
     }
 

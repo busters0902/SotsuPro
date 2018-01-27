@@ -38,6 +38,34 @@ public static class Utility
 
     }
 
+    public static IEnumerator TimeCrou(float limTime, System.Action<float> act, System.Action callback )
+    {
+        Debug.Log("Start TimeCrou");
+        var timer = new Timer();
+        timer.Initialize();
+
+        while (true)
+        {
+
+            timer.Update();
+            //Debug.Log("timer: " + timer.time);
+
+            if (timer.time >= limTime) break;
+
+            var t = timer.time / limTime;
+
+            act(t);
+
+            yield return null;
+        }
+        act(1);
+        if(callback != null)
+        {
+            callback();
+        }
+
+    }
+
     public static IEnumerator TimerCrou(float limTime, System.Action act)
     {
         Debug.Log("Start TimerCrou");
