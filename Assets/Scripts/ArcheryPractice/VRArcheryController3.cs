@@ -254,7 +254,7 @@ public class VRArcheryController3 : MonoBehaviour
             stringMovDistCurrent = dist;
 
             //一定量動かしたらSEを鳴らす
-            stringSeDistSum += Mathf.Abs(stringMovDistCurrent);
+            stringSeDistSum += Mathf.Abs(stringMovDistPrev - stringMovDistCurrent);
             if(stringSeDistSum >= stringSeDistLimit)
             {
                 //※弓を引く音 クリップの延長??

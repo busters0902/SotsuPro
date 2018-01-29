@@ -55,11 +55,11 @@ public class AudioManager : MonoBehaviour
         {
             var audsou = gameObject.AddComponent<AudioSource>();
             audsou.clip = seAudioClips[se_name];
-            audsou.Play();
             if (!seAudioSources.ContainsKey(se_name))
             {
 
                 seAudioSources.Add(se_name, audsou);
+                audsou.Play();
             }
             StartCoroutine(AudioSourceIns(audsou));
             return audsou;
@@ -84,7 +84,12 @@ public class AudioManager : MonoBehaviour
     {
         var audsou = gameObject.AddComponent<AudioSource>();
         audsou.clip = _clip;
-        audsou.Play();
+        if (!seAudioSources.ContainsKey(_clip.name))
+        {
+
+            seAudioSources.Add(_clip.name, audsou);
+            audsou.Play();
+        }
         StartCoroutine(AudioSourceIns(audsou, _callback));
         return audsou;
     }
@@ -135,11 +140,11 @@ public class AudioManager : MonoBehaviour
         StartCoroutine(
         Utility.TimeCrou(_time, (t) =>
         {
-            audioSou.volume = 1-t;
-        },()=>
-        {
-            audioSou.Stop();
-        }));
+            audioSou.volume = 1 - t;
+        }, () =>
+         {
+             audioSou.Stop();
+         }));
 
 
         return audioSou;
@@ -245,7 +250,7 @@ public class AudioManager : MonoBehaviour
     {
         seList.Add(_key,
             new List<AudioClip>(
-            Resources.LoadAll<AudioClip>(_filename))
+            Resources.LoadAll<AudioClip>("Audio/SE/" + _filename))
             );
     }
     //SEListを鳴らす
@@ -306,30 +311,60 @@ public class AudioManager : MonoBehaviour
 
     IEnumerator PlaySeListCol2(string _key)
     {
-        var _seList = seList[_key];
-        if (_seList.Count == 0)
-            yield break;
 
         var audsou = gameObject.AddComponent<AudioSource>();
-        var stockSeIndexs = stockSeIndex[_key];
-        for (int i = 0; i < stockSeIndexs.Count; i++)
+        if (!stockSeIndex.ContainsKey(_key))
         {
-
-            audsou.clip = _seList[stockSeIndexs[i]];
-            audsou.Play();
-            while (audsou.isPlaying)
-            {
-                if (!isSeLoop)
-                {
-                    isSeLoop = true;
-                    yield break;
-                }
-                yield return null;
-            }
-            //PlaySE(_seList[stockSeIndex[]]);
+            stockSeIndex.Add(_key, new List<int>());
         }
+        var stockSeIndexs = stockSeIndex[_key];
+        //Debug.Log(_key + "取得");
+        var _seList = seList[_key];
+        while (isSeLoop)
+        {
+            //Debug.Log(_key + "なるの待機中");
+            int i = 0;
+            if (stockSeIndexs.Count != 0)
+            {
+                audsou.clip = _seList[stockSeIndexs[i]];
+                audsou.Play();
+                stockSeIndexs.Remove(i);
+                while (audsou.isPlaying)
+                {
+                    yield return null;
+                }
+                i++;
+            }
+            yield return null;
+        }
+        stockSeIndexs.Clear();
+
+        isSeLoop = true;
         AudioSourceIns(audsou);
         yield break;
+
+
+        //for (int i = 0; i < stockSeIndexs.Count; i++)
+        //{
+
+        //    audsou.clip = _seList[stockSeIndexs[i]];
+        //    audsou.Play();
+        //    while (audsou.isPlaying)
+        //    {
+        //        if (!isSeLoop)
+        //        {
+        //            isSeLoop = true;
+        //            yield break;
+        //        }
+        //        yield return null;
+        //    }
+
+        //    //PlaySE(_seList[stockSeIndex[]]);
+        //}
+        //AudioSourceIns(audsou);
+        //yield break;
+
+
         //    while (true)
         //{
         //    var audsou = gameObject.AddComponent<AudioSource>();

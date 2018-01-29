@@ -225,7 +225,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         {
             var tgtDir = tutorialTarget.transform.position - eyeCamera.transform.position;
             var cross = Vector3.Cross(eyeCamera.transform.forward, tgtDir);
-            Debug.Log("cross :" + cross.y);
+            //Debug.Log("cross :" + cross.y);
             if (cross.y <= 0) return true;
             return false;
         });
