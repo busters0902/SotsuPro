@@ -32,6 +32,10 @@ public class UIAnimation : MonoBehaviour {
 
     public Vector3 pos;
 
+    public Vector3 scale;
+
+    public Quaternion rotate;
+
     public float time;
 
     public iTween.LoopType loopType;
@@ -148,6 +152,7 @@ public class UIAnimation : MonoBehaviour {
             }
             if (uiState == UIState.MOVE)
             {
+                iTween.Stop(this.gameObject, "scale");
                 iTween.Stop(this.gameObject, "rotate");
                 iTween.MoveTo(this.gameObject, iTween.Hash("x", pos.x, "y", pos.y, "z", pos.z, "time", time, "looptype", loopType));
                 yield return null;
@@ -174,13 +179,17 @@ public class UIAnimation : MonoBehaviour {
             }
             if (uiState == UIState.ROTATE)
             {
+                iTween.Stop(this.gameObject, "scale");
                 iTween.Stop(this.gameObject, "move");
-                iTween.RotateTo(this.gameObject, iTween.Hash("x", pos.x, "y", pos.y, "z", pos.z, "time", time, "looptype", loopType));
+                iTween.ShakeRotation(this.gameObject, iTween.Hash("x", rotate.x, "y", rotate.y, "z", rotate.z, "time", time, "islocal",true, "looptype", loopType));
                 yield return null;
             }
             if (uiState == UIState.SCALE)
             {
-                // iTween.ScaleTo(this.gameObject, iTween.Hash("x", _pos.x, "y", _pos.y, "z", _pos.z, "time", _time, _isLoop));
+                iTween.Stop(this.gameObject, "rotate");
+                iTween.Stop(this.gameObject, "move");
+                iTween.PunchScale(this.gameObject, iTween.Hash("x", scale.x, "y", scale.y, "z", scale.z, "time", time, "looptype", loopType));
+
                 yield return null;
             }
             yield return null;
