@@ -38,6 +38,11 @@ public class AudioManager : MonoBehaviour
     //SEを鳴らす
     public AudioSource PlaySE(string se_name, Vector3? playPos = null)
     {
+
+        if(se_name == "gaya")
+        {
+            Debug.Log("gaya ");
+        }
         if (playPos != null)
         {
             //距離によって
@@ -54,14 +59,31 @@ public class AudioManager : MonoBehaviour
         else
         {
             var audsou = gameObject.AddComponent<AudioSource>();
+            if (!seAudioClips.ContainsKey(se_name))
+            {
+                Debug.LogError(string.Format("{0}のサウンドが読み込まれていません", se_name));
+                return null;
+            }
             audsou.clip = seAudioClips[se_name];
             if (!seAudioSources.ContainsKey(se_name))
             {
-
+                
                 seAudioSources.Add(se_name, audsou);
                 audsou.Play();
             }
-            StartCoroutine(AudioSourceIns(audsou));
+            else
+            {
+                if (seAudioSources[se_name] == null)
+                {
+
+                    audsou.Play();
+                }
+            }
+            StartCoroutine(AudioSourceIns(audsou, () =>
+            {
+                if (!seAudioSources.ContainsKey(se_name))
+                    seAudioSources.Remove(se_name);
+            }));
             return audsou;
         }
         return null;
@@ -140,15 +162,18 @@ public class AudioManager : MonoBehaviour
         StartCoroutine(
         Utility.TimeCrou(_time, (t) =>
         {
-            audioSou.volume = 1 - t;
+            if (audioSou != null)
+                audioSou.volume = 1 - t;
         }, () =>
          {
-             audioSou.Stop();
+             if (audioSou != null)
+             {
+                 if (!seAudioSources.ContainsKey(se_name))
+                     seAudioSources.Remove(se_name);
+                 audioSou.Stop();
+             }
          }));
-
-
         return audioSou;
-
     }
 
 

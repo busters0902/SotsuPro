@@ -305,7 +305,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
                     {
                         garrary.highJump();
                         //AudioManager.Instance.PlaySE("kansei_1");
-                        if (score <= 2)
+                        if (score <= 3)
                         {
                             AudioManager.Instance.PlaySE("kansei_3");
 
