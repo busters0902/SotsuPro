@@ -325,6 +325,7 @@ MonoBehaviour:
   ranking: {fileID: 135876519}
   soundLengthLimit: 10
   target: {fileID: 905556296}
+  rankCheck: 0
 --- !u!4 &135876515
 Transform:
   m_ObjectHideFlags: 0
@@ -769,7 +770,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &502534932
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2095,6 +2096,48 @@ Prefab:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: fb8c8023243e77647804c755822fd99d, type: 2}
+  m_IsPrefabParent: 0
+--- !u!1001 &1503992891
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4280482287246440, guid: 3d317b1562a87e3439fd20f9aaf64cc7, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4280482287246440, guid: 3d317b1562a87e3439fd20f9aaf64cc7, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 1.535
+      objectReference: {fileID: 0}
+    - target: {fileID: 4280482287246440, guid: 3d317b1562a87e3439fd20f9aaf64cc7, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4280482287246440, guid: 3d317b1562a87e3439fd20f9aaf64cc7, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4280482287246440, guid: 3d317b1562a87e3439fd20f9aaf64cc7, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4280482287246440, guid: 3d317b1562a87e3439fd20f9aaf64cc7, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4280482287246440, guid: 3d317b1562a87e3439fd20f9aaf64cc7, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4280482287246440, guid: 3d317b1562a87e3439fd20f9aaf64cc7, type: 2}
+      propertyPath: m_RootOrder
+      value: 20
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 3d317b1562a87e3439fd20f9aaf64cc7, type: 2}
   m_IsPrefabParent: 0
 --- !u!1 &1536937546
 GameObject:
