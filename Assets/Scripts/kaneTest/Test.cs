@@ -14,7 +14,7 @@ public class Test : MonoBehaviour {
         if (Input.GetMouseButtonDown(0))
         {
             //AudioManager.Instance.PlaySE("引き絞り");
-            AudioManager.Instance.PlaySeList("Test");
+            //AudioManager.Instance.PlaySeList("Test");
             
         }
 
