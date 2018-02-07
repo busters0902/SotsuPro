@@ -23,6 +23,7 @@ public class TutorialAnimationController : MonoBehaviour
         SULLDROW,
         RELEASE,
         FOLLOW_THROUGH,
+        DEFAULT,
         MAX
     }
 
@@ -32,9 +33,27 @@ public class TutorialAnimationController : MonoBehaviour
     public void SetState(State _state)
     {
         state = _state;
-        Debug.Log(state.ToString().ToLower());
+        //Debug.Log(state.ToString().ToLower());
         animation.SetTrigger(state.ToString().ToLower());
 
+    }
+
+    public void SetFlow(bool is_flow)
+    {
+        if (is_flow)
+        {
+            for (int i = 0; i < (int)State.MAX - 1; i++)
+            {
+                SetState((State)i);
+            }
+            animation.SetBool("", true);
+        }
+        else
+        {
+
+
+
+        }
     }
 
     //次のステートに切り替える
@@ -51,9 +70,6 @@ public class TutorialAnimationController : MonoBehaviour
         {
             SetState(State.SET);
         }
-        if (Input.GetMouseButtonDown(1))
-        {
-            nextAnim();
-        }
+
     }
 }
