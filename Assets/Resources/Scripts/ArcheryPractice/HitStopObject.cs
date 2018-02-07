@@ -59,7 +59,8 @@ public class HitStopObject : MonoBehaviour
 
     public void OnHitUpdateText( int score)
     {
-        text.text = "Score : " + score.ToString();
+        //text.text = "Score : " + score.ToString();
+        text.text = score.ToString();
     }
 
 

@@ -18,6 +18,8 @@ public class ResultController : MonoBehaviour
     {
         onHideAll = false;
         onShowResult = false;
+
+
     }
 
     //初期化
@@ -106,6 +108,8 @@ public class ResultController : MonoBehaviour
     public void Reset_()
     {
         scores = new Score[10];
+
+        HideAll();
     }
 
 

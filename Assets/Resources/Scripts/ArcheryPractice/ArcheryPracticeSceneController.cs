@@ -116,6 +116,8 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         //フェードアウト
         FadeControl.Instance.FadeIn(3, 1);
 
+        result.Initialize();
+
         Debug.Log("SceneController.SetupEnd");
         yield return StartCoroutine(GameMain());
     }
@@ -361,8 +363,10 @@ public class ArcheryPracticeSceneController : MonoBehaviour
             }
 
             shotTimes++;
-            flashText.text.text = shotTimes + "射目";
-            timesText.text = "Times : " + (shotTimes) + "/6";
+            //flashText.text.text = shotTimes + "射目";
+            flashText.text.text = shotTimes.ToString();
+            //timesText.text = "Times : " + (shotTimes) + "/6";
+            timesText.text = (shotTimes) + "/6";
             isNextTimes = false;
 
         };
