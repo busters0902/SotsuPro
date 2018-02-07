@@ -40,20 +40,20 @@ public class TutorialAnimationController : MonoBehaviour
 
     public void SetFlow(bool is_flow)
     {
+
         if (is_flow)
         {
-            for (int i = 0; i < (int)State.MAX - 1; i++)
-            {
-                SetState((State)i);
-            }
-            animation.SetBool("", true);
+            //for (int i = 0; i < (int)State.MAX; i++)
+            //{
+            //    SetState((State)i);
+            //}
+            animation.SetBool("flow", true);
         }
         else
         {
-
-
-
+            animation.SetBool("flow", false);
         }
+
     }
 
     //次のステートに切り替える
@@ -70,6 +70,11 @@ public class TutorialAnimationController : MonoBehaviour
         {
             SetState(State.SET);
         }
+        if (Input.GetMouseButtonDown(1))
+        {
+            SetFlow(true);
+        }
+
 
     }
 }
