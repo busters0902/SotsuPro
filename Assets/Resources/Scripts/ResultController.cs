@@ -25,6 +25,7 @@ public class ResultController : MonoBehaviour
     //初期化
     public void Initialize()
     {
+        SetActiveResultPanel(false);
         Reset_();
     }
 
@@ -34,6 +35,10 @@ public class ResultController : MonoBehaviour
         scores = ScoreManager.Instance.scores.ToArray();
     }
 
+    public void SetActiveResultPanel( bool f)
+    {
+        panel.gameObject.SetActive(f);
+    }
 
     public void HideAll()
     {

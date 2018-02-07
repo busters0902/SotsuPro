@@ -60,6 +60,9 @@ public class ArcheryPracticeSceneController : MonoBehaviour
     GarraryController garrary;
 
     [SerializeField]
+    RightHandAnim rightHand;
+
+    [SerializeField]
     GameObject eyeCamera;
 
     [SerializeField]
@@ -269,7 +272,8 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         Debug.Log("SceneController.PlayGame Start");
 
         int shotTimes = 1;
-        timesText.text = "Times : " + (shotTimes) + "/6";
+        //timesText.text = "Times : " + (shotTimes) + "/6";
+        timesText.text = (shotTimes) + "/6";
 
         //BGM(環境音)
         //※
@@ -427,7 +431,8 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         }
 
         flashText.text.text = "";
-        timesText.text = "Times : " + 6 + "/6";
+        //timesText.text = "Times : " + 6 + "/6";
+        timesText.text = 6 + "/6";
 
         yield return new WaitForSeconds(2.0f);
 
@@ -473,13 +478,13 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         gameEndPanel.SetActive(false);
 
-        result.panel.gameObject.SetActive(true);
+        result.SetActiveResultPanel(true);
         result.ShowResult(() => AudioManager.Instance.PlaySE("いえーい"));
 
 
         yield return new WaitForSeconds(5.0f);
 
-        result.panel.gameObject.SetActive(false);
+        result.SetActiveResultPanel(false);
         result.HideAll();
 
         //ランクインしてるとき

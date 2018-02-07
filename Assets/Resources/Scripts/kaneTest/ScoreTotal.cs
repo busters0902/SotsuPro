@@ -15,12 +15,14 @@ public class ScoreTotal : MonoBehaviour
     public void AddScore(int num)
     {
         totalScore += num;
-        text.text = "Total : " + totalScore.ToString();
+        //text.text = "Total : " + totalScore.ToString();
+        text.text = totalScore.ToString();
     }
 
     public void ResetScore()
     {
         totalScore = 0;
-        text.text = "Total : 0"; 
+        //text.text = "Total : 0"; 
+        text.text = "0";
     }
 }

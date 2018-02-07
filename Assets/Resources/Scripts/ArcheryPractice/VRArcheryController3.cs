@@ -88,6 +88,9 @@ public class VRArcheryController3 : MonoBehaviour
     GameObject rightHand;
 
     [SerializeField]
+    RightHandAnim rightAnim;
+
+    [SerializeField]
     burekeigen shakeMitig;
 
     [SerializeField]
@@ -204,6 +207,8 @@ public class VRArcheryController3 : MonoBehaviour
             
             Debug.Log("Played SE: 弦引き");
 
+            rightAnim.Catch();
+
         }
         //弓を引いている
         else if ( hundleDevice.GetTouch(SteamVR_Controller.ButtonMask.Trigger)
@@ -316,6 +321,8 @@ public class VRArcheryController3 : MonoBehaviour
             //矢を射る音
             AudioManager.Instance.PlaySE("矢の飛来");
             Debug.Log("Played SE: 矢の飛来");
+
+            rightAnim.Release();
 
         }
 
