@@ -89,6 +89,8 @@ public class ArcheryPracticeSceneController : MonoBehaviour
     [SerializeField]
     TutorialAnimationController tutorialAnimationController;
 
+    [SerializeField]
+    Transform gayaTransfom;
 
     void Start()
     {
@@ -156,11 +158,11 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
             yield return StartCoroutine(PlayGame());
 
-            if(useResult)
+            if (useResult)
             {
                 yield return StartCoroutine(ShowResult());
             }
-            
+
 
             if (IsGameEnd) break;
 
@@ -202,7 +204,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         flashText.text.text = "ゲームを開始します。\n\nトリガーを引いてください";
         flashText.flash.useFrash = true;
-        flashText.flash.setColor(0,1,1);
+        flashText.flash.setColor(0, 1, 1);
         flashText.flash.setSize(Vector3.one * 3.0f);
         flashText.flash.transform.rotation = Quaternion.AngleAxis(0f, Vector3.right);
         flashText.flash.setPos(new Vector3(0f, 100f, 0.5f));
@@ -246,17 +248,25 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         tutorial.HideArrowAnime();
 
         //説明をする
-        //tutorialAnimationController.SetFlow(true);
+        tutorialAnimationController.SetFlow(true);
 
         //tutorialMovie.playMovie();
         //tutorialMovie.SetLoop(false);
+
+        bool end_flag = false;
+        StartCoroutine(Utility.TimerCrou(5, () =>
+        {
+            end_flag = true;
+            tutorialAnimationController.SetFlow(false);
+        }));
 
         //動画終了
         yield return new WaitUntil(() =>
         {
             if (ViveController.Instance.ViveLeftDown) return true;
             if (Input.GetKeyDown(KeyCode.N)) return true;
-            return tutorialMovie.IsEndMovie();
+            return end_flag;
+            //return tutorialMovie.IsEndMovie();
         });
 
         //tutorialMovie.stopMovie();
@@ -289,7 +299,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         //BGM(環境音)
         //※
-        AudioManager.Instance.PlaySE("gaya").loop = true;
+        AudioManager.Instance.PlaySE("gaya", gayaTransfom.localPosition).loop = true;
         Debug.Log("PlayBGM がやがや");
 
         ///////////////////////////////////////////////////////////////////////
@@ -325,26 +335,26 @@ public class ArcheryPracticeSceneController : MonoBehaviour
                         //AudioManager.Instance.PlaySE("kansei_1");
                         if (score <= 3)
                         {
-                            AudioManager.Instance.PlaySE("kansei_3");
+                            AudioManager.Instance.PlaySE("kansei_3", gayaTransfom.localPosition);
 
                             //ディレイをかける場合
                             //StartCoroutine(Utility.TimerCrou(0.5f, () => AudioManager.Instance.PlaySE("kansei_1")));
                         }
                         else if (score <= 5)
                         {
-                            AudioManager.Instance.PlaySE("kansei_1");
-                            AudioManager.Instance.PlaySE("hakushu_2");
+                            AudioManager.Instance.PlaySE("kansei_1", gayaTransfom.localPosition);
+                            AudioManager.Instance.PlaySE("hakushu_2", gayaTransfom.localPosition);
                         }
                         else if (score <= 8)
                         {
-                            AudioManager.Instance.PlaySE("kansei_4");
-                            AudioManager.Instance.PlaySE("hakushu_2");
+                            AudioManager.Instance.PlaySE("kansei_4", gayaTransfom.localPosition);
+                            AudioManager.Instance.PlaySE("hakushu_2", gayaTransfom.localPosition);
 
                         }
                         else //9,10点
                         {
-                            AudioManager.Instance.PlaySE("kansei_5");
-                            AudioManager.Instance.PlaySE("hakushu_1");
+                            AudioManager.Instance.PlaySE("kansei_5", gayaTransfom.localPosition);
+                            AudioManager.Instance.PlaySE("hakushu_1", gayaTransfom.localPosition);
                         }
                         Debug.Log("SE kansei_1 ");
                         StartCoroutine(Utility.TimerCrou(4.0f, () => garrary.stopHighJump()));
@@ -355,14 +365,14 @@ public class ArcheryPracticeSceneController : MonoBehaviour
                 scoreTortal.AddScore(score);
                 mato.hitStop.OnHitUpdateText(score);
 
-                
-            
+
+
             }
             else if (s.name == "BackWallQuad")
             {
                 //※
                 Debug.Log("！！　惜しい");
-                AudioManager.Instance.PlaySE("kansei_6");
+                AudioManager.Instance.PlaySE("kansei_6", gayaTransfom.localPosition);
                 //AudioManager.Instance.PlaySE("hakushu_2");
 
                 ScoreManager.Instance.AddScore(shotTimes, 0);
@@ -372,7 +382,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
             {
                 //※
                 Debug.Log("！！　はずれ");
-                AudioManager.Instance.PlaySE("kansei_2");
+                AudioManager.Instance.PlaySE("kansei_2", gayaTransfom.localPosition);
                 //AudioManager.Instance.PlaySE("hakushu_2");
                 ScoreManager.Instance.AddScore(shotTimes, 0);
                 AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
@@ -394,7 +404,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
             //環境音[ガヤガヤ]を止める
             //※
-            AudioManager.Instance.FadeOutSE("gaya",0.5f);
+            AudioManager.Instance.FadeOutSE("gaya", 0.5f);
 
             archeryController.bow.arrow.targets.Add(mato.quadCollider);
             archeryController.bow.arrow.frontWall = frontWall;
@@ -467,7 +477,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         //ランキングの更新
         if (DataManager.Instance.IsRankIn(score))
         {
-            var rankData = ScoreRankingData.Create( System.DateTime.Now.Minute , System.DateTime.Now.ToString() , score);
+            var rankData = ScoreRankingData.Create(System.DateTime.Now.Minute, System.DateTime.Now.ToString(), score);
             DataManager.Instance.AddRanking(rankData);
 
             rankIn = true;
@@ -475,7 +485,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         if (rankIn == true)
         {
-           
+
             DataManager.Instance.data.ranking = DataManager.Instance.data.ranking.OrderByDescending((s) => s.sumPoint).ToArray();
             DataManager.Instance.SaveData();
 

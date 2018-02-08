@@ -40,103 +40,110 @@ public class AudioManager : MonoBehaviour
     //SEを鳴らす
     public AudioSource PlaySE(string se_name, Vector3? playPos = null)
     {
-
-        if (se_name == "gaya")
+        try
         {
-            Debug.Log("gaya ");
-        }
-        if (playPos != null)
-        {
-            ////距離によって
-            //var dis = Vector3.Distance(Camera.main.transform.position, playPos.Value);
-            //Debug.Log(dis);
-            //StartCoroutine(Easing.Deyray(dis / 340f, () =>
-            //{
-            //    var audsou = gameObject.AddComponent<AudioSource>();
-            //    audsou.clip = seAudioClips[se_name];
-            //    audsou.Play();
-            //    StartCoroutine(AudioSourceIns(audsou));
-            //}));
-            if (!seAudioClips.ContainsKey(se_name))
+
+            if (se_name == "gaya")
             {
-                Debug.LogError(string.Format("{0}のサウンドが読み込まれていません", se_name));
-                return null;
+                Debug.Log("gaya ");
             }
-            AudioSource audsou = null;
-            GameObject obj = Instantiate(objectBase);
-
-            if (!seAudioSources.ContainsKey(se_name))
+            if (playPos != null)
             {
-
-                audsou = obj.AddComponent<AudioSource>();
-                audsou.spatialBlend = 1;
-                obj.transform.localPosition = playPos.Value;
-
-                audsou.clip = seAudioClips[se_name];
-                seAudioSources.Add(se_name, audsou);
-                audsou.Play();
-            }
-            else
-            {
-                if (seAudioSources[se_name] == null)
+                ////距離によって
+                //var dis = Vector3.Distance(Camera.main.transform.position, playPos.Value);
+                //Debug.Log(dis);
+                //StartCoroutine(Easing.Deyray(dis / 340f, () =>
+                //{
+                //    var audsou = gameObject.AddComponent<AudioSource>();
+                //    audsou.clip = seAudioClips[se_name];
+                //    audsou.Play();
+                //    StartCoroutine(AudioSourceIns(audsou));
+                //}));
+                if (!seAudioClips.ContainsKey(se_name))
                 {
-                   // obj = Instantiate(new GameObject());
+                    Debug.LogError(string.Format("{0}のサウンドが読み込まれていません", se_name));
+                    return null;
+                }
+                AudioSource audsou = null;
+                GameObject obj = Instantiate(objectBase);
+
+                if (!seAudioSources.ContainsKey(se_name))
+                {
 
                     audsou = obj.AddComponent<AudioSource>();
                     audsou.spatialBlend = 1;
                     obj.transform.localPosition = playPos.Value;
 
-                    seAudioSources[se_name] = audsou;
                     audsou.clip = seAudioClips[se_name];
+                    seAudioSources.Add(se_name, audsou);
                     audsou.Play();
                 }
-            }
-            StartCoroutine(AudioSourceIns(audsou, () =>
-            {
-
-                if (!seAudioSources.ContainsKey(se_name))
+                else
                 {
-                    seAudioSources.Remove(se_name);
-                }
-                if (obj != null)
-                {
-                    Destroy(obj);
-                }
-            }));
-            return audsou;
+                    if (seAudioSources[se_name] == null)
+                    {
+                        // obj = Instantiate(new GameObject());
 
-        }
-        else
-        {
-            if (!seAudioClips.ContainsKey(se_name))
-            {
-                Debug.LogError(string.Format("{0}のサウンドが読み込まれていません", se_name));
-                return null;
-            }
-            AudioSource audsou = null;
-            if (!seAudioSources.ContainsKey(se_name))
-            {
-                audsou = gameObject.AddComponent<AudioSource>();
-                audsou.clip = seAudioClips[se_name];
-                seAudioSources.Add(se_name, audsou);
-                audsou.Play();
+                        audsou = obj.AddComponent<AudioSource>();
+                        audsou.spatialBlend = 1;
+                        obj.transform.localPosition = playPos.Value;
+
+                        seAudioSources[se_name] = audsou;
+                        audsou.clip = seAudioClips[se_name];
+                        audsou.Play();
+                    }
+                }
+                StartCoroutine(AudioSourceIns(audsou, () =>
+                {
+
+                    if (!seAudioSources.ContainsKey(se_name))
+                    {
+                        seAudioSources.Remove(se_name);
+                    }
+                    if (obj != null)
+                    {
+                        Destroy(obj);
+                    }
+                }));
+                return audsou;
+
             }
             else
             {
-                if (seAudioSources[se_name] == null)
+                if (!seAudioClips.ContainsKey(se_name))
+                {
+                    Debug.LogError(string.Format("{0}のサウンドが読み込まれていません", se_name));
+                    return null;
+                }
+                AudioSource audsou = null;
+                if (!seAudioSources.ContainsKey(se_name))
                 {
                     audsou = gameObject.AddComponent<AudioSource>();
-                    seAudioSources[se_name] = audsou;
                     audsou.clip = seAudioClips[se_name];
+                    seAudioSources.Add(se_name, audsou);
                     audsou.Play();
                 }
+                else
+                {
+                    if (seAudioSources[se_name] == null)
+                    {
+                        audsou = gameObject.AddComponent<AudioSource>();
+                        seAudioSources[se_name] = audsou;
+                        audsou.clip = seAudioClips[se_name];
+                        audsou.Play();
+                    }
+                }
+                StartCoroutine(AudioSourceIns(audsou, () =>
+                {
+                    if (!seAudioSources.ContainsKey(se_name))
+                        seAudioSources.Remove(se_name);
+                }));
+                return audsou;
             }
-            StartCoroutine(AudioSourceIns(audsou, () =>
-            {
-                if (!seAudioSources.ContainsKey(se_name))
-                    seAudioSources.Remove(se_name);
-            }));
-            return audsou;
+        }
+        catch
+        {
+            Debug.LogError("SEを鳴らす機能がバグってます  " + se_name); 
         }
         return null;
     }
@@ -171,18 +178,26 @@ public class AudioManager : MonoBehaviour
     //SEを鳴らす　　curveの曲線でSEを鳴らします
     public AudioSource FadePlaySE(string se_name, AnimationCurve _curve)
     {
-        var audsou = gameObject.AddComponent<AudioSource>();
-        var clip = seAudioClips[se_name];
-        audsou.clip = clip;
-        audsou.Play();
-
-        StartCoroutine(
-        Utility.TimeCrou(clip.length, (t) =>
+        try
         {
-            audsou.volume = _curve.Evaluate(t);
-        }));
-        StartCoroutine(AudioSourceIns(audsou));
-        return audsou;
+            var audsou = gameObject.AddComponent<AudioSource>();
+            var clip = seAudioClips[se_name];
+            audsou.clip = clip;
+            audsou.Play();
+
+            StartCoroutine(
+            Utility.TimeCrou(clip.length, (t) =>
+            {
+                audsou.volume = _curve.Evaluate(t);
+            }));
+            StartCoroutine(AudioSourceIns(audsou));
+            return audsou;
+        }
+        catch
+        {
+            Debug.LogError("SEを鳴らす機能がバグってます  " + se_name);
+        }
+        return null;
     }
 
     //SEを鳴らす
@@ -210,6 +225,8 @@ public class AudioManager : MonoBehaviour
 
     public AudioSource FadeOutSE(string se_name, float _time)
     {
+        if (!seAudioSources.ContainsKey(se_name))
+            return null;
         var audioSou = seAudioSources[se_name];
         StartCoroutine(
         Utility.TimeCrou(_time, (t) =>
