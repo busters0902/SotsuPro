@@ -14,9 +14,7 @@ public class TextFrash : MonoBehaviour {
     void Start()
     {
         a_color = 0;
-        textColor_red = 1;
-        textColor_green = 1;
-        textColor_blue = 1;
+       
 
     }
     // Update is called once per frame

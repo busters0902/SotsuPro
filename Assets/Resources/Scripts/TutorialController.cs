@@ -24,7 +24,7 @@ public class TutorialController : MonoBehaviour
 
     void Start ()
     {
-        Initialize();
+        //Initialize();
     }
 
 	void Update ()

@@ -68,6 +68,9 @@ public class ArcheryPracticeSceneController : MonoBehaviour
     [SerializeField]
     GameObject tutorialTarget;
 
+    [SerializeField]
+    GameObject PlayStartTarget;
+
     bool isFullDrawing = false;
     bool isNextTimes = false;
 
@@ -199,6 +202,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         flashText.text.text = "ゲームを開始します。\n\nトリガーを引いてください";
         flashText.flash.useFrash = true;
+        flashText.flash.setColor(0,1,1);
         flashText.flash.setSize(Vector3.one * 3.0f);
         flashText.flash.transform.rotation = Quaternion.AngleAxis(0f, Vector3.right);
         flashText.flash.setPos(new Vector3(0f, 100f, 0.5f));
@@ -210,6 +214,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         flashText.text.text = 1 + "射目";
         flashText.flash.useFrash = false;
+        flashText.flash.setColor(1, 1, 1);
         flashText.flash.setAlpha(1.0f);
         flashText.flash.setSize(Vector3.one * 1.0f);
         flashText.flash.transform.rotation = Quaternion.AngleAxis(30f, Vector3.right);
@@ -243,10 +248,8 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         //説明をする
         //tutorialAnimationController.SetFlow(true);
 
-
-
-        tutorialMovie.playMovie();
-        tutorialMovie.SetLoop(false);
+        //tutorialMovie.playMovie();
+        //tutorialMovie.SetLoop(false);
 
         //動画終了
         yield return new WaitUntil(() =>
@@ -256,22 +259,23 @@ public class ArcheryPracticeSceneController : MonoBehaviour
             return tutorialMovie.IsEndMovie();
         });
 
-        tutorialMovie.stopMovie();
+        //tutorialMovie.stopMovie();
 
         //左を向く (的へ)
-        tutorial.Invert();
-        tutorial.ShowArrowAnime();
+        //tutorial.Invert();
+        //tutorial.ShowArrowAnime();
 
         //正面を見るまで待つ
         yield return new WaitUntil(() =>
         {
-            var tgtDir = Vector3.forward;
+            //var tgtDir = Vector3.forward;
+            var tgtDir = PlayStartTarget.transform.position;
             var cross = Vector3.Cross(eyeCamera.transform.forward, tgtDir);
             if (cross.y >= 0) return true;
             return false;
         });
 
-        tutorial.HideArrowAnime();
+        //tutorial.HideArrowAnime();
 
     }
 
@@ -375,8 +379,8 @@ public class ArcheryPracticeSceneController : MonoBehaviour
             }
 
             shotTimes++;
-            //flashText.text.text = shotTimes + "射目";
-            flashText.text.text = shotTimes.ToString();
+            flashText.text.text = shotTimes + "射目";
+            //flashText.text.text = shotTimes.ToString();
             //timesText.text = "Times : " + (shotTimes) + "/6";
             timesText.text = (shotTimes) + "/6";
             isNextTimes = false;
