@@ -53,30 +53,10 @@ public class UIAnimation : MonoBehaviour {
     }
     // Update is called once per frame
     void Update()
-    {
-       
-              
-
-        //if (uiState == UIState.FRASH)
-        //{
-        //    //テキストの透明度を変更する
-        //    animImage.color = new Color(textColor_red, textColor_green, textColor_blue, a_color);
-        //    if (flag_G)
-        //        a_color -= Time.deltaTime;
-        //    else
-        //        a_color += Time.deltaTime;
-        //    if (a_color < 0)
-        //    {
-        //        a_color = 0;
-        //        flag_G = false;
-        //    }
-        //    else if (a_color > 1)
-        //    {
-        //        a_color = 1;
-        //        flag_G = true;
-        //    }
-        //}
-
+    { 
+        
+          
+      
     }
 
 

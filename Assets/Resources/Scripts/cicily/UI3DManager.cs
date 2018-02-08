@@ -33,9 +33,17 @@ public class UI3DManager : MonoBehaviour {
     public Dictionary<string, UIAnimation> uis = new Dictionary<string, UIAnimation>();
 
    
-    
+    public void playAnim(string _name)
+    {
+        uis[_name].animState = UIAnimation.AnimState.PLAY;
+    }
 
-   
+    public void pauseAnim(string _name)
+    {
+        uis[_name].animState = UIAnimation.AnimState.PAUSE;
+    }
+
+
     public void loadUIAnimation(string _name ,UIAnimation _uiAnim)
     {
         uis.Add(_name, _uiAnim);
@@ -74,20 +82,19 @@ public class UI3DManager : MonoBehaviour {
         }
     }
 
-    //public void addUiFrash(Vector3 pos, Vector3 size, int _size, string _name, bool _isFrash = false)
-    //{
-    //    var ui = createNewAnimUI(_name);
-    //    ui.sprite =
-    //    ui.transform.position = pos;
-    //    ui.transform.localScale = size;
-    //    ui.transform.SetParent(canv.transform, false);
-    //    var uiFrash = ui.gameObject.GetComponent<UIAnimation>();
-    //    uiFrash.useFrash = _isFrash;
-    //    uis.Add(_name, ui.gameObject);
-    //    return ui;
-    //}
-
-
-
+  public void loadUIAnimation(UIAnimationItem[] items)
+    {
+        foreach (var i in items)
+        {
+            loadUIAnimation(i.name,  i.obj);
+        }
+    }
   
+}
+
+[System.Serializable]
+ public class UIAnimationItem 
+{
+    public string name;
+    public UIAnimation obj;
 }
