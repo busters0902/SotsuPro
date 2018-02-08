@@ -56,6 +56,15 @@ public class TutorialAnimationController : MonoBehaviour
 
     }
 
+    IEnumerator waitAnimation()
+    {
+
+        yield return null;
+       // yield return new WaitForAnimation(animator, 0);
+    }
+
+    
+
     //次のステートに切り替える
     public void nextAnim()
     {

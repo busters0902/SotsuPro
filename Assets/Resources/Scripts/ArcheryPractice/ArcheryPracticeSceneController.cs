@@ -83,6 +83,10 @@ public class ArcheryPracticeSceneController : MonoBehaviour
     [SerializeField]
     QuadCollider frontWall;
 
+    [SerializeField]
+    TutorialAnimationController tutorialAnimationController;
+
+
     void Start()
     {
         StartCoroutine(Setup());
@@ -237,6 +241,10 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         tutorial.HideArrowAnime();
 
         //説明をする
+        //tutorialAnimationController.SetFlow(true);
+
+
+
         tutorialMovie.playMovie();
         tutorialMovie.SetLoop(false);
 
