@@ -92,6 +92,9 @@ public class ArcheryPracticeSceneController : MonoBehaviour
     [SerializeField]
     Transform gayaTransfom;
 
+    [SerializeField]
+    UIAnimationItem[] items;
+
     void Start()
     {
         StartCoroutine(Setup());
@@ -113,6 +116,8 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         flashText = CreateGameTelop();
         flashText.Set(flashTextSettings);
         flashText.text.text = "";
+
+        UI3DManager.Instance.loadUIAnimation(items);
 
         title.HideTitle();
 
@@ -235,17 +240,26 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         //カメラの向き
         //右を向く (スクリーン)
         tutorial.ShowArrowAnime();
+        string dir1 = "Dir1";
+        UI3DManager.Instance.showUI(dir1);
+
+        string eye1 = "Eye1";
+        UI3DManager.Instance.showUI(eye1);
 
         //チュートリアル版を見るまで待つ
         yield return new WaitUntil(() =>
         {
             var tgtDir = tutorialTarget.transform.position - eyeCamera.transform.position;
             var cross = Vector3.Cross(eyeCamera.transform.forward, tgtDir);
-            //Debug.Log("cross :" + cross.y);
             if (cross.y <= 0) return true;
             return false;
         });
         tutorial.HideArrowAnime();
+
+        UI3DManager.Instance.hideUI(dir1);
+        UI3DManager.Instance.hideUI(eye1);
+
+
 
         //説明をする
         tutorialAnimationController.SetFlow(true);
@@ -275,6 +289,12 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         //tutorial.Invert();
         //tutorial.ShowArrowAnime();
 
+        string dir2 = "Dir2";
+        UI3DManager.Instance.showUI(dir2);
+
+        string eye2 = "Eye2";
+        UI3DManager.Instance.showUI(eye2);
+
         //正面を見るまで待つ
         yield return new WaitUntil(() =>
         {
@@ -285,6 +305,8 @@ public class ArcheryPracticeSceneController : MonoBehaviour
             return false;
         });
 
+        UI3DManager.Instance.hideUI(dir2);
+        UI3DManager.Instance.hideUI(eye2);
         //tutorial.HideArrowAnime();
 
     }
