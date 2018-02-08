@@ -8,7 +8,9 @@ public class Test : MonoBehaviour {
 	void Start () {
         //FadeControl.Instance.FadeStart();
 	}
-	
+    [SerializeField]
+    Transform target;
+
 	// Update is called once per frame
 	void Update () {
         if (Input.GetMouseButtonDown(0))
@@ -16,6 +18,16 @@ public class Test : MonoBehaviour {
             //AudioManager.Instance.PlaySE("引き絞り");
             //AudioManager.Instance.PlaySeList("Test");
             
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            AudioManager.Instance.PlaySE("gaya", target.localPosition);
+
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            AudioManager.Instance.FadeOutSE("gaya",0.5f);
+
         }
 
 
