@@ -95,6 +95,9 @@ public class ArcheryPracticeSceneController : MonoBehaviour
     [SerializeField]
     UIAnimationItem[] items;
 
+    [SerializeField]
+    ArrayTexture timesTelop;
+
     void Start()
     {
         StartCoroutine(Setup());
@@ -134,6 +137,8 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         ScoreManager.Instance.scores = new System.Collections.Generic.List<Score>();
 
         tutorialMovie.pauseMovie();
+
+        timesTelop.gameObject.SetActive(false);
 
         //フェードアウト
         FadeControl.Instance.FadeIn(3, 1);
@@ -323,6 +328,8 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         int shotTimes = 1;
         //timesText.text = "Times : " + (shotTimes) + "/6";
         timesText.text = (shotTimes) + "/6";
+        timesTelop.ChangeTexture(shotTimes);
+        timesTelop.gameObject.SetActive(true);
 
         //BGM(環境音)
         //※
@@ -420,6 +427,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
             //flashText.text.text = shotTimes.ToString();
             //timesText.text = "Times : " + (shotTimes) + "/6";
             timesText.text = (shotTimes) + "/6";
+            timesTelop.ChangeTexture(shotTimes-1);
             isNextTimes = false;
 
         };

@@ -189,7 +189,8 @@ public class VRArcheryController3 : MonoBehaviour
         //弓を引く
         if (hundleDevice.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger)
             && IsAreaDrawingString(hundleDevice.transform.pos, drawingDist)
-            && isDrawing == false && hasArrow == true)
+            && isDrawing == false 
+            && hasArrow == true)
         {
             var pos = hundleDevice.transform.pos;
             basePos = pos;
@@ -330,9 +331,9 @@ public class VRArcheryController3 : MonoBehaviour
 
         //矢を生成して、弓にセットする(両デバイスでトリガーを押す) 
         //処理フレームをずらすため 引く処理より後
-        if (canReload == true &&
-            hundleDevice.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger) &&
-            hasArrow == false)
+        if (canReload == true 
+            && hundleDevice.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger) 
+            &&hasArrow == false)
         {
 
             var ar = bow.CreateArrow();
