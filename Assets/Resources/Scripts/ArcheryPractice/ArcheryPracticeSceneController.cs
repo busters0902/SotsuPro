@@ -117,6 +117,11 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         flashText.Set(flashTextSettings);
         flashText.text.text = "";
 
+        foreach( var i in items )
+        {
+            i.obj.gameObject.SetActive(false);
+        }
+
         UI3DManager.Instance.loadUIAnimation(items);
 
         title.HideTitle();
