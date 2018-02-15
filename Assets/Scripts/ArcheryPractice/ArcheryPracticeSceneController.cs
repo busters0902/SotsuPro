@@ -98,6 +98,9 @@ public class ArcheryPracticeSceneController : MonoBehaviour
     [SerializeField]
     ArrayTexture timesTelop;
 
+    [SerializeField]
+    GameObject[] startFalseObjects;
+
     void Start()
     {
         StartCoroutine(Setup());
@@ -107,11 +110,16 @@ public class ArcheryPracticeSceneController : MonoBehaviour
     IEnumerator Setup()
     {
 
-        FadeControl.Instance.SetGemeobject(head);
+        //FadeControl.Instance.SetGemeobject(head);
 
         Debug.Log("SceneController.Setup");
 
         yield return null;
+
+        foreach (var i in startFalseObjects)
+        {
+            i.gameObject.SetActive(false);
+        }
 
         TextManager.Instance.SetCanvas(canvas);
         TextManager.Instance.SetPrefab((GameObject)Resources.Load("Model/Prefabs/Text"));
@@ -196,6 +204,8 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         //初期化
         AudioManager.Instance.PlayBGM("bgm_title");
+        AudioManager.Instance.setBGMLoop(true);
+
         title.ShowTitle();
 
         yield return new WaitUntil(() => ViveController.Instance.ViveRightDown || ViveController.Instance.ViveLeftDown || Input.GetKeyDown(KeyCode.M));
@@ -229,7 +239,8 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         yield return new WaitUntil(() => ViveController.Instance.ViveRightDown || ViveController.Instance.ViveLeftDown);
         AudioManager.Instance.PlaySE("se_decision");
 
-        flashText.text.text = 1 + "射目";
+        flashText.text.text = " ";
+        //flashText.text.text = 1 + "射目";
         flashText.flash.useFrash = false;
         flashText.flash.setColor(1, 1, 1);
         flashText.flash.setAlpha(1.0f);
@@ -264,12 +275,11 @@ public class ArcheryPracticeSceneController : MonoBehaviour
             if (cross.y <= 0) return true;
             return false;
         });
+
         tutorial.HideArrowAnime();
 
         UI3DManager.Instance.hideUI(dir1);
         UI3DManager.Instance.hideUI(eye1);
-
-
 
         //説明をする
         tutorialAnimationController.SetFlow(true);
@@ -328,7 +338,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         int shotTimes = 1;
         //timesText.text = "Times : " + (shotTimes) + "/6";
         timesText.text = (shotTimes) + "/6";
-        timesTelop.ChangeTexture(shotTimes);
+        timesTelop.ChangeTexture(shotTimes - 1);
         timesTelop.gameObject.SetActive(true);
 
         //BGM(環境音)
@@ -399,15 +409,12 @@ public class ArcheryPracticeSceneController : MonoBehaviour
                 scoreTortal.AddScore(score);
                 mato.hitStop.OnHitUpdateText(score);
 
-
-
             }
             else if (s.name == "BackWallQuad")
             {
-                //※
+
                 Debug.Log("！！　惜しい");
                 AudioManager.Instance.PlaySE("kansei_6", gayaTransfom.localPosition);
-                //AudioManager.Instance.PlaySE("hakushu_2");
 
                 ScoreManager.Instance.AddScore(shotTimes, 0);
                 AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
@@ -417,13 +424,13 @@ public class ArcheryPracticeSceneController : MonoBehaviour
                 //※
                 Debug.Log("！！　はずれ");
                 AudioManager.Instance.PlaySE("kansei_2", gayaTransfom.localPosition);
-                //AudioManager.Instance.PlaySE("hakushu_2");
+                
                 ScoreManager.Instance.AddScore(shotTimes, 0);
                 AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
             }
 
             shotTimes++;
-            flashText.text.text = shotTimes + "射目";
+            //flashText.text.text = shotTimes + "射目";
             //flashText.text.text = shotTimes.ToString();
             //timesText.text = "Times : " + (shotTimes) + "/6";
             timesText.text = (shotTimes) + "/6";
@@ -438,7 +445,6 @@ public class ArcheryPracticeSceneController : MonoBehaviour
             Debug.Log("SetArrowCall");
 
             //環境音[ガヤガヤ]を止める
-            //※
             AudioManager.Instance.FadeOutSE("gaya", 0.5f);
 
             archeryController.bow.arrow.targets.Add(mato.quadCollider);
@@ -487,6 +493,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         }
 
+        timesTelop.gameObject.SetActive(false);
         flashText.text.text = "";
         //timesText.text = "Times : " + 6 + "/6";
         timesText.text = 6 + "/6";
@@ -529,6 +536,16 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         //ランキングデータの読み込み
         ranking.LoadRankingData();
 
+        //トリガーを
+        flashText.text.text = "トリガーを引いてください";
+        flashText.flash.useFrash = true;
+        flashText.flash.setColor(0, 1, 1);
+        flashText.flash.setSize(Vector3.one * 3.0f);
+        flashText.flash.transform.rotation = Quaternion.AngleAxis(0f, Vector3.right);
+        flashText.flash.setPos(new Vector3(0f, 50f, 0.5f));
+        flashText.text.fontSize = 20;
+
+
         //リザルト表示する
         yield return new WaitUntil(() => ViveController.Instance.ViveRightDown);
         AudioManager.Instance.PlaySE("se_decision");
@@ -539,26 +556,31 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         result.ShowResult(() => AudioManager.Instance.PlaySE("いえーい"));
 
 
-        yield return new WaitForSeconds(5.0f);
+        yield return new WaitForSeconds(3.0f);
+
+        // ※反転 1 / 0.5f
+        var trans = result.panel.transform;
+        
+        //StartCoroutine(Utility.TimeCrou(1.0f, (f) => trans.rotation = Quaternion.EulerAngles(0, 180 * f, 0) ));
+        yield return StartCoroutine( Utility.TimeCrou(1.0f, (f) => trans.rotation = Quaternion.EulerAngles( 0, Mathf.PI * 0.5f * f, 0)));
 
         result.SetActiveResultPanel(false);
         result.HideAll();
 
-        //ランクインしてるとき
-        //if (rankIn)
-        {
+        ranking.panel.gameObject.SetActive(true);
+        ranking.ShowRanking();
 
-            Debug.Log("ランクインしました。");
-            ranking.panel.gameObject.SetActive(true);
-            ranking.ShowRanking();
-            yield return new WaitForSeconds(3.0f);
-            ranking.HideRanking();
-            ranking.panel.gameObject.SetActive(false);
+        var trans2 = ranking.panel.transform;
 
-        }
+        yield return StartCoroutine( Utility.TimeCrou(1.0f, (f) => trans2.rotation = Quaternion.EulerAngles( 0, Mathf.PI * (0.5f - 1.0f + (0.5f * f)) , 0)));
+
+        yield return new WaitForSeconds(3.0f);
+
+        ranking.HideRanking();
+        ranking.panel.gameObject.SetActive(false);
+
 
         yield return new WaitForSeconds(1.0f);
-
 
     }
 
@@ -572,6 +594,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         scoreTortal.ResetScore();
         tutorial.Reset_();
         tutorialMovie.stopMovie();
+        result.panel.transform.rotation = Quaternion.EulerAngles(0, 0, 0);
 
         //点数
         ScoreManager.Instance.scores = new System.Collections.Generic.List<Score>();
