@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class TutorialAnimationController : MonoBehaviour
 {
-
+    
     Animator animation;
 
     // Use this for initialization
     void Start()
     {
         animation = GetComponent<Animator>();
+        //AudioManager.Instance.Load("Audio/SE/Voice");
     }
 
     public enum State
@@ -38,30 +39,141 @@ public class TutorialAnimationController : MonoBehaviour
 
     }
 
+
+
     public void SetFlow(bool is_flow)
     {
 
+        //そのまま値入れてもよくね？
         if (is_flow)
         {
-            //for (int i = 0; i < (int)State.MAX; i++)
-            //{
-            //    SetState((State)i);
-            //}
             animation.SetBool("flow", true);
+            animation.SetTrigger("Loop 0");
         }
         else
         {
             animation.SetBool("flow", false);
         }
-
     }
 
+
+    //流しで再生します
     IEnumerator waitAnimation()
     {
+        animation.SetBool("Loop", false);
+        bool is_next = false;
+
+        AudioManager.Instance.PlaySE("01_", () => {
+            AudioManager.Instance.PlaySE("02", () => {
+            is_next = true;
+        }); });
+
+        while (!is_next)
+        {
+            yield return null;
+        }
+        is_next = false;
+        AudioManager.Instance.PlaySE("03", () => {
+            AudioManager.Instance.PlaySE("04", () => {
+                is_next = true;
+            });
+        });
+        SetState(State.SET);
+        while (!is_next)
+        {
+            yield return null;
+        }
+        is_next = false;
+        AudioManager.Instance.PlaySE("05", () => { is_next = true; });
+        SetState(State.NOKING);
+
+        while (!is_next)
+        {
+            yield return null;
+        }
+        is_next = false;
+        AudioManager.Instance.PlaySE("06", () => { is_next = true; });
+        SetState(State.SETUP);
+        while (!is_next)
+        {
+            yield return null;
+        }
+        is_next = false;
+        AudioManager.Instance.PlaySE("07", () => { is_next = true; });
+        SetState(State.DROWING);
+        while (!is_next)
+        {
+            yield return null;
+
+        }
+        is_next = false;
+        AudioManager.Instance.PlaySE("08", () => { is_next = true; });
+        SetState(State.FULLDROW);
+        while (!is_next)
+        {
+            yield return null;
+        }
+        is_next = false;
+        AudioManager.Instance.PlaySE("09", () => { is_next = true; });
+        SetState(State.RELEASE);
+        while (!is_next)
+        {
+            yield return null;
+        }
+        //最後の挨拶
+        is_next = false;
+        SetState(State.DEFAULT);
+        AudioManager.Instance.PlaySE("10", () => {
+            AudioManager.Instance.PlaySE("11", () => {
+                AudioManager.Instance.PlaySE("12", () => {
+                    is_next = true;
+                });
+            });
+        });
+
+        while (!is_next)
+        {
+            yield return null;
+        }
 
         yield return null;
-       // yield return new WaitForAnimation(animator, 0);
     }
+
+    //Channelを切り替える関数
+    void ChangeChannel(State _state)
+    {
+        animation.SetBool("Loop", true);
+        SetState(_state);
+
+        System.Action callback = () => {
+            SetState(State.DEFAULT);
+        };
+
+        switch (_state) {
+            case State.SET:
+                AudioManager.Instance.PlaySE("03", () => {
+                    AudioManager.Instance.PlaySE("04", callback);
+                });
+                break;
+            case State.NOKING:
+                AudioManager.Instance.PlaySE("05", callback);
+                break;
+            case State.SETUP:
+                AudioManager.Instance.PlaySE("06", callback);
+                break;
+            case State.DROWING:
+                AudioManager.Instance.PlaySE("07", callback);
+                break;
+            case State.FULLDROW:
+                AudioManager.Instance.PlaySE("08", callback);
+                break;
+            case State.RELEASE:
+                AudioManager.Instance.PlaySE("09", callback);
+                break;
+
+        }
+    }
+
 
     
 
@@ -75,15 +187,34 @@ public class TutorialAnimationController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        //Debug.Log(string.Format("{0} = = is ",animation.GetCurrentAnimatorStateInfo(0).normalizedTime));
+        //if (Input.GetMouseButtonDown(0))
+        //{
+        //    SetState(State.SET);
+        //}
+        //if (Input.GetMouseButtonDown(1))
+        //{
+        //    SetFlow(true);
+        //}
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            SetState(State.SET);
+            ChangeChannel(State.SET);
         }
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            SetFlow(true);
+            ChangeChannel(State.NOKING);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            ChangeChannel(State.SETUP);
         }
 
 
+
+        if (Input.GetKeyDown(KeyCode.Alpha0))
+        {
+            StartCoroutine(waitAnimation());
+
+        }
     }
 }
