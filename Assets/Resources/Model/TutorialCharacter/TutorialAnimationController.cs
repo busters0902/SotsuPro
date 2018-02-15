@@ -7,6 +7,8 @@ public class TutorialAnimationController : MonoBehaviour
     
     Animator animation;
 
+    bool stop = false;
+
     // Use this for initialization
     void Start()
     {
@@ -56,13 +58,19 @@ public class TutorialAnimationController : MonoBehaviour
         }
     }
 
+    public void Stop()
+    {
+        stop = true;
+    }
 
     //流しで再生します
-    IEnumerator waitAnimation()
+    public IEnumerator waitAnimation()
     {
         animation.SetBool("Loop", false);
-        bool is_next = false;
 
+        if (stop) yield break;
+
+        bool is_next = false;
         AudioManager.Instance.PlaySE("01_", () => {
             AudioManager.Instance.PlaySE("02", () => {
             is_next = true;
@@ -71,7 +79,11 @@ public class TutorialAnimationController : MonoBehaviour
         while (!is_next)
         {
             yield return null;
+            if (stop) yield break;
         }
+
+        if (stop) yield break;
+
         is_next = false;
         AudioManager.Instance.PlaySE("03", () => {
             AudioManager.Instance.PlaySE("04", () => {
@@ -82,7 +94,11 @@ public class TutorialAnimationController : MonoBehaviour
         while (!is_next)
         {
             yield return null;
+            if (stop) yield break;
         }
+
+        if (stop) yield break;
+
         is_next = false;
         AudioManager.Instance.PlaySE("05", () => { is_next = true; });
         SetState(State.NOKING);
@@ -90,13 +106,18 @@ public class TutorialAnimationController : MonoBehaviour
         while (!is_next)
         {
             yield return null;
+            if (stop) yield break;
         }
+
+        if (stop) yield break;
+
         is_next = false;
         AudioManager.Instance.PlaySE("06", () => { is_next = true; });
         SetState(State.SETUP);
         while (!is_next)
         {
             yield return null;
+            if (stop) yield break;
         }
         is_next = false;
         AudioManager.Instance.PlaySE("07", () => { is_next = true; });
@@ -104,22 +125,33 @@ public class TutorialAnimationController : MonoBehaviour
         while (!is_next)
         {
             yield return null;
-
+            if (stop) yield break;
         }
+
+        if (stop) yield break;
+
         is_next = false;
         AudioManager.Instance.PlaySE("08", () => { is_next = true; });
         SetState(State.FULLDROW);
         while (!is_next)
         {
             yield return null;
+            if (stop) yield break;
         }
+
+        if (stop) yield break;
+
         is_next = false;
         AudioManager.Instance.PlaySE("09", () => { is_next = true; });
         SetState(State.RELEASE);
         while (!is_next)
         {
             yield return null;
+            if (stop) yield break;
         }
+
+        if (stop) yield break;
+
         //最後の挨拶
         is_next = false;
         SetState(State.DEFAULT);
@@ -134,6 +166,7 @@ public class TutorialAnimationController : MonoBehaviour
         while (!is_next)
         {
             yield return null;
+            if (stop) yield break;
         }
 
         yield return null;
@@ -196,25 +229,25 @@ public class TutorialAnimationController : MonoBehaviour
         //{
         //    SetFlow(true);
         //}
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            ChangeChannel(State.SET);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            ChangeChannel(State.NOKING);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            ChangeChannel(State.SETUP);
-        }
+        //if (Input.GetKeyDown(KeyCode.Alpha1))
+        //{
+        //    ChangeChannel(State.SET);
+        //}
+        //if (Input.GetKeyDown(KeyCode.Alpha2))
+        //{
+        //    ChangeChannel(State.NOKING);
+        //}
+        //if (Input.GetKeyDown(KeyCode.Alpha3))
+        //{
+        //    ChangeChannel(State.SETUP);
+        //}
 
 
 
-        if (Input.GetKeyDown(KeyCode.Alpha0))
-        {
-            StartCoroutine(waitAnimation());
+        //if (Input.GetKeyDown(KeyCode.Alpha0))
+        //{
+        //    StartCoroutine(waitAnimation());
 
-        }
+        //}
     }
 }

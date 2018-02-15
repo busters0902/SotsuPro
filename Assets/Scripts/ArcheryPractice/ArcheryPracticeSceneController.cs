@@ -282,26 +282,36 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         UI3DManager.Instance.hideUI(eye1);
 
         //説明をする
-        tutorialAnimationController.SetFlow(true);
+        //tutorialAnimationController.SetFlow(true);
 
-        //tutorialMovie.playMovie();
-        //tutorialMovie.SetLoop(false);
+        ////tutorialMovie.playMovie();
+        ////tutorialMovie.SetLoop(false);
 
         bool end_flag = false;
-        StartCoroutine(Utility.TimerCrou(5, () =>
-        {
-            end_flag = true;
-            tutorialAnimationController.SetFlow(false);
-        }));
+        //StartCoroutine(Utility.TimerCrou(5, () =>
+        //{
+        //    end_flag = true;
+        //    tutorialAnimationController.SetFlow(false);
+        //}));
+
+        StartCoroutine(TutorialStopper(() => tutorialAnimationController.Stop(),
+            () =>
+            {
+                 Debug.Log("cehck");
+                return ViveController.Instance.ViveLeftUp;
+            }
+        ));
+
+        yield return StartCoroutine(tutorialAnimationController.waitAnimation());
 
         //動画終了
-        yield return new WaitUntil(() =>
-        {
-            if (ViveController.Instance.ViveLeftDown) return true;
-            if (Input.GetKeyDown(KeyCode.N)) return true;
-            return end_flag;
-            //return tutorialMovie.IsEndMovie();
-        });
+        //yield return new WaitUntil(() =>
+        //{
+        //    if (ViveController.Instance.ViveLeftDown) return true;
+        //    if (Input.GetKeyDown(KeyCode.N)) return true;
+        //    return end_flag;
+        //    //return tutorialMovie.IsEndMovie();
+        //});
 
         //tutorialMovie.stopMovie();
 
@@ -613,5 +623,25 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         var obj = new FlashTextObject(text_, flash_);
         return obj;
     }
+
+    bool stEnd = false;
+
+    IEnumerator TutorialStopper(System.Action act, System.Func<bool> boolFunc)
+    {
+        while (!stEnd)
+        {
+            yield return null;
+            
+            if (boolFunc())
+            {
+                Debug.Log("cehck true");
+                act();
+                yield break;
+            }
+        }
+
+        yield return null;
+    }
+
 
 }
