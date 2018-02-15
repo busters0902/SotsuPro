@@ -149,7 +149,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         timesTelop.gameObject.SetActive(false);
 
         //フェードアウト
-        FadeControl.Instance.FadeIn(3, 1);
+        //FadeControl.Instance.FadeIn(3, 1);
 
         result.Initialize();
 
@@ -540,15 +540,18 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         flashText.text.text = "トリガーを引いてください";
         flashText.flash.useFrash = true;
         flashText.flash.setColor(0, 1, 1);
-        flashText.flash.setSize(Vector3.one * 3.0f);
+        flashText.flash.setSize(Vector3.one * 2.0f);
         flashText.flash.transform.rotation = Quaternion.AngleAxis(0f, Vector3.right);
-        flashText.flash.setPos(new Vector3(0f, 50f, 0.5f));
+        flashText.flash.setPos(new Vector3(0f, -60f, 0.5f));
         flashText.text.fontSize = 20;
 
 
         //リザルト表示する
         yield return new WaitUntil(() => ViveController.Instance.ViveRightDown);
         AudioManager.Instance.PlaySE("se_decision");
+
+        flashText.text.text = "";
+
 
         gameEndPanel.SetActive(false);
 
@@ -558,11 +561,10 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         yield return new WaitForSeconds(3.0f);
 
-        // ※反転 1 / 0.5f
+        //反転
         var trans = result.panel.transform;
         
-        //StartCoroutine(Utility.TimeCrou(1.0f, (f) => trans.rotation = Quaternion.EulerAngles(0, 180 * f, 0) ));
-        yield return StartCoroutine( Utility.TimeCrou(1.0f, (f) => trans.rotation = Quaternion.EulerAngles( 0, Mathf.PI * 0.5f * f, 0)));
+        yield return StartCoroutine( Utility.TimeCrou(0.5f, (f) => trans.rotation = Quaternion.EulerAngles( 0, Mathf.PI * 0.5f * f, 0)));
 
         result.SetActiveResultPanel(false);
         result.HideAll();
@@ -570,9 +572,11 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         ranking.panel.gameObject.SetActive(true);
         ranking.ShowRanking();
 
+        //rankingマーカー
+
         var trans2 = ranking.panel.transform;
 
-        yield return StartCoroutine( Utility.TimeCrou(1.0f, (f) => trans2.rotation = Quaternion.EulerAngles( 0, Mathf.PI * (0.5f - 1.0f + (0.5f * f)) , 0)));
+        yield return StartCoroutine( Utility.TimeCrou(0.5f, (f) => trans2.rotation = Quaternion.EulerAngles( 0, Mathf.PI * (0.5f - 1.0f + (0.5f * f)) , 0)));
 
         yield return new WaitForSeconds(3.0f);
 
