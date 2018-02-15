@@ -42,11 +42,6 @@ public class AudioManager : MonoBehaviour
     {
         try
         {
-
-            if (se_name == "gaya")
-            {
-                Debug.Log("gaya ");
-            }
             if (playPos != null)
             {
                 ////距離によって
@@ -143,10 +138,52 @@ public class AudioManager : MonoBehaviour
         }
         catch
         {
-            Debug.LogError("SEを鳴らす機能がバグってます  " + se_name); 
+            Debug.LogError("SEを鳴らす機能がバグってます  " + se_name);
         }
         return null;
     }
+    public AudioSource PlaySE(string se_name,Action callback)
+    {
+
+
+        if (!seAudioClips.ContainsKey(se_name))
+        {
+            Debug.LogError(string.Format("{0}のサウンドが読み込まれていません", se_name));
+            return null;
+        }
+        AudioSource audsou = null;
+        if (!seAudioSources.ContainsKey(se_name))
+        {
+            audsou = gameObject.AddComponent<AudioSource>();
+            audsou.clip = seAudioClips[se_name];
+            seAudioSources.Add(se_name, audsou);
+            audsou.Play();
+        }
+        else
+        {
+            if (seAudioSources[se_name] == null)
+            {
+                audsou = gameObject.AddComponent<AudioSource>();
+                seAudioSources[se_name] = audsou;
+                audsou.clip = seAudioClips[se_name];
+                audsou.Play();
+            }
+        }
+        StartCoroutine(AudioSourceIns(audsou, () =>
+        {
+            if (!seAudioSources.ContainsKey(se_name))
+                seAudioSources.Remove(se_name);
+
+            if(callback != null)
+            {
+                callback();
+            }
+        }));
+        return audsou;
+        
+    }
+
+
 
     public void StopSE(string _key)
     {
@@ -159,6 +196,9 @@ public class AudioManager : MonoBehaviour
             }
         }
     }
+
+
+
 
     //PlaySEのAudioClip版
     public AudioSource PlaySE(AudioClip _clip, Action _callback = null)

@@ -19,16 +19,16 @@ public class Test : MonoBehaviour {
             //AudioManager.Instance.PlaySeList("Test");
             
         }
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            AudioManager.Instance.PlaySE("gaya", target.localPosition);
+        //if (Input.GetKeyDown(KeyCode.Alpha1))
+        //{
+        //    AudioManager.Instance.PlaySE("gaya", target.localPosition);
 
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            AudioManager.Instance.FadeOutSE("gaya",0.5f);
+        //}
+        //if (Input.GetKeyDown(KeyCode.Alpha2))
+        //{
+        //    AudioManager.Instance.FadeOutSE("gaya",0.5f);
 
-        }
+        //}
 
 
     }
