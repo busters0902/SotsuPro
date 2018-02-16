@@ -34,7 +34,8 @@ public static class Utility
 
             yield return null;
         }
-        act(limTime);
+        act(1.0f);
+        //act(limTime);
 
     }
 
