@@ -6,6 +6,8 @@ public class RankScoreViewer : MonoBehaviour
 
     public LogoText logoText;
 
+    public Image plateImage;
+
     public Text point;
 
 	void Start ()

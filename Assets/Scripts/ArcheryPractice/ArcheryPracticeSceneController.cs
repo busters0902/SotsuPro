@@ -525,6 +525,8 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         gameEndPanel.SetActive(true);
 
         result.Load();
+        
+        int rank = -1;
 
         //ランキングの更新
         if (DataManager.Instance.IsRankIn(score))
@@ -537,10 +539,12 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         if (rankIn == true)
         {
-
             DataManager.Instance.data.ranking = DataManager.Instance.data.ranking.OrderByDescending((s) => s.sumPoint).ToArray();
             DataManager.Instance.SaveData();
 
+            //配列の長さがランキングの順位になるので
+            //rank = DataManager.Instance.data.ranking.Where((s) => s.sumPoint >= score).ToArray().Length;
+            rank = DataManager.Instance.data.ranking.Count((s) => s.sumPoint >= score);
         }
 
         //ランキングデータの読み込み
@@ -582,7 +586,11 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         ranking.panel.gameObject.SetActive(true);
         ranking.ShowRanking();
 
-        //rankingマーカー
+        //ランクインしたら色を黄色に
+        if(rank > 0 && rank < ranking.panel.rankScores.Length)
+        {
+            ranking.panel.rankScores[rank - 1].plateImage.color = Color.yellow;
+        }
 
         var trans2 = ranking.panel.transform;
 
@@ -592,6 +600,12 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         ranking.HideRanking();
         ranking.panel.gameObject.SetActive(false);
+
+        //変更した色をもどす
+        if (rank > 0 && rank < ranking.panel.rankScores.Length)
+        {
+            ranking.panel.rankScores[rank - 1].plateImage.color = Color.white;
+        }
 
 
         yield return new WaitForSeconds(1.0f);
