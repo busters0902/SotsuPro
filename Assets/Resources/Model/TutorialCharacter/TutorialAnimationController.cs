@@ -71,7 +71,7 @@ public class TutorialAnimationController : MonoBehaviour
         if (stop) yield break;
 
         bool is_next = false;
-        AudioManager.Instance.PlaySE("01_", () => {
+        AudioManager.Instance.PlaySE("01", () => {
             AudioManager.Instance.PlaySE("02", () => {
             is_next = true;
         }); });
@@ -206,9 +206,6 @@ public class TutorialAnimationController : MonoBehaviour
 
         }
     }
-
-
-    
 
     //次のステートに切り替える
     public void nextAnim()
