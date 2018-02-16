@@ -28,7 +28,7 @@ public class DebugAPScene : MonoBehaviour
             var r = DataManager.Instance.data.ranking;
             DataManager.Instance.data.ranking = r.OrderByDescending((s) => s.sumPoint).ToArray();
             //DataManager.Instance.data.ranking = DataManager.Instance.data.ranking.OrderByDescending((s) => s.sumPoint).ToArray();
-            Debug.Log(" ソートします "); 
+            Debug.Log("Debug ソートします "); 
         }
 
     }

@@ -500,7 +500,6 @@ public class ArcheryPracticeSceneController : MonoBehaviour
             yield return null;
 
             archeryController.UseBow();
-
         }
 
         timesTelop.gameObject.SetActive(false);
