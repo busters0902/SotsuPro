@@ -8,6 +8,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scene/ArcheryPractice.unity
     guid: 4c274e714876903488db02d924f15be7
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scene/TitleAndTutorial.unity
     guid: c45183d5ee5a5c747b5f9d95d49f38a1

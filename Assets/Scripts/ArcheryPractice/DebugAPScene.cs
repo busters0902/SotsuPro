@@ -8,12 +8,14 @@ public class DebugAPScene : MonoBehaviour
 
     void Update()
     {
+        //現在のデータをセーブ
         if(Input.GetKeyDown(KeyCode.S))
         {
             Debug.Log("Debug Save SaveData");
             DataManager.Instance.SaveData();
         }
 
+        //データを生成
         if (Input.GetKeyDown(KeyCode.C))
         {
             Debug.Log("Debug Create SaveData");

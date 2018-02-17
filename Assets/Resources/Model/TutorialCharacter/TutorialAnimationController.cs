@@ -172,6 +172,16 @@ public class TutorialAnimationController : MonoBehaviour
         yield return null;
     }
 
+
+    public IEnumerator waitAnimation_Second()
+    {
+        animation.SetBool("Loop", false);
+
+        nextAnim();
+
+        yield return null;
+    }
+
     //Channelを切り替える関数
     void ChangeChannel(State _state)
     {

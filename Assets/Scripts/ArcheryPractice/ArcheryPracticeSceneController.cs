@@ -366,7 +366,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
             Debug.Log("shotTimes : " + shotTimes + "回目");
 
-            //archeryController.canReload = true;
+            archeryController.canReload = true;
 
             //的に当たった場合
             if (s.name == "Mato")
@@ -462,7 +462,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
             archeryController.bow.arrow.useCalcIntersectWall = true;
 
-            //archeryController.canReload = false;
+            archeryController.canReload = false;
 
             archeryController.bow.SetShotCall();
 
