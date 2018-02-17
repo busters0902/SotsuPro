@@ -81,6 +81,9 @@ public class ArcheryPracticeSceneController : MonoBehaviour
     GameObject gameEndPanel;
 
     [SerializeField]
+    GameObject tkfpPanel;
+
+    [SerializeField]
     Mato mato;
 
     [SerializeField]
@@ -139,6 +142,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         isFullDrawing = false;
         gameEndPanel.SetActive(false);
+        tkfpPanel.SetActive(false);
 
         ranking.panel.gameObject.SetActive(false);
 
@@ -258,6 +262,19 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         yield return null;
         Debug.Log("SceneController.PlayTutorial Start");
 
+        yield return new WaitForSeconds(0.5f);
+
+        bool endf = false;
+        AudioManager.Instance.PlaySE("01", () => endf = true );
+
+        yield return new WaitUntil( () => endf  );
+
+        endf = false;
+
+        yield return new WaitForSeconds(0.5f);
+
+        AudioManager.Instance.PlaySE("02", () => endf = true);
+
         //カメラの向き
         //右を向く (スクリーン)
         tutorial.ShowArrowAnime();
@@ -266,6 +283,11 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         string eye1 = "Eye1";
         UI3DManager.Instance.showUI(eye1);
+
+
+        yield return new WaitUntil(() => endf);
+
+        
 
         //チュートリアル版を見るまで待つ
         yield return new WaitUntil(() =>
@@ -281,12 +303,6 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         UI3DManager.Instance.hideUI(dir1);
         UI3DManager.Instance.hideUI(eye1);
 
-        //説明をする
-        //tutorialAnimationController.SetFlow(true);
-
-        ////tutorialMovie.playMovie();
-        ////tutorialMovie.SetLoop(false);
-
         bool end_flag = false;
         //StartCoroutine(Utility.TimerCrou(5, () =>
         //{
@@ -297,27 +313,12 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         StartCoroutine(TutorialStopper(() => tutorialAnimationController.Stop(),
             () =>
             {
-                 Debug.Log("cehck");
+                //Debug.Log("cehck");
                 return ViveController.Instance.ViveLeftUp;
             }
         ));
 
         yield return StartCoroutine(tutorialAnimationController.waitAnimation());
-
-        //動画終了
-        //yield return new WaitUntil(() =>
-        //{
-        //    if (ViveController.Instance.ViveLeftDown) return true;
-        //    if (Input.GetKeyDown(KeyCode.N)) return true;
-        //    return end_flag;
-        //    //return tutorialMovie.IsEndMovie();
-        //});
-
-        //tutorialMovie.stopMovie();
-
-        //左を向く (的へ)
-        //tutorial.Invert();
-        //tutorial.ShowArrowAnime();
 
         string dir2 = "Dir2";
         UI3DManager.Instance.showUI(dir2);
@@ -606,6 +607,13 @@ public class ArcheryPracticeSceneController : MonoBehaviour
             ranking.panel.rankScores[rank - 1].plateImage.color = Color.white;
         }
 
+        yield return new WaitForSeconds(1.0f);
+
+        tkfpPanel.gameObject.SetActive(true);
+
+        yield return new WaitUntil(() => ViveController.Instance.ViveRightDown);
+
+        tkfpPanel.gameObject.SetActive(false);
 
         yield return new WaitForSeconds(1.0f);
 
@@ -619,9 +627,12 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         //UIの初期化
         scoreTortal.ResetScore();
+        timesText.text = "0/6";
+        mato.hitStop.OnHitUpdateText(0);
+
         tutorial.Reset_();
         tutorialMovie.stopMovie();
-        result.panel.transform.rotation = Quaternion.EulerAngles(0, 0, 0);
+        result.panel.transform.rotation = Quaternion.Euler(0, 0, 0);
 
         //点数
         ScoreManager.Instance.scores = new System.Collections.Generic.List<Score>();

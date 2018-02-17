@@ -100,8 +100,6 @@ public class VRArcheryController3 : MonoBehaviour
     float stringMovDistCurrent;
     float stringMovDistPrev;
 
-    
-
     //リロード
     public bool canReload;
 
