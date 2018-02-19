@@ -771,3 +771,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 287877dfe64c86949a734f90ea42ba0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  waitTime:
+  - 3
+  - 3
+  - 3
+  - 3
+  - 4
+  - 3
+  SoundWaitTime:
+  - 0
+  - 1
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
