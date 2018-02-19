@@ -36,6 +36,9 @@ public class bustersSceneController : MonoBehaviour
     [SerializeField]
     int rankCheck;
 
+    [SerializeField]
+    AngleLength angleLength;
+
     void Start()
     {
         preLine.CreateLine();
@@ -210,7 +213,14 @@ public class bustersSceneController : MonoBehaviour
 
         }
 
-
+        if (angleLength.InAngle(bow.gameObject))
+        {
+            Debug.Log("内");
+        }
+        else
+        {
+            Debug.Log("外");
+        }
 
     }
 
