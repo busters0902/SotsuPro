@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// レイザー用の判定範囲
+/// オブジェクトがleftとrightの間を向いているときtrueを返す
+/// </summary>
 public class AngleLength : MonoBehaviour
 {
     [SerializeField]

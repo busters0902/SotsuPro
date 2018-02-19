@@ -32,6 +32,13 @@ public class RankingController : MonoBehaviour
 
     }
 
+    //※
+    //ランキング生成
+    public void CreateRankingPanel()
+    {
+        //panel
+    }
+
     //※途中
     //ランキングの表示
     public void ShowRanking()

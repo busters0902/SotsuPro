@@ -7,6 +7,8 @@ using UnityEngine.UI;
 public class ArcheryPracticeSceneController : MonoBehaviour
 {
 
+    public bool useSelectHand;
+
     public bool useTitle;
 
     public bool useTutorial;
@@ -45,6 +47,9 @@ public class ArcheryPracticeSceneController : MonoBehaviour
     GameObject head;
 
     [SerializeField]
+    SelectHandController select;
+
+    [SerializeField]
     ResultController result;
 
     [SerializeField]
@@ -69,7 +74,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
     GameObject tutorialTarget;
 
     [SerializeField]
-    GameObject PlayStartTarget;
+    GameObject playStartTarget;
 
     bool isFullDrawing = false;
     bool isNextTimes = false;
@@ -103,6 +108,9 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
     [SerializeField]
     GameObject[] startFalseObjects;
+
+    [SerializeField]
+    LiserController liser;
 
     void Start()
     {
@@ -170,6 +178,10 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         while (true)
         {
+            if(useSelectHand)
+            {
+                yield return StartCoroutine(SelectHand());
+            }
 
             if (useTitle)
             {
@@ -178,7 +190,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
             if (useTutorial)
             {
-                yield return StartCoroutine(PlayTutorial());
+                yield return StartCoroutine(ShowTutorial());
             }
 
             yield return StartCoroutine(StartGame());
@@ -200,6 +212,52 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
     }
 
+    //利き腕選択
+    IEnumerator SelectHand()
+    {
+
+        //liser.NotUse(true);
+        //liserの初期化
+        liser.onUsed = true;
+        liser.onUseShow = false;
+        liser.onUseLiser = true;
+        liser.line.enabled = true;
+
+        liser.targetNames = select.targetNames;
+
+        select.Show();
+
+        //select.targetNames
+        bool isRight = false;
+        bool isLeft = false;
+
+        liser.SetAction((n) => 
+        {
+            if (n == 0)isRight = true;
+            else isLeft = true;
+        }　);
+
+        //選んだオブジェクトで判定
+        yield return new WaitUntil(
+            () =>
+            { 
+                return ( isRight || isLeft );
+            });
+
+        if (isLeft) select.SetLeftMode();
+        if (isRight) select.SetRightMode();
+
+        select.Hide();
+
+        liser.onUsed = true;
+        liser.onUseShow = true;
+        liser.onUseLiser = true;
+        liser.line.enabled = false;
+
+        yield return null;
+    }
+
+    //タイトル画面
     IEnumerator ShowTitle()
     {
         Debug.Log("ShowTitle Start");
@@ -222,7 +280,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
     }
 
-
+    //ゲーム開始
     IEnumerator StartGame()
     {
         Debug.Log("Start StartGame");
@@ -257,7 +315,8 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         Debug.Log("End StartGame");
     }
 
-    IEnumerator PlayTutorial()
+    //チュートリルを見せる
+    IEnumerator ShowTutorial()
     {
         yield return null;
         Debug.Log("SceneController.PlayTutorial Start");
@@ -300,7 +359,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         UI3DManager.Instance.hideUI(dir1);
         UI3DManager.Instance.hideUI(eye1);
 
-        bool end_flag = false;
+        //bool end_flag = false;
         
 
         //チュートリアル中断
@@ -324,7 +383,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         //正面を見るまで待つ
         yield return new WaitUntil(() =>
         {
-            var tgtDir = PlayStartTarget.transform.position;
+            var tgtDir = playStartTarget.transform.position;
             var cross = Vector3.Cross(eyeCamera.transform.forward, tgtDir);
             if (cross.y >= 0) return true;
             return false;
@@ -359,7 +418,14 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
             Debug.Log("shotTimes : " + shotTimes + "回目");
 
-            archeryController.canReload = true;
+            //※　アニメ
+            //archeryController.canReload = true;
+            StartCoroutine(Utility.TimerCrou(2.0f, () =>
+            {
+                archeryController.canReload = true;
+                timesText.text = (shotTimes) + "/6";
+                timesTelop.ChangeTexture(shotTimes - 1);
+            }));
 
             //的に当たった場合
             if (s.name == "Mato")
@@ -379,7 +445,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
                     () =>
                     {
                         garrary.highJump();
-                        
+
                         if (score <= 3)
                         {
                             AudioManager.Instance.PlaySE("kansei_3", gayaTransfom.localPosition);
@@ -424,22 +490,18 @@ public class ArcheryPracticeSceneController : MonoBehaviour
             }
             else
             {
-                //※
+
                 Debug.Log("！！　はずれ");
                 AudioManager.Instance.PlaySE("kansei_2", gayaTransfom.localPosition);
-                
+
                 ScoreManager.Instance.AddScore(shotTimes, 0);
                 AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
             }
 
             shotTimes++;
-            //flashText.text.text = shotTimes + "射目";
-            //flashText.text.text = shotTimes.ToString();
-            //timesText.text = "Times : " + (shotTimes) + "/6";
-            timesText.text = (shotTimes) + "/6";
-            timesTelop.ChangeTexture(shotTimes-1);
-            isNextTimes = false;
 
+            isNextTimes = false;
+               
         };
 
         //矢をセットしたときのコールを設定
@@ -497,8 +559,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         timesTelop.gameObject.SetActive(false);
         flashText.text.text = "";
-        //timesText.text = "Times : " + 6 + "/6";
-        timesText.text = 6 + "/6";
+        timesText.text = "6/6";
 
         yield return new WaitForSeconds(2.0f);
 
@@ -508,6 +569,8 @@ public class ArcheryPracticeSceneController : MonoBehaviour
     IEnumerator ShowResult()
     {
         Debug.Log("リザルト");
+
+        AudioManager.Instance.PlayBGM("bgm_result");
 
         bool rankIn = false;
 
@@ -607,6 +670,8 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         tkfpPanel.gameObject.SetActive(false);
 
+        AudioManager.Instance.StopBGM("bgm_result");
+
         yield return new WaitForSeconds(1.0f);
 
     }
@@ -659,5 +724,17 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         yield return null;
     }
 
+    //LiserControllerの初期化
+    //※
+    void InitializeLiser()
+    {
+        //liser.SetAction();
+        //liser.targetNames();
+
+        liser.onUsed = false;
+        liser.onUseShow = true;
+        liser.onUseLiser = true;
+        liser.line.enabled = false;
+    }
 
 }

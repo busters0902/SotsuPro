@@ -11,23 +11,20 @@ public class LiserController : MonoBehaviour
     //[SerializeField]
     //GameObject liser;
 
-    [SerializeField]
-    LineRenderer line;
+    public LineRenderer line;
 
     [SerializeField]
     GameObject obj;
 
-    [SerializeField]
-    AngleLength angleLength;
+    public AngleLength angleLength;
 
-    [SerializeField]
-    string[] targetNames;
+    public string[] targetNames;
 
     System.Action<int> act;
 
     public bool onUsed;
 
-    public bool onUseShower;
+    public bool onUseShow;
 
     public bool onUseLiser;
 
@@ -42,15 +39,35 @@ public class LiserController : MonoBehaviour
     public void Update_()
     {
 
-        ShowLiser();
+        if(onUseShow) ShowLiser();
 
-        Liser();   
+        if (onUseLiser) Liser();   
 
     }
 
-    public void SetAction(System.Action<int> call_)
+    public void Setup(string[] names, System.Action<int> call)
     {
-        act = call_;
+        targetNames = names;
+        act = call;
+    }
+
+    public void Setup( AngleLength length, string[] names, System.Action<int> call)
+    {
+        angleLength = length;
+        targetNames = names;
+        act = call;
+    }
+
+    public void SetAction(System.Action<int> call)
+    {
+        act = call;
+    }
+    
+    //消すときにラインは描画するかどうか
+    public void NotUse(bool f)
+    {
+        onUsed = false;
+        line.enabled = f;
     }
 
     public void ShowLiser()
@@ -69,7 +86,7 @@ public class LiserController : MonoBehaviour
     {
         if (ViveController.Instance.ViveRight)
         {
-            var trans = ViveController.Instance.RightController.transform;
+            var trans = obj.transform;
             
             Ray ray = new Ray(trans.position, trans.forward);
             RaycastHit hit = new RaycastHit();
