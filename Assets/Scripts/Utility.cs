@@ -14,9 +14,10 @@ public static class Utility
         Object.Destroy(obj);
     }
 
+    //時間経過処理(フェードなど)
     public static IEnumerator TimeCrou(float limTime, System.Action<float> act)
     {
-        Debug.Log("Start TimeCrou");
+        //Debug.Log("Start TimeCrou");
         var timer = new Timer();
         timer.Initialize();
 
@@ -41,7 +42,7 @@ public static class Utility
 
     public static IEnumerator TimeCrou(float limTime, System.Action<float> act, System.Action callback )
     {
-        Debug.Log("Start TimeCrou");
+        //Debug.Log("Start TimeCrou");
         var timer = new Timer();
         timer.Initialize();
 
@@ -59,7 +60,7 @@ public static class Utility
 
             yield return null;
         }
-        act(1);
+        act(1.0f);
         if(callback != null)
         {
             callback();
@@ -67,6 +68,7 @@ public static class Utility
 
     }
 
+    //タイマー 時間経過後、アクションをおこす
     public static IEnumerator TimerCrou(float limTime, System.Action act)
     {
         Debug.Log("Start TimerCrou");

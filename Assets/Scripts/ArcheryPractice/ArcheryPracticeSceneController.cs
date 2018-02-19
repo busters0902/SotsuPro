@@ -301,12 +301,9 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         UI3DManager.Instance.hideUI(eye1);
 
         bool end_flag = false;
-        //StartCoroutine(Utility.TimerCrou(5, () =>
-        //{
-        //    end_flag = true;
-        //    tutorialAnimationController.SetFlow(false);
-        //}));
+        
 
+        //チュートリアル中断
         StartCoroutine(TutorialStopper(() => tutorialAnimationController.animationStop(),
             () =>
             {
@@ -315,6 +312,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
             }
         ));
 
+        //チュートリアルモーションムービー
         yield return StartCoroutine(tutorialAnimationController.waitAnimation(false));
 
         string dir2 = "Dir2";
@@ -326,7 +324,6 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         //正面を見るまで待つ
         yield return new WaitUntil(() =>
         {
-            //var tgtDir = Vector3.forward;
             var tgtDir = PlayStartTarget.transform.position;
             var cross = Vector3.Cross(eyeCamera.transform.forward, tgtDir);
             if (cross.y >= 0) return true;
@@ -335,7 +332,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         UI3DManager.Instance.hideUI(dir2);
         UI3DManager.Instance.hideUI(eye2);
-        //tutorial.HideArrowAnime();
+        
 
     }
 
@@ -344,13 +341,11 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         Debug.Log("SceneController.PlayGame Start");
 
         int shotTimes = 1;
-        //timesText.text = "Times : " + (shotTimes) + "/6";
         timesText.text = (shotTimes) + "/6";
         timesTelop.ChangeTexture(shotTimes - 1);
         timesTelop.gameObject.SetActive(true);
 
         //BGM(環境音)
-        //※
         AudioManager.Instance.PlaySE("gaya", gayaTransfom.localPosition).loop = true;
         Debug.Log("PlayBGM がやがや");
 
@@ -384,7 +379,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
                     () =>
                     {
                         garrary.highJump();
-                        //AudioManager.Instance.PlaySE("kansei_1");
+                        
                         if (score <= 3)
                         {
                             AudioManager.Instance.PlaySE("kansei_3", gayaTransfom.localPosition);

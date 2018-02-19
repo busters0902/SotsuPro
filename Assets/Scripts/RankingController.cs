@@ -8,7 +8,7 @@ public class RankingController : MonoBehaviour
 
     public RankingPanel panel;
 
-    const int RANKING_NUM = 10;
+    //const int RANKING_NUM = 100;
     List<ScoreRankingData> ranking;
 
     //データマネージャーから受け取る

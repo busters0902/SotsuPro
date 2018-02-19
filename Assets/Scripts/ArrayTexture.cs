@@ -14,7 +14,7 @@ public class ArrayTexture : MonoBehaviour
     {
         if(id > sprites.Length)
         {
-            Debug.LogError("sprite is out of range");
+            //Debug.LogError("sprite is out of range");
         }
         else if(id < 0)
         {

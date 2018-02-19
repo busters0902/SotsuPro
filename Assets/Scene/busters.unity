@@ -135,15 +135,15 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4780006660612828, guid: 74901345ebf8906479adcd7bdb810139, type: 2}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4780006660612828, guid: 74901345ebf8906479adcd7bdb810139, type: 2}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4780006660612828, guid: 74901345ebf8906479adcd7bdb810139, type: 2}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4780006660612828, guid: 74901345ebf8906479adcd7bdb810139, type: 2}
       propertyPath: m_LocalRotation.w
@@ -152,6 +152,10 @@ Prefab:
     - target: {fileID: 4780006660612828, guid: 74901345ebf8906479adcd7bdb810139, type: 2}
       propertyPath: m_RootOrder
       value: 24
+      objectReference: {fileID: 0}
+    - target: {fileID: 4780006660612828, guid: 74901345ebf8906479adcd7bdb810139, type: 2}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 74901345ebf8906479adcd7bdb810139, type: 2}
@@ -426,7 +430,10 @@ MonoBehaviour:
   line: {fileID: 362667680}
   obj: {fileID: 362667678}
   angleLength: {fileID: 2027180094}
+  targetNames: []
   onUsed: 1
+  onUseShower: 0
+  onUseLiser: 0
 --- !u!114 &135876520
 MonoBehaviour:
   m_ObjectHideFlags: 0

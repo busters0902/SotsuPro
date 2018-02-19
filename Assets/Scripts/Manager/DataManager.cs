@@ -112,14 +112,16 @@ public class DataManager : MonoBehaviour
 public class GameSaveData
 {
 
+    const int DEFAULT = 100;
+
     public ScoreRankingData[] ranking;
 
     public GameSettings settings;
 
-    public static GameSaveData Create()
+    public static GameSaveData Create(int n = DEFAULT)
     {
         var obj = new GameSaveData();
-        obj.ranking = new ScoreRankingData[10];
+        obj.ranking = new ScoreRankingData[n];
         for (int i = 0; i < obj.ranking.Length; i++)
         {
             obj.ranking[i] = ScoreRankingData.Create();
