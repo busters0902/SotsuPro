@@ -71,7 +71,7 @@ public class TutorialAnimationController : MonoBehaviour
     //流しで再生します
     //一個の動きをループして
     //ナレーションが終わったら次のモーションに移動します
-    public IEnumerator waitAnimation(bool is_loop = true)
+    public IEnumerator waitAnimation(bool is_loop)
     {
         animation.SetBool("loop", is_loop);
         if (stop) yield break;
@@ -418,7 +418,7 @@ public class TutorialAnimationController : MonoBehaviour
     }
 
     //animationを停止する関数
-    void animationStop()
+    public void animationStop()
     {
 
         //AudioManager.Instance.StopSE("01");

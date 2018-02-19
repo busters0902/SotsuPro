@@ -262,7 +262,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         yield return null;
         Debug.Log("SceneController.PlayTutorial Start");
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1.5f);
 
         bool endf = false;
         AudioManager.Instance.PlaySE("01", () => endf = true );
@@ -275,6 +275,8 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         AudioManager.Instance.PlaySE("02", () => endf = true);
 
+        yield return new WaitUntil(() => endf);
+
         //カメラの向き
         //右を向く (スクリーン)
         tutorial.ShowArrowAnime();
@@ -283,11 +285,6 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         string eye1 = "Eye1";
         UI3DManager.Instance.showUI(eye1);
-
-
-        yield return new WaitUntil(() => endf);
-
-        
 
         //チュートリアル版を見るまで待つ
         yield return new WaitUntil(() =>
@@ -310,7 +307,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         //    tutorialAnimationController.SetFlow(false);
         //}));
 
-        StartCoroutine(TutorialStopper(() => tutorialAnimationController.Stop(),
+        StartCoroutine(TutorialStopper(() => tutorialAnimationController.animationStop(),
             () =>
             {
                 //Debug.Log("cehck");
@@ -318,7 +315,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
             }
         ));
 
-        yield return StartCoroutine(tutorialAnimationController.waitAnimation());
+        yield return StartCoroutine(tutorialAnimationController.waitAnimation(false));
 
         string dir2 = "Dir2";
         UI3DManager.Instance.showUI(dir2);
