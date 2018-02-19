@@ -8,12 +8,13 @@ public class TutorialAnimationController : MonoBehaviour
     Animator animation;
 
     bool stop = false;
-
+    
     // Use this for initialization
     void Start()
     {
         animation = GetComponent<Animator>();
         //AudioManager.Instance.Load("Audio/SE/Voice");
+        StartCoroutine(allPlayAnimation());
     }
 
     public enum State
@@ -30,7 +31,7 @@ public class TutorialAnimationController : MonoBehaviour
         MAX
     }
 
-    State state = State.SET;
+    State state = State.DEFAULT;
 
     //アニメーションのステートを切り替える
     public void SetState(State _state)
@@ -177,10 +178,96 @@ public class TutorialAnimationController : MonoBehaviour
     {
         animation.SetBool("Loop", false);
 
-        nextAnim();
+        //nextAnim();
+
+        
+
+
 
         yield return null;
     }
+
+    [SerializeField]
+    float[] waitTime;
+
+
+    public IEnumerator allPlayAnimation()
+    {
+
+        bool isNext = false;
+
+        //SetState(State.DEFAULT);
+
+        //AudioManager.Instance.PlaySE("01", () => isNext = true);
+        //StartCoroutine(Utility.TimerCrou(waitTime[0],()=>SetState(State.SET)));
+        //yield return new WaitUntil(() => isNext);
+
+        //isNext = false;
+
+        //AudioManager.Instance.PlaySE("02", () => isNext = true);
+        //yield return new WaitUntil(() => isNext);
+
+        //isNext = false;
+
+        //nextAnim();
+
+        AudioManager.Instance.PlaySE("03", () => isNext = true);
+        StartCoroutine(Utility.TimerCrou(3.0f, () => SetState(State.SET)));
+        yield return new WaitForSeconds(3.0f);
+        yield return new WaitUntil(() => isNext);
+
+        isNext = false;
+
+        AudioManager.Instance.PlaySE("04", () => isNext = true);
+        yield return new WaitUntil(() => isNext);
+
+        isNext = false;
+
+        AudioManager.Instance.PlaySE("05", () => isNext = true);
+        yield return new WaitUntil(() => isNext);
+
+        isNext = false;
+
+        AudioManager.Instance.PlaySE("06", () => isNext = true);
+        yield return new WaitUntil(() => isNext);
+
+        isNext = false;
+
+        AudioManager.Instance.PlaySE("07", () => isNext = true);
+        yield return new WaitUntil(() => isNext);
+
+        isNext = false;
+
+        AudioManager.Instance.PlaySE("08", () => isNext = true);
+        yield return new WaitUntil(() => isNext);
+
+        isNext = false;
+
+        AudioManager.Instance.PlaySE("09", () => isNext = true);
+        yield return new WaitUntil(() => isNext);
+
+        isNext = false;
+
+        AudioManager.Instance.PlaySE("10", () => isNext = true);
+        yield return new WaitUntil(() => isNext);
+
+        isNext = false;
+
+
+        AudioManager.Instance.PlaySE("11", () => isNext = true);
+        yield return new WaitUntil(() => isNext);
+
+        isNext = false;
+
+        AudioManager.Instance.PlaySE("12", () => isNext = true);
+        yield return new WaitUntil(() => isNext);
+
+        isNext = false;
+
+
+        yield return null;
+    }
+
 
     //Channelを切り替える関数
     void ChangeChannel(State _state)
