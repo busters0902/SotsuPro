@@ -346,6 +346,7 @@ GameObject:
   - component: {fileID: 135876516}
   - component: {fileID: 135876517}
   - component: {fileID: 135876520}
+  - component: {fileID: 135876518}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -411,6 +412,21 @@ MonoBehaviour:
   target: {fileID: 1536937550}
   prevNum: 100
   postions: []
+--- !u!114 &135876518
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 135876513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f4d61d0d9f519c4d80daf1e8937e49e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  line: {fileID: 362667680}
+  obj: {fileID: 362667678}
+  angleLength: {fileID: 2027180094}
+  onUsed: 1
 --- !u!114 &135876520
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -652,7 +668,7 @@ LineRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 0, b: 0, a: 1}
+      key0: {r: 0, g: 0, b: 0, a: 1}
       key1: {r: 1, g: 0, b: 0, a: 1}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
@@ -676,7 +692,7 @@ LineRenderer:
       atime5: 0
       atime6: 0
       atime7: 0
-      m_Mode: 0
+      m_Mode: 1
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
     numCornerVertices: 0

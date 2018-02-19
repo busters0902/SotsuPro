@@ -213,14 +213,7 @@ public class bustersSceneController : MonoBehaviour
 
         }
 
-        if (angleLength.InAngle(bow.gameObject))
-        {
-            Debug.Log("内");
-        }
-        else
-        {
-            Debug.Log("外");
-        }
+        
 
     }
 
