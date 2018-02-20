@@ -28,6 +28,7 @@ public class LiserController : MonoBehaviour
 
     public bool onUseLiser;
 
+    TutorialAnimationController tutorialAnimationController; 
     void Update()
     {
         if(onUsed)
