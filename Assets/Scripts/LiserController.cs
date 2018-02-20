@@ -84,19 +84,23 @@ public class LiserController : MonoBehaviour
 
     public void Liser()
     {
-        if (ViveController.Instance.ViveRight)
+        if (ViveController.Instance.ViveRightDown)
         {
+            Debug.Log("右トリガー");
+
             var trans = obj.transform;
             
             Ray ray = new Ray(trans.position, trans.forward);
             RaycastHit hit = new RaycastHit();
 
-            if (Physics.Raycast(ray, out hit, line.endWidth - line.startWidth))
+            //if (Physics.Raycast(ray, out hit, line.endWidth - line.startWidth))
+            if (Physics.Raycast(ray, out hit, 5))
             {
                 
                 var name = hit.collider.gameObject.name;
+                Debug.Log(name);
 
-                for(int i = 0; i < targetNames.Length; i++)
+                for (int i = 0; i < targetNames.Length; i++)
                 {
                     if(name == targetNames[i])
                     {
