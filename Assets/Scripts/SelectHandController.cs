@@ -23,6 +23,8 @@ public class SelectHandController : MonoBehaviour
     [SerializeField]
     Transform dot;
 
+    public bool isLeft;
+
     /// <summary>
     /// 右、左
     /// </summary>
@@ -45,10 +47,11 @@ public class SelectHandController : MonoBehaviour
 
     public void SetRightMode()
     {
-        left.transform.localScale = Vector3.one;
+        left.transform.localScale  = Vector3.one;
         right.transform.localScale = Vector3.one;
         scoop.transform.localScale = Vector3.one;
-        dot.transform.localScale = Vector3.one;
+        dot.transform.localScale   = Vector3.one;
+        isLeft = false;
     }
 
     public void SetLeftMode()
@@ -56,7 +59,8 @@ public class SelectHandController : MonoBehaviour
         left.transform.localScale  = new Vector3(-1, 1, 1);
         right.transform.localScale = new Vector3(-1, 1, 1);
         scoop.transform.localScale = new Vector3(-1, 1, 1);
-        dot.transform.localScale = new Vector3(-1, 1, 1);
+        dot.transform.localScale   = new Vector3(-1, 1, 1);
+        isLeft = true;
     }
 
     

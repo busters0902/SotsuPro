@@ -320,6 +320,8 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         flashText.text.fontSize = 90;
         mato.hitStop.OnHitUpdateText(0);
 
+        AnimateTelop();
+
         Debug.Log("End StartGame");
     }
 
@@ -379,6 +381,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
             }
         ));
 
+        //select.isLeft
         //チュートリアルモーションムービー
         yield return StartCoroutine(tutorialAnimationController.waitAnimation(false));
 
@@ -433,6 +436,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
                 archeryController.canReload = true;
                 timesText.text = (shotTimes) + "/6";
                 timesTelop.ChangeTexture(shotTimes - 1);
+                AnimateTelop();
             }));
 
             //的に当たった場合
@@ -747,7 +751,14 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
     void AnimateTelop()
     {
-        iTween.MoveTo(timesTelop.gameObject, telopStart.position, 1 );
+        timesTelop.gameObject.transform.position = telopStart.position;
+
+        //iTween.MoveTo( timesTelop.gameObject, telopEnd.position, 1.0f );
+        iTween.MoveTo(timesTelop.gameObject, iTween.Hash(
+            "x", telopEnd.position.x, 
+            "time", 1, 
+            "easetype", "easeOutBack") );
+
     }
 
 }
