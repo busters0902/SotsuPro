@@ -15,21 +15,16 @@ public class Test : MonoBehaviour {
 	void Update () {
         if (Input.GetMouseButtonDown(0))
         {
-            //AudioManager.Instance.PlaySE("引き絞り");
-            //AudioManager.Instance.PlaySeList("Test");
-            
+            RaycastHit hit;
+
+            if (Physics.Raycast(transform.position, -Vector3.up, out hit))
+            {
+                Debug.Log("Found an object - distance: ");
+
+                Debug.Log("Found an object - distance: " + hit.collider.gameObject.name);
+            }
         }
-        //if (Input.GetKeyDown(KeyCode.Alpha1))
-        //{
-        //    AudioManager.Instance.PlaySE("gaya", target.localPosition);
-
-        //}
-        //if (Input.GetKeyDown(KeyCode.Alpha2))
-        //{
-        //    AudioManager.Instance.FadeOutSE("gaya",0.5f);
-
-        //}
-
+        
 
     }
 }
