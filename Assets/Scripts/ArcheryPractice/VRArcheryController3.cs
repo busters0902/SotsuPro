@@ -375,6 +375,8 @@ public class VRArcheryController3 : MonoBehaviour
             Destroy(obj.gameObject);
         }
         arrows.Clear();
+
+        bow.arrow = null;
     }
 
     //弓の弦をつかめる距離

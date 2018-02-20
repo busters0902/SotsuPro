@@ -17,6 +17,8 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
     public bool IsGameEnd;
 
+    public bool isSkipGreet;
+
     [SerializeField]
     VRArcheryController3 archeryController;
 
@@ -187,7 +189,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         while (true)
         {
             if(useSelectHand)
-            {
+            { 
                 yield return StartCoroutine(SelectHand());
             }
 
@@ -198,6 +200,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
             if (useTutorial)
             {
+                if ( isSkipGreet == false ) yield return StartCoroutine(Greet());
                 yield return StartCoroutine(ShowTutorial());
             }
 
@@ -224,7 +227,6 @@ public class ArcheryPracticeSceneController : MonoBehaviour
     IEnumerator SelectHand()
     {
 
-        //liser.NotUse(true);
         //liserの初期化
         liser.onUsed = true;
         liser.onUseShow = false;
@@ -235,7 +237,6 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         select.Show();
 
-        //select.targetNames
         bool isRight = false;
         bool isLeft = false;
 
@@ -254,6 +255,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         if (isLeft) select.SetLeftMode();
         if (isRight) select.SetRightMode();
+        AudioManager.Instance.PlaySE("se_decision");
 
         select.Hide();
 
@@ -262,7 +264,8 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         liser.onUseLiser = true;
         liser.line.enabled = false;
 
-        yield return null;
+        yield return new WaitForSeconds(1.0f);
+
     }
 
     //タイトル画面
@@ -325,18 +328,27 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         Debug.Log("End StartGame");
     }
 
-    //チュートリルを見せる
-    IEnumerator ShowTutorial()
+    IEnumerator Greet()
     {
-        yield return null;
-        Debug.Log("SceneController.PlayTutorial Start");
-
         yield return new WaitForSeconds(1.5f);
 
-        bool endf = false;
-        AudioManager.Instance.PlaySE("01", () => endf = true );
 
-        yield return new WaitUntil( () => endf  );
+        ////チュートリアル中断
+        //StartCoroutine(Stopper(() => StopCoroutine(  ),
+        //    () =>
+        //    {
+        //        //Debug.Log("cehck");
+        //        if (ViveController.Instance.ViveLeftUp) Debug.Log("crou end");
+
+        //        return ViveController.Instance.ViveLeftUp;
+        //    }
+        //));
+
+
+        bool endf = false;
+        AudioManager.Instance.PlaySE("01", () => endf = true);
+
+        yield return new WaitUntil(() => endf);
 
         endf = false;
 
@@ -345,6 +357,90 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         AudioManager.Instance.PlaySE("02", () => endf = true);
 
         yield return new WaitUntil(() => endf);
+
+    }
+
+    //練習
+    IEnumerator Practice()
+    {
+
+        //コールバック仮
+        archeryController.bow.arrowSetHitCall = (s, p) =>
+        {
+            Debug.Log("ArrowHitCall " + s + ": " + p);
+            //的に当たった場合
+            if (s.name == "Mato")
+            {
+                Debug.Log("！！　やったぜ");
+                var mato = s.GetComponent<Mato>();
+
+                //スコア
+                int score = mato.calc.getScore(p);
+                Debug.Log("スコア :" + score);
+                mato.hitStop.EffectPlay(p, score);
+                //ScoreManager.Instance.AddScore(shotTimes, score);
+
+                //SE
+                AudioManager.Instance.PlaySE("的に当たる");
+                
+                mato.hitStop.OnHitUpdateText(score);
+
+            }
+            else if (s.name == "BackWallQuad")
+            {
+                AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
+                mato.hitStop.OnHitUpdateText(0);
+            }
+            else
+            {
+                Debug.Log("！！　はずれ");
+                AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
+                mato.hitStop.OnHitUpdateText(0);
+            }
+
+        };
+
+        archeryController.setArrowCall = () =>
+        {
+            Debug.Log("setArrowCall");
+            
+            archeryController.bow.arrow.targets.Add(mato.quadCollider);
+            archeryController.bow.arrow.frontWall = frontWall;
+
+            archeryController.bow.arrow.useCalcIntersectWall = true;
+
+            archeryController.bow.SetShotCall();
+        };
+
+        archeryController.fullDrawingCall = () =>
+        {
+            Debug.Log("fullDrawingCall");
+        };
+
+        archeryController.ShotedCall = () =>
+        {
+            Debug.Log("ShotedCall");
+        };
+
+        while (true)
+        {
+            yield return null;
+
+            archeryController.UseBow();
+        }
+
+
+
+    }
+
+    //チュートリルを見せる
+    IEnumerator ShowTutorial()
+    {
+
+        yield return null;
+        Debug.Log("SceneController.PlayTutorial Start");
+
+        Coroutine subCrou = StartCoroutine( Practice() );
 
         //カメラの向き
         //右を向く (スクリーン)
@@ -369,17 +465,16 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         UI3DManager.Instance.hideUI(dir1);
         UI3DManager.Instance.hideUI(eye1);
 
-        //bool end_flag = false;
-        
+        //bool end_flag = false;      
 
         //チュートリアル中断
-        StartCoroutine(TutorialStopper(() => tutorialAnimationController.animationStop(),
-            () =>
-            {
-                //Debug.Log("cehck");
-                return ViveController.Instance.ViveLeftUp;
-            }
-        ));
+        //StartCoroutine(Stopper(() => tutorialAnimationController.animationStop(),
+        //    () =>
+        //    {
+        //        //Debug.Log("cehck");
+        //        return ViveController.Instance.ViveLeftUp;
+        //    }
+        //));
 
         //select.isLeft
         //チュートリアルモーションムービー
@@ -402,7 +497,10 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         UI3DManager.Instance.hideUI(dir2);
         UI3DManager.Instance.hideUI(eye2);
-        
+
+        StopCoroutine(subCrou);
+        //※弓や矢のリセット
+        archeryController.ClearArrows();
 
     }
 
@@ -513,7 +611,8 @@ public class ArcheryPracticeSceneController : MonoBehaviour
                 AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
             }
 
-            shotTimes++;
+            if(shotTimes < 6)
+                shotTimes++;
 
             isNextTimes = false;
                
@@ -681,7 +780,8 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         tkfpPanel.gameObject.SetActive(true);
 
-        yield return new WaitUntil(() => ViveController.Instance.ViveRightDown);
+        //yield return new WaitUntil(() => ViveController.Instance.ViveRightDown);
+        yield return new WaitForSeconds(1.0f);
 
         tkfpPanel.gameObject.SetActive(false);
 
@@ -722,9 +822,11 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
     bool stEnd = false;
 
-    IEnumerator TutorialStopper(System.Action act, System.Func<bool> boolFunc)
+    IEnumerator Stopper(System.Action act, System.Func<bool> boolFunc)
     {
-        while (!stEnd)
+        stEnd = false;
+
+        while (stEnd == false )
         {
             yield return null;
             

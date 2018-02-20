@@ -41,7 +41,7 @@ public class LiserController : MonoBehaviour
 
     private void Start()
     {
-        act = tutorialAnimationController.ChangeChannel;
+        
     }
 
     
