@@ -19,13 +19,12 @@ public class TutorialAnimationController : MonoBehaviour
 
     public enum State
     {
-        SET,
-        NOKING,
-        SETUP,
-        FULLDROW,
-        DROWING,
-        SULLDROW,
-        RELEASE,
+        SET,            //0
+        NOKING,         //1
+        SETUP,          //2
+        FULLDROW,       //3
+        DROWING,        //4
+        RELEASE,        //5
         FOLLOW_THROUGH,
         DEFAULT,
         MAX
@@ -267,6 +266,7 @@ public class TutorialAnimationController : MonoBehaviour
     //流しで再生します
     //一個の動きをループしません
     //ナレーションが終わったら次のモーションに移動します
+    //(使用していません)
     public IEnumerator waitAnimation_Second()
     {
         animation.SetBool("loop", false);
@@ -357,64 +357,105 @@ public class TutorialAnimationController : MonoBehaviour
     {
         animation.SetBool("loop", is_loop);
         animationStop();
-
-        SetState(_state);
-        System.Action callback = () =>
+        StartCoroutine(Utility.TimerCrou(0.2f, () =>
         {
-            //stop = false;
-            //SetState(State.DEFAULT);
-            animationStop();
-        };
+            //SetState(_state);
+            System.Action callback = () =>
+            {
+                //stop = false;
+                SetState(State.DEFAULT);
+                animationStop();
+            };
 
-        switch (_state)
-        {
-            case State.SET:
-                AudioManager.Instance.PlaySE("03", () =>
-                {
-                    AudioManager.Instance.PlaySE("04", callback);
-                });
-                //StartCoroutine(checkStop(()=> {
-                //    AudioManager.Instance.StopSE("03");
-                //    AudioManager.Instance.StopSE("04");
-                //    callback();
-                //}));
-                break;
-            case State.NOKING:
-                AudioManager.Instance.PlaySE("05", callback);
-                //StartCoroutine(checkStop(() => {
-                //    AudioManager.Instance.StopSE("05");
-                //    callback();
-                //}));
-                break;
-            case State.SETUP:
-                AudioManager.Instance.PlaySE("06", callback);
-                //StartCoroutine(checkStop(() => {
-                //    AudioManager.Instance.StopSE("06");
-                //    callback();
-                //}));
-                break;
-            case State.DROWING:
-                AudioManager.Instance.PlaySE("07", callback);
-                //StartCoroutine(checkStop(() => {
-                //    AudioManager.Instance.StopSE("07");
-                //    callback();
-                //}));
-                break;
-            case State.FULLDROW:
-                AudioManager.Instance.PlaySE("08", callback);
-                //StartCoroutine(checkStop(() => {
-                //    AudioManager.Instance.StopSE("08");
-                //    callback();
-                //}));
-                break;
-            case State.RELEASE:
-                AudioManager.Instance.PlaySE("09", callback);
-                //StartCoroutine(checkStop(() => {
-                //    AudioManager.Instance.StopSE("09");
-                //    callback();
-                //}));
-                break;
-        }
+            switch (_state)
+            {
+                case State.SET:
+                    AudioManager.Instance.PlaySE("03", () =>
+                    {
+                        StartCoroutine(Utility.TimerCrou(SoundWaitTime[1], () =>
+                        {
+                            AudioManager.Instance.PlaySE("04");
+                        }));
+                    });
+                    StartCoroutine(Utility.TimerCrou(waitTime[0], () =>
+                    {
+                        SetState(State.SET);
+                    }));
+
+                    //StartCoroutine(checkStop(()=> {
+                    //    AudioManager.Instance.StopSE("03");
+                    //    AudioManager.Instance.StopSE("04");
+                    //    callback();
+                    //}));
+                    break;
+                case State.NOKING:
+
+                    AudioManager.Instance.PlaySE("05");
+                    StartCoroutine(Utility.TimerCrou(waitTime[1], () =>
+                    {
+                        SetState(State.NOKING);
+                    }));
+
+                    //AudioManager.Instance.PlaySE("05", callback);
+                    //StartCoroutine(checkStop(() => {
+                    //    AudioManager.Instance.StopSE("05");
+                    //    callback();
+                    //}));
+                    break;
+                case State.SETUP:
+
+                    AudioManager.Instance.PlaySE("06");
+                    StartCoroutine(Utility.TimerCrou(waitTime[2], () =>
+                    {
+                        SetState(State.SETUP);
+                    }));
+                    //AudioManager.Instance.PlaySE("06", callback);
+                    //StartCoroutine(checkStop(() => {
+                    //    AudioManager.Instance.StopSE("06");
+                    //    callback();
+                    //}));
+                    break;
+                case State.DROWING:
+
+                    AudioManager.Instance.PlaySE("07");
+                    StartCoroutine(Utility.TimerCrou(waitTime[3], () =>
+                    {
+                        SetState(State.DROWING);
+                    }));
+                    //AudioManager.Instance.PlaySE("07", callback);
+                    //StartCoroutine(checkStop(() => {
+                    //    AudioManager.Instance.StopSE("07");
+                    //    callback();
+                    //}));
+                    break;
+                case State.FULLDROW:
+
+                    AudioManager.Instance.PlaySE("08");
+                    StartCoroutine(Utility.TimerCrou(waitTime[4], () =>
+                    {
+                        SetState(State.FULLDROW);
+                    }));
+                    //AudioManager.Instance.PlaySE("08", callback);
+                    //StartCoroutine(checkStop(() => {
+                    //    AudioManager.Instance.StopSE("08");
+                    //    callback();
+                    //}));
+                    break;
+                case State.RELEASE:
+
+                    AudioManager.Instance.PlaySE("09");
+                    StartCoroutine(Utility.TimerCrou(waitTime[5], () =>
+                    {
+                        SetState(State.RELEASE);
+                    }));
+                    //AudioManager.Instance.PlaySE("09", callback);
+                    //StartCoroutine(checkStop(() => {
+                    //    AudioManager.Instance.StopSE("09");
+                    //    callback();
+                    //}));
+                    break;
+            }
+        }));
     }
 
     //animationを停止する関数
@@ -459,6 +500,17 @@ public class TutorialAnimationController : MonoBehaviour
     float[] waitTime;
     [SerializeField]
     float[] SoundWaitTime;//10個あります
+                          //03 <= 0
+                          //04 <= 1
+                          //05 <= 2
+                          //06 <= 3
+                          //07 <= 4
+                          //08 <= 5
+                          //09 <= 6
+                          //10 <= 7
+                          //11 <= 8
+                          //12 <= 9
+
 
     //次のステートに切り替える（使用する予定はありません）
     public void nextAnim()
@@ -470,6 +522,7 @@ public class TutorialAnimationController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        return;
         //Debug.Log(string.Format("{0} = = is ",animation.GetCurrentAnimatorStateInfo(0).normalizedTime));
         //if (Input.GetMouseButtonDown(0))
         //{
@@ -480,29 +533,29 @@ public class TutorialAnimationController : MonoBehaviour
         //    SetFlow(true);
         //}
 
-        //if (Input.GetKeyDown(KeyCode.Alpha0))
-        //{
-        //    //ChangeChannel(State.SET);
-        //    StartCoroutine(waitAnimation_Second());
-        //}
-        //if (Input.GetKeyDown(KeyCode.Alpha1))
-        //{
-        //    StartCoroutine(waitAnimation(false));
-        //}
-        //if (Input.GetKeyDown(KeyCode.Alpha2))
-        //{
-        //    //ChangeChannel(State.NOKING);
-        //    SetFlow(true);
-        //}
-        //if (Input.GetKeyDown(KeyCode.Alpha3))
-        //{
-        //    ChangeChannel(State.SETUP);
-        //}
-        //if (Input.GetKeyDown(KeyCode.Alpha4))
-        //{
-        //    animationStop();
+        if (Input.GetKeyDown(KeyCode.Alpha0))
+        {
+            //ChangeChannel(State.SET);
+            StartCoroutine(waitAnimation_Second());
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            StartCoroutine(waitAnimation(false));
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            //ChangeChannel(State.NOKING);
+            SetFlow(true);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            ChangeChannel(State.SETUP);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            animationStop();
 
-        //}
+        }
 
 
 
