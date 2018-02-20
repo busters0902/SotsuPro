@@ -160,6 +160,8 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         timesTelop.gameObject.SetActive(false);
 
+        select.Hide();
+
         //フェードアウト
         //FadeControl.Instance.FadeIn(3, 1);
 
