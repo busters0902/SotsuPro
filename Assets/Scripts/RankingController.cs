@@ -61,7 +61,7 @@ public class RankingController : MonoBehaviour
 
     }
 
-    public void moveContent(int rankNum)
+    public void moveContent(int rankNum,System.Action callback = null)
     {
         ////RectTransform rectTransform;
         //ScrollRect scrollRect = transform.Find("scrollvieew").GetComponent<ScrollRect>();
@@ -93,7 +93,7 @@ public class RankingController : MonoBehaviour
         {
             scrollRect.localPosition = new Vector3(scrollRect.localPosition.x,
                 Mathf.Lerp(to, (num * 2.0f), curve.Evaluate(t)), scrollRect.localPosition.y);
-        }));
+        }, callback));
 
 
         }));

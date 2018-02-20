@@ -123,6 +123,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
     void Start()
     {
         StartCoroutine(Setup());
+        
     }
 
     //ゲームルーチン全体の立ち上げ
@@ -174,6 +175,8 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         //FadeControl.Instance.FadeIn(3, 1);
 
         result.Initialize();
+
+        ranking.CreateRankingPanel();
 
         Debug.Log("SceneController.SetupEnd");
         yield return StartCoroutine(GameMain());
@@ -611,8 +614,8 @@ public class ArcheryPracticeSceneController : MonoBehaviour
                 AudioManager.Instance.PlaySE("弓矢・矢が刺さる03");
             }
 
-            if(shotTimes < 6)
-                shotTimes++;
+            //if(shotTimes < 6)
+            shotTimes++;
 
             isNextTimes = false;
                
@@ -765,6 +768,14 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         yield return StartCoroutine( Utility.TimeCrou(0.5f, (f) => trans2.rotation = Quaternion.EulerAngles( 0, Mathf.PI * (0.5f - 1.0f + (0.5f * f)) , 0)));
 
+        //※
+        var isScrol = false;
+
+        //int x = 100;
+        //if (rank < 1) x = rank; 
+        //ranking.moveContent( x, ()=> { isScrol = true; });
+        //yield return new WaitUntil(() => isScrol);
+
         yield return new WaitForSeconds(3.0f);
 
         ranking.HideRanking();
@@ -780,7 +791,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         tkfpPanel.gameObject.SetActive(true);
 
-        //yield return new WaitUntil(() => ViveController.Instance.ViveRightDown);
+        //yield return new WaitUntil(() => ViveController.Instance.ViveRightDown)
         yield return new WaitForSeconds(1.0f);
 
         tkfpPanel.gameObject.SetActive(false);
