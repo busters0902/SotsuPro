@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RankingController : MonoBehaviour
 {
 
     public RankingPanel panel;
 
-    //const int RANKING_NUM = 100;
+    const int RANKING_NUM = 100;
     List<ScoreRankingData> ranking;
 
     //データマネージャーから受け取る
@@ -32,18 +33,80 @@ public class RankingController : MonoBehaviour
 
     }
 
+    [SerializeField]
+    GameObject content;
+
+    [SerializeField]
+    float contentWidth;
+
+    List<GameObject> prefabNum = new List<GameObject>();
     //※
     //ランキング生成
     public void CreateRankingPanel()
     {
-        //panel
+
+        var prefab = (GameObject)Resources.Load("Prefabs/Rank1Score");
+        panel.rankNumber = new Text[RANKING_NUM];
+        panel.rankScores = new RankScoreViewer[RANKING_NUM];
+        for (int i = 0; i < RANKING_NUM; i++)
+        {
+            var obj = Instantiate(prefab);
+            obj.transform.SetParent(content.transform);
+            obj.transform.localScale = new Vector3(1, 1, 1);
+            panel.rankNumber[i] = obj.GetComponent<LogoText>().text;
+            panel.rankScores[i] = obj.GetComponent<RankScoreViewer>();
+            obj.transform.Find("Rank1").GetComponent<Text>().text = (i + 1).ToString();
+            prefabNum.Add(prefab);
+        }
+
     }
 
+    public void moveContent(int rankNum)
+    {
+        ////RectTransform rectTransform;
+        //ScrollRect scrollRect = transform.Find("scrollvieew").GetComponent<ScrollRect>();
+        ////content.GetComponent<RectTransform>().position = new Vector3(content.transform.localPosition.x, prefabNum[rankNum].GetComponent<RectTransform>().position.y, content.transform.localPosition.z);
+        //scrollRect.verticalNormalizedPosition = -102000 * rankNum;
+
+        RectTransform scrollRect = transform.Find("scrollvieew/content").GetComponent<RectTransform>();
+        //content.GetComponent<RectTransform>().position = new Vector3(content.transform.localPosition.x, prefabNum[rankNum].GetComponent<RectTransform>().position.y, content.transform.localPosition.z);
+        //if (rankNum < 3)
+        //{
+        //    rankNum = 1;
+        //}
+        var num = 29.6f / 100f;
+        //scrollRect.localPosition = new Vector3(scrollRect.localPosition.x, Mathf.Min(Mathf.Max((num * rankNum) + (num * 2.0f), 0), 29.6f - num * 2), scrollRect.localPosition.y);
+        var from = num * 100;
+        var to = Mathf.Min(Mathf.Max((num * (float)rankNum) + (num * 2.0f), 0.0f), 29.6f - num * 2.0f);
+        StartCoroutine(
+        Utility.TimeCrou(2, (t) =>
+        {
+            scrollRect.localPosition = new Vector3(scrollRect.localPosition.x,
+                Mathf.Lerp(from, to, curve.Evaluate(t)), scrollRect.localPosition.y);
+        }, () =>
+        {
+            StartCoroutine(
+        Utility.TimerCrou(1, () =>
+        {
+            StartCoroutine(
+        Utility.TimeCrou(5, (t) =>
+        {
+            scrollRect.localPosition = new Vector3(scrollRect.localPosition.x,
+                Mathf.Lerp(to, (num * 2.0f), curve.Evaluate(t)), scrollRect.localPosition.y);
+        }));
+
+
+        }));
+        }));
+
+    }
+    public
+    AnimationCurve curve;
     //※途中
     //ランキングの表示
     public void ShowRanking()
     {
-        for(int i = 0; i < panel.rankScores.Length; i++)
+        for (int i = 0; i < panel.rankScores.Length; i++)
         {
             panel.rankNumber[i].gameObject.SetActive(true);
             panel.rankScores[i].gameObject.SetActive(true);
@@ -68,3 +131,5 @@ public class RankingController : MonoBehaviour
     }
 
 }
+
+
