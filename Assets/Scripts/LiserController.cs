@@ -28,7 +28,9 @@ public class LiserController : MonoBehaviour
 
     public bool onUseLiser;
 
-    TutorialAnimationController tutorialAnimationController; 
+    [SerializeField]
+    TutorialAnimationController tutorialAnimationController;
+
     void Update()
     {
         if(onUsed)
@@ -36,6 +38,13 @@ public class LiserController : MonoBehaviour
             Update_();
         }
     }
+
+    private void Start()
+    {
+        act = tutorialAnimationController.ChangeChannel;
+    }
+
+    
 
     public void Update_()
     {

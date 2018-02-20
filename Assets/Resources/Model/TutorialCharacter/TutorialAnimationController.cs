@@ -9,6 +9,8 @@ public class TutorialAnimationController : MonoBehaviour
 
     bool stop = false;
 
+    public string[] targetNames;
+
     void Start()
     {
         animation = GetComponent<Animator>();
@@ -349,11 +351,15 @@ public class TutorialAnimationController : MonoBehaviour
 
         yield return null;
     }
+    public void ChangeChannel(int _state)
+    {
+        ChangeChannel((State)_state);
+    }
 
     //アニメーションを一つだけ流します
     //ループしないで
     //ナレーションが終わったら止まります
-    void ChangeChannel(State _state, bool is_loop = false)
+    public void ChangeChannel(State _state, bool is_loop = false)
     {
         animation.SetBool("loop", is_loop);
         animationStop();

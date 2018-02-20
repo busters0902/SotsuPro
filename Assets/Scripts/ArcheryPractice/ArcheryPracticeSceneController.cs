@@ -419,6 +419,9 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         AudioManager.Instance.PlaySE("gaya", gayaTransfom.localPosition).loop = true;
         Debug.Log("PlayBGM がやがや");
 
+        //チュートリアルのボタンの設定
+        liser.Setup(tutorialAnimationController.targetNames, tutorialAnimationController.ChangeChannel);
+
         ///////////////////////////////////////////////////////////////////////
         //ゲーム中のコールバックのセッティング
 
