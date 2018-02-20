@@ -94,7 +94,7 @@ public class LiserController : MonoBehaviour
             RaycastHit hit = new RaycastHit();
 
             //if (Physics.Raycast(ray, out hit, line.endWidth - line.startWidth))
-            if (Physics.Raycast(ray, out hit, 5))
+            if (Physics.Raycast(ray, out hit, 15))
             {
                 
                 var name = hit.collider.gameObject.name;

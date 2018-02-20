@@ -107,6 +107,12 @@ public class ArcheryPracticeSceneController : MonoBehaviour
     ArrayTexture timesTelop;
 
     [SerializeField]
+    RectTransform telopStart;
+
+    [SerializeField]
+    RectTransform telopEnd;
+
+    [SerializeField]
     GameObject[] startFalseObjects;
 
     [SerializeField]
@@ -737,6 +743,11 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         liser.onUseShow = true;
         liser.onUseLiser = true;
         liser.line.enabled = false;
+    }
+
+    void AnimateTelop()
+    {
+        iTween.MoveTo(timesTelop.gameObject, telopStart.position, 1 );
     }
 
 }
