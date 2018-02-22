@@ -22,12 +22,6 @@ public class ViveLiser : MonoBehaviour
 
     }
 
-    public void SetEndPoint(Vector3 posion)
-    {
-        line.SetPosition(1, posion);
-
-    }
-
     void Update ()
     {
 

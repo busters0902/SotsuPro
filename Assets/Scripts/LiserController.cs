@@ -30,12 +30,10 @@ public class LiserController : MonoBehaviour
 
     [SerializeField]
     TutorialAnimationController tutorialAnimationController;
-    [SerializeField]
-    ViveLiser viveLiser;
 
     void Update()
     {
-        if (onUsed)
+        if(onUsed)
         {
             Update_();
         }
@@ -43,17 +41,17 @@ public class LiserController : MonoBehaviour
 
     private void Start()
     {
-
+        
     }
 
-
+    
 
     public void Update_()
     {
 
-        if (onUseShow) ShowLiser();
+        if(onUseShow) ShowLiser();
 
-        if (onUseLiser) Liser();
+        if (onUseLiser) Liser();   
 
     }
 
@@ -63,7 +61,7 @@ public class LiserController : MonoBehaviour
         act = call;
     }
 
-    public void Setup(AngleLength length, string[] names, System.Action<int> call)
+    public void Setup( AngleLength length, string[] names, System.Action<int> call)
     {
         angleLength = length;
         targetNames = names;
@@ -74,7 +72,7 @@ public class LiserController : MonoBehaviour
     {
         act = call;
     }
-
+    
     //消すときにラインは描画するかどうか
     public void NotUse(bool f)
     {
@@ -85,7 +83,7 @@ public class LiserController : MonoBehaviour
     public void ShowLiser()
     {
         if (angleLength.InAngle(obj))
-        {
+        {   
             line.enabled = true;
         }
         else
@@ -96,39 +94,32 @@ public class LiserController : MonoBehaviour
 
     public void Liser()
     {
-
-        var trans = obj.transform;
-
-        Ray ray = new Ray(trans.position, trans.forward);
-        RaycastHit hit = new RaycastHit();
-
-        viveLiser.length = 100;
-        
-        if (Physics.Raycast(ray, out hit, 15))
+        if (ViveController.Instance.ViveRightDown)
         {
-            viveLiser.length = Vector3.Distance(hit.point, trans.position);
+            Debug.Log("右トリガー");
 
-            if (ViveController.Instance.ViveRightDown)
+            var trans = obj.transform;
+            
+            Ray ray = new Ray(trans.position, trans.forward);
+            RaycastHit hit = new RaycastHit();
+
+            //if (Physics.Raycast(ray, out hit, line.endWidth - line.startWidth))
+            if (Physics.Raycast(ray, out hit, 15))
             {
-                Debug.Log("右トリガー");
-
-
-
-                //if (Physics.Raycast(ray, out hit, line.endWidth - line.startWidth))
-               
+                
                 var name = hit.collider.gameObject.name;
                 Debug.Log(name);
 
                 for (int i = 0; i < targetNames.Length; i++)
                 {
-                    if (name == targetNames[i])
+                    if(name == targetNames[i])
                     {
-                        if (act != null)
+                        if(act != null)
                             act(i);
                         break;
                     }
                 }
-
+                
             }
         }
     }
