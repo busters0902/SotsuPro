@@ -18,10 +18,16 @@ public class RankingController : MonoBehaviour
 
         ranking = DataManager.Instance.data.ranking.ToList();
         var scoreViewers = panel.rankScores;
-        for (int i = 0; i < panel.rankScores.Length; i++)
+        int i = 0;
+        for (i = 0; i < ranking.Count; i++)
         {
             scoreViewers[i].logoText.text.text = ranking[i].id.ToString();
             scoreViewers[i].point.text = ranking[i].sumPoint.ToString();
+        }
+        for (; i < panel.rankScores.Length; i++)
+        {
+            scoreViewers[i].logoText.text.text = i.ToString();
+            scoreViewers[i].point.text = "0";
         }
 
     }
@@ -44,7 +50,7 @@ public class RankingController : MonoBehaviour
     //ランキング生成
     public void CreateRankingPanel()
     {
-
+        prefabNum.Clear();
         var prefab = (GameObject)Resources.Load("Prefabs/Rank1Score");
         panel.rankNumber = new Text[RANKING_NUM];
         panel.rankScores = new RankScoreViewer[RANKING_NUM];
@@ -53,6 +59,9 @@ public class RankingController : MonoBehaviour
             var obj = Instantiate(prefab);
             obj.transform.SetParent(content.transform);
             obj.transform.localScale = new Vector3(1, 1, 1);
+            obj.transform.localPosition = new Vector3(obj.transform.localPosition.x, obj.transform.localPosition.y, 0);
+
+
             panel.rankNumber[i] = obj.GetComponent<LogoText>().text;
             panel.rankScores[i] = obj.GetComponent<RankScoreViewer>();
             obj.transform.Find("Rank1").GetComponent<Text>().text = (i + 1).ToString();
@@ -61,14 +70,24 @@ public class RankingController : MonoBehaviour
 
     }
 
-    public void moveContent(int rankNum,System.Action callback = null)
+    public void posReset()
+    {
+        RectTransform scrollRect = content.GetComponent<RectTransform>();
+        var num = 29.6f / 100f;
+       
+        var from = num * 100;
+        scrollRect.localPosition = new Vector3(scrollRect.localPosition.x,
+                from, scrollRect.localPosition.y);
+    } 
+
+    public void moveContent(int rankNum, System.Action callback = null)
     {
         ////RectTransform rectTransform;
         //ScrollRect scrollRect = transform.Find("scrollvieew").GetComponent<ScrollRect>();
         ////content.GetComponent<RectTransform>().position = new Vector3(content.transform.localPosition.x, prefabNum[rankNum].GetComponent<RectTransform>().position.y, content.transform.localPosition.z);
         //scrollRect.verticalNormalizedPosition = -102000 * rankNum;
 
-        RectTransform scrollRect = transform.Find("scrollvieew/content").GetComponent<RectTransform>();
+        RectTransform scrollRect = content.GetComponent<RectTransform>();
         //content.GetComponent<RectTransform>().position = new Vector3(content.transform.localPosition.x, prefabNum[rankNum].GetComponent<RectTransform>().position.y, content.transform.localPosition.z);
         //if (rankNum < 3)
         //{
@@ -108,7 +127,7 @@ public class RankingController : MonoBehaviour
     {
         for (int i = 0; i < panel.rankScores.Length; i++)
         {
-            panel.rankNumber[i].gameObject.SetActive(true);
+            //panel.rankNumber[i].gameObject.SetActive(true);
             panel.rankScores[i].gameObject.SetActive(true);
         }
     }
@@ -119,7 +138,7 @@ public class RankingController : MonoBehaviour
     {
         for (int i = 0; i < panel.rankScores.Length; i++)
         {
-            panel.rankNumber[i].gameObject.SetActive(false);
+            //panel.rankNumber[i].gameObject.SetActive(false);
             panel.rankScores[i].gameObject.SetActive(false);
         }
     }
@@ -131,5 +150,3 @@ public class RankingController : MonoBehaviour
     }
 
 }
-
-

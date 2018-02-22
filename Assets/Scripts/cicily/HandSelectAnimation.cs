@@ -2,22 +2,32 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class selectHandController : MonoBehaviour {
+public class HandSelectAnimation : MonoBehaviour {
+
     [SerializeField]
     GameObject push_;
     [SerializeField]
     GameObject pull_;
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Awake()
+    {
         push_.SetActive(true);
         pull_.SetActive(false);
         StartCoroutine(controllerAnim());
     }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
+    public void animationStart()
+    {
+        push_.SetActive(true);
+        pull_.SetActive(false);
+        StartCoroutine(controllerAnim());
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
 
     IEnumerator controllerAnim()
     {

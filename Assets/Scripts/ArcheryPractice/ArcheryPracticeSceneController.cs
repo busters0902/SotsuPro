@@ -123,10 +123,12 @@ public class ArcheryPracticeSceneController : MonoBehaviour
     [SerializeField]
     LiserController liser;
 
+    [SerializeField]
+    HandSelectAnimation[] handSelectAnim;
     void Start()
     {
         StartCoroutine(Setup());
-        
+
     }
 
     //ゲームルーチン全体の立ち上げ
@@ -151,12 +153,16 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         flashText.Set(flashTextSettings);
         flashText.text.text = "";
 
-        foreach( var i in items )
+        foreach (var i in items)
         {
             i.obj.gameObject.SetActive(false);
         }
 
         UI3DManager.Instance.loadUIAnimation(items);
+
+        //
+
+
 
         title.HideTitle();
 
@@ -195,19 +201,20 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         while (true)
         {
-            if(useSelectHand)
-            { 
-                yield return StartCoroutine(SelectHand());
-            }
 
             if (useTitle)
             {
                 yield return StartCoroutine(ShowTitle());
             }
 
+            if (useSelectHand)
+            {
+                yield return StartCoroutine(SelectHand());
+            }
+
             if (useTutorial)
             {
-                if ( isSkipGreet == false ) yield return StartCoroutine(Greet());
+                if (isSkipGreet == false) yield return StartCoroutine(Greet());
                 yield return StartCoroutine(ShowTutorial());
             }
 
@@ -241,29 +248,34 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         liser.line.enabled = true;
 
         liser.targetNames = select.targetNames;
+        handSelectAnim[2].gameObject.SetActive(true);
+        StartCoroutine(Utility.TimerCrou(0.1f, () =>
+        {
 
+            handSelectAnim[2].animationStart();
+        }));
         select.Show();
 
         bool isRight = false;
         bool isLeft = false;
 
-        liser.SetAction((n) => 
+        liser.SetAction((n) =>
         {
-            if (n == 0)isRight = true;
+            if (n == 0) isRight = true;
             else isLeft = true;
-        }　);
+        });
 
         //選んだオブジェクトで判定
         yield return new WaitUntil(
             () =>
-            { 
-                return ( isRight || isLeft );
+            {
+                return (isRight || isLeft);
             });
 
         if (isLeft) select.SetLeftMode();
         if (isRight) select.SetRightMode();
         AudioManager.Instance.PlaySE("se_decision");
-
+        handSelectAnim[2].gameObject.SetActive(false);
         select.Hide();
 
         liser.onUsed = true;
@@ -278,6 +290,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
     //タイトル画面
     IEnumerator ShowTitle()
     {
+
         Debug.Log("ShowTitle Start");
 
         flashText.text.text = "";
@@ -286,10 +299,22 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         AudioManager.Instance.PlayBGM("bgm_title");
         AudioManager.Instance.setBGMLoop(true);
 
+        for (int i = 0; i < 2; i++)
+        {
+            handSelectAnim[i].gameObject.SetActive(true);
+        }
+        for (int i = 0; i < 2; i++)
+        {
+            handSelectAnim[i].animationStart();
+        }
+
         title.ShowTitle();
 
         yield return new WaitUntil(() => ViveController.Instance.ViveRightDown || ViveController.Instance.ViveLeftDown || Input.GetKeyDown(KeyCode.M));
-
+        for (int i = 0; i < 2; i++)
+        {
+            handSelectAnim[i].gameObject.SetActive(false);
+        }
         AudioManager.Instance.PlaySE("se_decision");
         AudioManager.Instance.StopBGM("bgm_title");
         title.HideTitle();
@@ -389,7 +414,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
                 //SE
                 AudioManager.Instance.PlaySE("的に当たる");
-                
+
                 mato.hitStop.OnHitUpdateText(score);
 
             }
@@ -410,7 +435,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         archeryController.setArrowCall = () =>
         {
             Debug.Log("setArrowCall");
-            
+
             archeryController.bow.arrow.targets.Add(mato.quadCollider);
             archeryController.bow.arrow.frontWall = frontWall;
 
@@ -447,7 +472,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         yield return null;
         Debug.Log("SceneController.PlayTutorial Start");
 
-        Coroutine subCrou = StartCoroutine( Practice() );
+        Coroutine subCrou = StartCoroutine(Practice());
 
         //カメラの向き
         //右を向く (スクリーン)
@@ -623,7 +648,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
             shotTimes++;
 
             isNextTimes = false;
-               
+
         };
 
         //矢をセットしたときのコールを設定
@@ -686,6 +711,9 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         yield return new WaitForSeconds(2.0f);
 
+        //7/6
+        timesText.text = "6/6";
+
         Debug.Log("SceneController.PlayGame End");
     }
 
@@ -703,7 +731,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         gameEndPanel.SetActive(true);
 
         result.Load();
-        
+
         int rank = -1;
 
         //ランキングの更新
@@ -724,9 +752,21 @@ public class ArcheryPracticeSceneController : MonoBehaviour
             //rank = DataManager.Instance.data.ranking.Where((s) => s.sumPoint >= score).ToArray().Length;
             rank = DataManager.Instance.data.ranking.Count((s) => s.sumPoint >= score);
         }
+        else
+        {
+            rank = 100 - 1;
+        }
+
+        Debug.Log(string.Format("現在のランキングは{0}です", rank));
 
         //ランキングデータの読み込み
+        yield return new WaitUntil(() => ViveController.Instance.ViveRightDown);
+
         ranking.LoadRankingData();
+
+        yield return new WaitUntil(() => ViveController.Instance.ViveRightDown);
+
+
 
         //トリガーを
         flashText.text.text = "トリガーを引いてください";
@@ -750,13 +790,15 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         result.SetActiveResultPanel(true);
         result.ShowResult(() => AudioManager.Instance.PlaySE("いえーい"));
 
+        yield return new WaitUntil(() => ViveController.Instance.ViveRightDown);
 
         yield return new WaitForSeconds(3.0f);
 
+        ranking.posReset();
         //反転
         var trans = result.panel.transform;
-        
-        yield return StartCoroutine( Utility.TimeCrou(0.5f, (f) => trans.rotation = Quaternion.EulerAngles( 0, Mathf.PI * 0.5f * f, 0)));
+
+        yield return StartCoroutine(Utility.TimeCrou(0.5f, (f) => trans.rotation = Quaternion.EulerAngles(0, Mathf.PI * 0.5f * f, 0)));
 
         result.SetActiveResultPanel(false);
         result.HideAll();
@@ -765,24 +807,25 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         ranking.ShowRanking();
 
         //ランクインしたら色を黄色に
-        if(rank > 0 && rank < ranking.panel.rankScores.Length)
+        if (rank > 0 && rank < ranking.panel.rankScores.Length)
         {
             ranking.panel.rankScores[rank - 1].plateImage.color = Color.yellow;
         }
 
         var trans2 = ranking.panel.transform;
 
-        yield return StartCoroutine( Utility.TimeCrou(0.5f, (f) => trans2.rotation = Quaternion.EulerAngles( 0, Mathf.PI * (0.5f - 1.0f + (0.5f * f)) , 0)));
+        yield return StartCoroutine(Utility.TimeCrou(0.5f, (f) => trans2.rotation = Quaternion.EulerAngles(0, Mathf.PI * (0.5f - 1.0f + (0.5f * f)), 0)));
 
         //※
-        var isScrol = false;
+        Debug.Log("ランキングをイージングします");
 
-        //int x = 100;
-        //if (rank < 1) x = rank; 
-        //ranking.moveContent( x, ()=> { isScrol = true; });
-        //yield return new WaitUntil(() => isScrol);
+        var rankingmoveFlag = false;
+        ranking.moveContent(rank, () => rankingmoveFlag = true);
+        yield return new WaitUntil(() => rankingmoveFlag);
 
-        yield return new WaitForSeconds(3.0f);
+        //yield return new WaitForSeconds(3.0f);
+
+        yield return new WaitUntil(() => ViveController.Instance.ViveRightDown);
 
         ranking.HideRanking();
         ranking.panel.gameObject.SetActive(false);
@@ -797,8 +840,8 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         tkfpPanel.gameObject.SetActive(true);
 
-        //yield return new WaitUntil(() => ViveController.Instance.ViveRightDown)
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitUntil(() => ViveController.Instance.ViveRightDown);
+        //yield return new WaitForSeconds(1.0f);
 
         tkfpPanel.gameObject.SetActive(false);
 
@@ -843,10 +886,10 @@ public class ArcheryPracticeSceneController : MonoBehaviour
     {
         stEnd = false;
 
-        while (stEnd == false )
+        while (stEnd == false)
         {
             yield return null;
-            
+
             if (boolFunc())
             {
                 Debug.Log("cehck true");
@@ -877,9 +920,9 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         //iTween.MoveTo( timesTelop.gameObject, telopEnd.position, 1.0f );
         iTween.MoveTo(timesTelop.gameObject, iTween.Hash(
-            "x", telopEnd.position.x, 
-            "time", 1, 
-            "easetype", "easeOutBack") );
+            "x", telopEnd.position.x,
+            "time", 1,
+            "easetype", "easeOutBack"));
 
     }
 

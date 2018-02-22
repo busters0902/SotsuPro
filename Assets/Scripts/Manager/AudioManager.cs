@@ -142,7 +142,7 @@ public class AudioManager : MonoBehaviour
         }
         return null;
     }
-    public AudioSource PlaySE(string se_name,Action callback)
+    public AudioSource PlaySE(string se_name, Action callback)
     {
 
 
@@ -174,13 +174,13 @@ public class AudioManager : MonoBehaviour
             if (!seAudioSources.ContainsKey(se_name))
                 seAudioSources.Remove(se_name);
 
-            if(callback != null)
+            if (callback != null)
             {
                 callback();
             }
         }));
         return audsou;
-        
+
     }
 
 
@@ -273,14 +273,14 @@ public class AudioManager : MonoBehaviour
             if (audioSou != null)
                 audioSou.volume = 1 - t;
         }, () =>
-         {
-             if (audioSou != null)
-             {
-                 if (seAudioSources.ContainsKey(se_name))
-                     seAudioSources.Remove(se_name);
-                 audioSou.Stop();
-             }
-         }));
+        {
+            if (audioSou != null)
+            {
+                if (seAudioSources.ContainsKey(se_name))
+                    seAudioSources.Remove(se_name);
+                audioSou.Stop();
+            }
+        }));
         return audioSou;
     }
 
@@ -307,9 +307,16 @@ public class AudioManager : MonoBehaviour
     //なり終わったら消す
     IEnumerator AudioSourceIns(AudioSource au, Action callback = null)
     {
-        while (au.isPlaying)
+        while (au != null)
         {
-            yield return null;
+            if (au.isPlaying)
+            {
+                yield return null;
+            }
+            else
+            {
+                break;
+            }
         }
         if (callback != null)
         {
