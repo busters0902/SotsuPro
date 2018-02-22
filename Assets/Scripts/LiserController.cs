@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LiserController : MonoBehaviour
 {
@@ -32,6 +33,11 @@ public class LiserController : MonoBehaviour
     TutorialAnimationController tutorialAnimationController;
     [SerializeField]
     ViveLiser viveLiser;
+
+    [SerializeField]
+    Image rButton;
+    [SerializeField]
+    Image lButton;
 
     void Update()
     {
@@ -107,7 +113,22 @@ public class LiserController : MonoBehaviour
         if (Physics.Raycast(ray, out hit, 15))
         {
             viveLiser.length = Vector3.Distance(hit.point, trans.position);
-
+            if (hit.collider.gameObject.name == "migikiki")
+            {
+                rButton.color = new Color(238.0f/255.0f,255.0f / 255.0f, 161.0f / 255.0f, 1);
+                lButton.color = new Color(1, 1, 1, 1);
+            }
+            else if(hit.collider.gameObject.name == "hidarikiki")
+            {
+                lButton.color = new Color(238.0f / 255.0f, 255.0f / 255.0f, 161.0f / 255.0f, 1);
+                rButton.color = new Color(1, 1, 1, 1);
+            }
+            else
+            {
+                rButton.color = new Color(1, 1, 1, 1);
+                lButton.color = new Color(1, 1, 1, 1);
+            }
+          
             if (ViveController.Instance.ViveRightDown)
             {
                 Debug.Log("右トリガー");
