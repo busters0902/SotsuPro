@@ -160,10 +160,6 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         UI3DManager.Instance.loadUIAnimation(items);
 
-        //
-
-
-
         title.HideTitle();
 
         isFullDrawing = false;
@@ -508,7 +504,6 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         //    }
         //));
 
-        //select.isLeft
         //チュートリアルモーションムービー
         yield return StartCoroutine(tutorialAnimationController.waitAnimation(false));
 
@@ -532,7 +527,8 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
         StopCoroutine(subCrou);
         //※弓や矢のリセット
-        archeryController.ClearArrows();
+        //archeryController.ClearArrows();
+        archeryController.Reset();
 
     }
 
@@ -563,7 +559,6 @@ public class ArcheryPracticeSceneController : MonoBehaviour
 
             Debug.Log("shotTimes : " + shotTimes + "回目");
 
-            //※　アニメ
             //archeryController.canReload = true;
             StartCoroutine(Utility.TimerCrou(2.0f, () =>
             {
@@ -823,9 +818,8 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         ranking.moveContent(rank, () => rankingmoveFlag = true);
         yield return new WaitUntil(() => rankingmoveFlag);
 
-        //yield return new WaitForSeconds(3.0f);
-
-        yield return new WaitUntil(() => ViveController.Instance.ViveRightDown);
+        yield return new WaitForSeconds(3.0f);
+        //yield return new WaitUntil(() => ViveController.Instance.ViveRightDown);
 
         ranking.HideRanking();
         ranking.panel.gameObject.SetActive(false);
@@ -841,7 +835,7 @@ public class ArcheryPracticeSceneController : MonoBehaviour
         tkfpPanel.gameObject.SetActive(true);
 
         yield return new WaitUntil(() => ViveController.Instance.ViveRightDown);
-        //yield return new WaitForSeconds(1.0f);
+        //yield return new WaitForSeconds(10.0f);
 
         tkfpPanel.gameObject.SetActive(false);
 

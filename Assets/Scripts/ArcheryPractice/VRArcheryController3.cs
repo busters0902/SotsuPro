@@ -120,6 +120,25 @@ public class VRArcheryController3 : MonoBehaviour
 
     private List<Arrow3> arrows;
 
+    public void Reset()
+    {
+
+        hasArrow = false;
+        canReload = true;
+        isDrawing = false;
+
+        bow.hasArrow = false;
+
+        //手ブレ補正を切る
+        isMaxDrawing = false;
+        isMaxDrawingFirst = false;
+        shakeMitig.enabled = false;
+        shakeMitig.ResetRotation();
+
+        ClearArrows();
+
+    }
+
     void ResetReverseMode()
     {
         bowObject.transform.SetParent(null);
