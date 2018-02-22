@@ -102,6 +102,7 @@ public class VRArcheryController3 : MonoBehaviour
 
     //リロード
     public bool canReload;
+    public bool canReload2;
 
     //引き切ったかどうか
     bool isMaxDrawing;
@@ -125,6 +126,7 @@ public class VRArcheryController3 : MonoBehaviour
 
         hasArrow = false;
         canReload = true;
+        canReload2 = true;
         isDrawing = false;
 
         bow.hasArrow = false;
@@ -167,6 +169,7 @@ public class VRArcheryController3 : MonoBehaviour
         AudioManager.Instance.LoadSeList("st", "Drawing");
 
         canReload = true;
+        canReload2 = true;
         isMaxDrawing       = false ;
         isMaxDrawingFirst  = false ;
         shakeMitig.enabled = false ;
@@ -348,9 +351,9 @@ public class VRArcheryController3 : MonoBehaviour
 
         //矢を生成して、弓にセットする(両デバイスでトリガーを押す) 
         //処理フレームをずらすため 引く処理より後
-        if (canReload == true 
+        if (canReload == true && canReload2 == true
             && hundleDevice.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger) 
-            &&hasArrow == false)
+            &&hasArrow == false )
         {
 
             var ar = bow.CreateArrow();

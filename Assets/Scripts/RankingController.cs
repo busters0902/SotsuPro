@@ -96,7 +96,7 @@ public class RankingController : MonoBehaviour
         var num = 29.6f / 100f;
         //scrollRect.localPosition = new Vector3(scrollRect.localPosition.x, Mathf.Min(Mathf.Max((num * rankNum) + (num * 2.0f), 0), 29.6f - num * 2), scrollRect.localPosition.y);
         var from = num * 100;
-        var to = Mathf.Min(Mathf.Max((num * (float)rankNum) + (num * 2.0f), 0.0f), 29.6f - num * 2.0f);
+        var to = Mathf.Min(Mathf.Max((num * (float)rankNum) + (num * 1.0f), 0.0f), 29.6f - num * 2.0f);
         StartCoroutine(
         Utility.TimeCrou(2, (t) =>
         {
@@ -111,7 +111,7 @@ public class RankingController : MonoBehaviour
         Utility.TimeCrou(5, (t) =>
         {
             scrollRect.localPosition = new Vector3(scrollRect.localPosition.x,
-                Mathf.Lerp(to, (num * 2.0f), curve.Evaluate(t)), scrollRect.localPosition.y);
+                Mathf.Lerp(to, 0.685f, curve.Evaluate(t)), scrollRect.localPosition.y);
         }, callback));
 
 

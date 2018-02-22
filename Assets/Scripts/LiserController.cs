@@ -76,6 +76,11 @@ public class LiserController : MonoBehaviour
         line.enabled = f;
     }
 
+    public bool GetLineEnable()
+    {
+        return line.enabled;
+    }
+
     public void ShowLiser()
     {
         if (angleLength.InAngle(obj))
