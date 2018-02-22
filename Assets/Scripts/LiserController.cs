@@ -6,12 +6,6 @@ using UnityEngine.UI;
 public class LiserController : MonoBehaviour
 {
 
-    //特定の範囲の時レイざーの表示
-
-
-    //[SerializeField]
-    //GameObject liser;
-
     public LineRenderer line;
 
     [SerializeField]
@@ -31,6 +25,7 @@ public class LiserController : MonoBehaviour
 
     [SerializeField]
     TutorialAnimationController tutorialAnimationController;
+    
     [SerializeField]
     ViveLiser viveLiser;
 
@@ -46,13 +41,6 @@ public class LiserController : MonoBehaviour
             Update_();
         }
     }
-
-    private void Start()
-    {
-
-    }
-
-
 
     public void Update_()
     {
@@ -132,8 +120,6 @@ public class LiserController : MonoBehaviour
             if (ViveController.Instance.ViveRightDown)
             {
                 Debug.Log("右トリガー");
-
-
 
                 //if (Physics.Raycast(ray, out hit, line.endWidth - line.startWidth))
 
